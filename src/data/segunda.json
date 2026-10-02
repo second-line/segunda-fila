@@ -5,11 +5,11 @@
       "id": "2505794",
       "date": "2026-10-02",
       "time": "20:30",
-      "status": "NS",
+      "status": "FT",
       "home": "Eldense",
       "away": "Real Oviedo",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": "4",
+      "awayScore": "1"
     }
   ],
   "trends": [
