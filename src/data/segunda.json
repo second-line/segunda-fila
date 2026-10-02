@@ -1,15 +1,102 @@
 {
-  "matchSectionTitle": "Partidos de hoy",
-  "matches": [
+  "todayMatches": [
+    {
+      "id": "2505787",
+      "date": "2026-10-03",
+      "dateLabel": "Sábado 03/10",
+      "time": "14:00",
+      "kickoffUtc": "2026-10-03T12:00:00+00:00",
+      "status": "NS",
+      "home": "Albacete",
+      "away": "Eibar",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "2505788",
+      "date": "2026-10-03",
+      "dateLabel": "Sábado 03/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-03T14:15:00+00:00",
+      "status": "NS",
+      "home": "Almería",
+      "away": "Burgos",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "2505789",
+      "date": "2026-10-03",
+      "dateLabel": "Sábado 03/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-03T16:30:00+00:00",
+      "status": "NS",
+      "home": "Cádiz",
+      "away": "Leganés",
+      "homeScore": null,
+      "awayScore": null
+    }
+  ],
+  "journeyMatches": [
     {
       "id": "2505794",
       "date": "2026-10-02",
+      "dateLabel": "Viernes 02/10",
       "time": "20:30",
+      "kickoffUtc": "2026-10-02T18:30:00+00:00",
       "status": "FT",
       "home": "Eldense",
       "away": "Real Oviedo",
-      "homeScore": "4",
-      "awayScore": "1"
+      "homeScore": 4,
+      "awayScore": 1
+    },
+    {
+      "id": "2505790",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-04T14:15:00+00:00",
+      "status": "NS",
+      "home": "Sporting de Gijón",
+      "away": "Celta Fortuna",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "2505784",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-04T16:30:00+00:00",
+      "status": "NS",
+      "home": "Las Palmas",
+      "away": "Real Valladolid",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "2505785",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "21:00",
+      "kickoffUtc": "2026-10-04T19:00:00+00:00",
+      "status": "NS",
+      "home": "Girona",
+      "away": "Mallorca",
+      "homeScore": null,
+      "awayScore": null
+    },
+    {
+      "id": "2505786",
+      "date": "2026-10-05",
+      "dateLabel": "Lunes 05/10",
+      "time": "20:30",
+      "kickoffUtc": "2026-10-05T18:30:00+00:00",
+      "status": "NS",
+      "home": "Córdoba",
+      "away": "Tenerife",
+      "homeScore": null,
+      "awayScore": null
     }
   ],
   "trends": [
@@ -308,7 +395,7 @@
     },
     {
       "pos": 15,
-      "team": "Celta B",
+      "team": "Celta Fortuna",
       "played": 7,
       "points": 8,
       "won": 2,
@@ -685,7 +772,7 @@
       "matchesAnalysed": 5
     },
     "team_celta_b_es": {
-      "name": "Celta B",
+      "name": "Celta Fortuna",
       "form": [
         "L",
         "W",
@@ -812,5 +899,6 @@
       "winStreak": 0,
       "matchesAnalysed": 5
     }
-  }
+  },
+  "lastUpdated": "03/10/2026 01:56"
 }

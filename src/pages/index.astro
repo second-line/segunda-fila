@@ -1,15 +1,32 @@
 ---
 import data from "../data/segunda.json";
 
-const matches = data.matches;
-const trends = data.trends;
-const standings = data.standings;
+const todayMatches = data.todayMatches ?? [];
+const journeyMatches = data.journeyMatches ?? [];
+const trends = data.trends ?? [];
+const standings = data.standings ?? [];
+
+const journeyByDay = journeyMatches.reduce((acc, match) => {
+  const day = match.dateLabel ?? "";
+
+  if (!acc[day]) {
+    acc[day] = [];
+  }
+
+  acc[day].push(match);
+
+  return acc;
+}, {});
 ---
 
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
 
     <meta
       name="description"
@@ -34,54 +51,201 @@ const standings = data.standings;
     </header>
 
     <main class="container page">
+      <!-- LIGAS -->
+
       <nav class="league-tabs">
         <button class="league-tab active">
           Segunda
         </button>
 
-        <button class="league-tab disabled" disabled>
+        <button
+          class="league-tab disabled"
+          disabled
+        >
           Championship
         </button>
       </nav>
 
       <div class="content-grid">
         <div class="main-column">
-          <!-- PARTIDOS -->
+
+          <!-- PARTIDOS DE HOY -->
 
           <section class="panel">
             <div class="panel-header">
               <div>
-                <h2>{data.matchSectionTitle}</h2>
+                <h2>Partidos de hoy</h2>
+                <span>Resultados y horarios se actualizan periódicamente</span>
               </div>
             </div>
 
-            <div>
-              {matches.map((match) => (
-                <article class="match-row">
-                  <div class="match-time">
-                    {match.time}
-                  </div>
+            {
+              todayMatches.length > 0 ? (
+                <div class="matches-list">
 
-                  <div class="teams">
-                    <div class="team-row">
-                      <div class="team-logo">
-                        {match.home.charAt(0)}
+                  {todayMatches.map((match) => (
+
+                    <article
+                      class="match-row"
+                      data-match
+                      data-kickoff={match.kickoffUtc}
+                      data-status={match.status ?? ""}
+                    >
+                      <div class="match-time">
+                        <span data-match-status>
+                          {match.time}
+                        </span>
                       </div>
 
-                      <span>{match.home}</span>
-                    </div>
+                      <div class="teams">
+                        <div class="team-row">
+                          <div class="team-logo">
+                            {match.home.charAt(0)}
+                          </div>
 
-                    <div class="team-row">
-                      <div class="team-logo">
-                        {match.away.charAt(0)}
+                          <span>{match.home}</span>
+
+                          {
+                            match.homeScore !== null &&
+                            match.homeScore !== ""
+                              ? (
+                                <strong class="score">
+                                  {match.homeScore}
+                                </strong>
+                              )
+                              : null
+                          }
+                        </div>
+
+                        <div class="team-row">
+                          <div class="team-logo">
+                            {match.away.charAt(0)}
+                          </div>
+
+                          <span>{match.away}</span>
+
+                          {
+                            match.awayScore !== null &&
+                            match.awayScore !== ""
+                              ? (
+                                <strong class="score">
+                                  {match.awayScore}
+                                </strong>
+                              )
+                              : null
+                          }
+                        </div>
                       </div>
+                    </article>
 
-                      <span>{match.away}</span>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                  ))}
+
+                </div>
+              ) : (
+                <div class="empty-state">
+                  No hay partidos de Segunda hoy.
+                </div>
+              )
+            }
+          </section>
+
+          <!-- ESTA JORNADA -->
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Esta jornada</h2>
+                <span>Los partidos del finde</span>
+              </div>
             </div>
+
+            {
+              Object.keys(journeyByDay).length > 0 ? (
+                <div class="matchday-list">
+
+                  {Object.entries(journeyByDay).map(
+                    ([day, matches]) => (
+
+                      <div class="matchday-group">
+
+                        <div class="matchday-title">
+                          {day}
+                        </div>
+
+                        <div class="matches-list">
+
+                          {matches.map((match) => (
+
+                            <article
+                              class="match-row"
+                              data-match
+                              data-kickoff={match.kickoffUtc}
+                              data-status={match.status ?? ""}
+                            >
+                              <div class="match-time">
+                                <span data-match-status>
+                                  {match.time}
+                                </span>
+                              </div>
+
+                              <div class="teams">
+
+                                <div class="team-row">
+                                  <div class="team-logo">
+                                    {match.home.charAt(0)}
+                                  </div>
+
+                                  <span>{match.home}</span>
+
+                                  {
+                                    match.homeScore !== null &&
+                                    match.homeScore !== ""
+                                      ? (
+                                        <strong class="score">
+                                          {match.homeScore}
+                                        </strong>
+                                      )
+                                      : null
+                                  }
+                                </div>
+
+                                <div class="team-row">
+                                  <div class="team-logo">
+                                    {match.away.charAt(0)}
+                                  </div>
+
+                                  <span>{match.away}</span>
+
+                                  {
+                                    match.awayScore !== null &&
+                                    match.awayScore !== ""
+                                      ? (
+                                        <strong class="score">
+                                          {match.awayScore}
+                                        </strong>
+                                      )
+                                      : null
+                                  }
+                                </div>
+
+                              </div>
+                            </article>
+
+                          ))}
+
+                        </div>
+                      </div>
+
+                    )
+                  )}
+
+                </div>
+              ) : (
+                <div class="empty-state">
+                  No hay más partidos disponibles para esta jornada.
+                </div>
+              )
+            }
           </section>
 
           <!-- TENDENCIAS -->
@@ -97,6 +261,7 @@ const standings = data.standings;
             <div>
               {trends.map((trend) => (
                 <article class="trend-row">
+
                   <div class="trend-icon">
                     {trend.icon}
                   </div>
@@ -105,10 +270,12 @@ const standings = data.standings;
                     <strong>{trend.title}</strong>
                     <p>{trend.text}</p>
                   </div>
+
                 </article>
               ))}
             </div>
           </section>
+
         </div>
 
         <!-- CLASIFICACIÓN -->
@@ -133,8 +300,11 @@ const standings = data.standings;
               class:list={[
                 "standing-row",
                 row.pos <= 2 && "promotion",
-                row.pos >= 3 && row.pos <= 6 && "playoff",
-                row.pos >= 19 && "relegation"
+                row.pos >= 3 &&
+                  row.pos <= 6 &&
+                  "playoff",
+                row.pos >= 19 &&
+                  "relegation"
               ]}
             >
               <span class="position">
@@ -157,6 +327,94 @@ const standings = data.standings;
         </aside>
       </div>
     </main>
+
+    <!-- ESTADO EN CURSO -->
+
+    <script is:inline>
+      function updateMatchStatuses() {
+        const matches =
+          document.querySelectorAll("[data-match]");
+
+        const now = new Date();
+
+        matches.forEach((match) => {
+          const kickoffValue =
+            match.dataset.kickoff;
+
+          const rawStatus =
+            (match.dataset.status || "").toLowerCase();
+
+          const statusElement =
+            match.querySelector("[data-match-status]");
+
+          if (!kickoffValue || !statusElement) {
+            return;
+          }
+
+          const kickoff =
+            new Date(kickoffValue);
+
+          const matchEnd =
+            new Date(
+              kickoff.getTime() +
+              135 * 60 * 1000
+            );
+
+          const finished =
+            rawStatus.includes("finished") ||
+            rawStatus.includes("ft");
+
+          statusElement.classList.remove(
+            "status-live",
+            "status-final"
+          );
+
+          if (finished) {
+            statusElement.textContent = "FINAL";
+            statusElement.classList.add("status-final");
+
+            return;
+          }
+
+          if (
+            now >= kickoff &&
+            now <= matchEnd
+          ) {
+            statusElement.textContent = "EN CURSO";
+            statusElement.classList.add("status-live");
+
+            return;
+          }
+
+          if (now > matchEnd) {
+            statusElement.textContent = "FINAL";
+            statusElement.classList.add("status-final");
+
+            return;
+          }
+
+          const formatter =
+            new Intl.DateTimeFormat(
+              "es-ES",
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "Europe/Madrid"
+              }
+            );
+
+          statusElement.textContent =
+            formatter.format(kickoff);
+        });
+      }
+
+      updateMatchStatuses();
+
+      setInterval(
+        updateMatchStatuses,
+        30000
+      );
+    </script>
   </body>
 </html>
 
@@ -173,8 +431,10 @@ const standings = data.standings;
   :global(body) {
     margin: 0;
     min-height: 100vh;
+
     background: #f3f4f6;
     color: #202124;
+
     font-family:
       Inter,
       system-ui,
@@ -219,13 +479,14 @@ const standings = data.standings;
   .logo {
     width: 42px;
     height: 42px;
+
     display: grid;
     place-items: center;
 
     border-radius: 10px;
 
     background: #111827;
-    color: white;
+    color: #ffffff;
 
     font-weight: 800;
   }
@@ -237,34 +498,38 @@ const standings = data.standings;
 
   .brand p {
     margin: 3px 0 0;
+
     color: #6b7280;
+
     font-size: 13px;
   }
 
-  /* LEAGUE TABS */
+  /* TABS */
 
   .league-tabs {
     display: flex;
     gap: 8px;
+
     margin-bottom: 20px;
   }
 
   .league-tab {
+    padding: 9px 16px;
+
     border: none;
+    border-radius: 20px;
+
     background: transparent;
     color: #6b7280;
 
-    padding: 9px 16px;
-
-    border-radius: 20px;
+    font-weight: 600;
 
     cursor: pointer;
-    font-weight: 600;
   }
 
   .league-tab.active {
     background: #111827;
-    color: white;
+    color: #ffffff;
   }
 
   .league-tab.disabled {
@@ -272,6 +537,7 @@ const standings = data.standings;
     color: #b0b4bb;
 
     cursor: not-allowed;
+
     opacity: 0.65;
   }
 
@@ -279,21 +545,24 @@ const standings = data.standings;
 
   .content-grid {
     display: grid;
+
     grid-template-columns:
       minmax(0, 2fr)
       minmax(280px, 1fr);
 
     gap: 20px;
+
     align-items: start;
   }
 
   .main-column {
     display: flex;
     flex-direction: column;
+
     gap: 20px;
   }
 
-  /* PANELS */
+  /* PANEL */
 
   .panel {
     overflow: hidden;
@@ -316,28 +585,75 @@ const standings = data.standings;
 
   .panel-header h2 {
     margin: 0;
+
     font-size: 16px;
+    font-weight: 700;
   }
 
   .panel-header span {
     display: block;
-    margin-top: 3px;
+
+    margin-top: 4px;
 
     color: #9ca3af;
 
     font-size: 12px;
+    font-weight: 400;
   }
 
-  /* MATCHES */
+  /* JORNADA */
+
+  .matchday-list {
+    width: 100%;
+  }
+
+  .matchday-group {
+    width: 100%;
+  }
+
+  .matchday-group + .matchday-group {
+    border-top: 8px solid #f3f4f6;
+  }
+
+  .matchday-title {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 38px;
+
+    padding: 10px 20px;
+
+    background: #f8f9fa;
+    color: #4b5563;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+  }
+
+  /* PARTIDOS */
+
+  .matches-list {
+    width: 100%;
+  }
 
   .match-row {
     display: grid;
-    grid-template-columns: 65px minmax(0, 1fr);
 
-    gap: 12px;
+    grid-template-columns:
+      68px
+      minmax(0, 1fr);
+
+    gap: 14px;
+
     align-items: center;
 
-    padding: 16px 20px;
+    min-height: 78px;
+
+    padding: 14px 20px;
 
     border-bottom: 1px solid #f0f0f0;
   }
@@ -347,16 +663,44 @@ const standings = data.standings;
   }
 
   .match-time {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+  }
+
+  .match-time span {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 24px;
+
     color: #6b7280;
 
     font-size: 13px;
     font-weight: 600;
+    line-height: 1;
+
+    white-space: nowrap;
+  }
+
+  .match-time span.status-live {
+    color: #dc2626;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .match-time span.status-final {
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
   }
 
   .teams {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+
+    gap: 9px;
 
     min-width: 0;
   }
@@ -366,17 +710,35 @@ const standings = data.standings;
     align-items: center;
 
     gap: 10px;
+
     min-width: 0;
 
     font-size: 14px;
     font-weight: 600;
   }
 
-  .team-row span {
+  .team-row > span {
+    flex: 1;
+
+    min-width: 0;
+
     overflow: hidden;
 
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+
+  .score {
+    flex-shrink: 0;
+
+    width: 24px;
+
+    color: #111827;
+
+    text-align: right;
+
+    font-size: 15px;
+    font-weight: 700;
   }
 
   .team-logo,
@@ -397,16 +759,28 @@ const standings = data.standings;
   .team-logo {
     width: 28px;
     height: 28px;
+
     font-size: 11px;
   }
 
   .small-logo {
     width: 24px;
     height: 24px;
+
     font-size: 10px;
   }
 
-  /* TRENDS */
+  .empty-state {
+    padding: 26px 20px;
+
+    color: #9ca3af;
+
+    text-align: center;
+
+    font-size: 13px;
+  }
+
+  /* TENDENCIAS */
 
   .trend-row {
     display: flex;
@@ -450,7 +824,7 @@ const standings = data.standings;
     line-height: 1.4;
   }
 
-  /* STANDINGS */
+  /* CLASIFICACIÓN */
 
   .standing-header,
   .standing-row {
@@ -463,6 +837,7 @@ const standings = data.standings;
       40px;
 
     gap: 8px;
+
     align-items: center;
 
     padding: 10px 16px;
@@ -512,6 +887,7 @@ const standings = data.standings;
 
   .position {
     color: #6b7280;
+
     font-weight: 600;
   }
 
@@ -520,6 +896,7 @@ const standings = data.standings;
     align-items: center;
 
     gap: 8px;
+
     min-width: 0;
   }
 
@@ -537,13 +914,24 @@ const standings = data.standings;
       grid-template-columns: 1fr;
     }
 
-    .match-row {
-      grid-template-columns: 55px minmax(0, 1fr);
-      padding: 14px 16px;
-    }
-
     .panel-header {
       padding: 16px;
+    }
+
+    .matchday-title {
+      min-height: 36px;
+
+      padding: 9px 16px;
+    }
+
+    .match-row {
+      grid-template-columns:
+        62px
+        minmax(0, 1fr);
+
+      gap: 10px;
+
+      padding: 14px 16px;
     }
 
     .trend-row {

@@ -3,8 +3,7 @@ import json
 import requests
 import truststore
 
-from collections import defaultdict
-from datetime import date, datetime, timezone
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 
@@ -15,20 +14,6 @@ from dotenv import load_dotenv
 
 truststore.inject_into_ssl()
 load_dotenv()
-
-TEAM_NAMES = {
-    "Castellon": "Castellón",
-    "Leganes": "Leganés",
-    "Almeria": "Almería",
-    "Cordoba": "Córdoba",
-    "Cadiz": "Cádiz",
-    "Sp Gijon": "Real Sporting",
-    "Sociedad B": "Real Sociedad B",
-}
-
-
-def normalize_team_name(name):
-    return TEAM_NAMES.get(name, name)
 
 OPENFOOT_API_KEY = os.getenv("OPENFOOT_API_KEY")
 
@@ -45,6 +30,7 @@ SPORTSDB_LEAGUE_ID = 4400
 
 MADRID_TZ = ZoneInfo("Europe/Madrid")
 
+
 openfoot_headers = {
     "Accept": "application/json",
     "Authorization": f"Bearer {OPENFOOT_API_KEY}"
@@ -52,7 +38,45 @@ openfoot_headers = {
 
 
 # --------------------------------------------------
-# HELPERS
+# NOMBRES DE EQUIPOS
+# --------------------------------------------------
+
+TEAM_NAMES = {
+    "Castellon": "Castellón",
+    "CD Castellon": "Castellón",
+
+    "Leganes": "Leganés",
+    "CD Leganes": "Leganés",
+
+    "Almeria": "Almería",
+    "UD Almeria": "Almería",
+
+    "Cordoba": "Córdoba",
+    "Cordoba CF": "Córdoba",
+
+    "Cadiz": "Cádiz",
+    "Cadiz CF": "Cádiz",
+
+    "Sp Gijon": "Real Sporting",
+    "Sporting Gijon": "Real Sporting",
+
+    "Sociedad B": "Real Sociedad B",
+    "Real Sociedad B": "Real Sociedad B",
+
+    "Celta B": "Celta Fortuna",
+    "Celta Fortuna": "Celta Fortuna"
+}
+
+
+def normalize_team_name(name):
+    if not name:
+        return ""
+
+    return TEAM_NAMES.get(name, name)
+
+
+# --------------------------------------------------
+# HELPERS DE FECHAS
 # --------------------------------------------------
 
 def convert_utc_to_madrid(date_string, time_string):
@@ -70,12 +94,82 @@ def convert_utc_to_madrid(date_string, time_string):
     return madrid_datetime.strftime("%H:%M")
 
 
-def get_all_openfoot_matches():
+def create_kickoff_utc(date_string, time_string):
     """
-    Obtiene todos los partidos disponibles de la temporada,
-    recorriendo todas las páginas de OpenFoot.
+    Devuelve una fecha ISO UTC para que el navegador pueda
+    calcular si el partido está en curso.
     """
 
+    if not date_string or not time_string:
+        return None
+
+    clean_time = time_string[:8]
+
+    utc_datetime = datetime.fromisoformat(
+        f"{date_string}T{clean_time}"
+    ).replace(tzinfo=timezone.utc)
+
+    return utc_datetime.isoformat()
+
+
+def format_date_label(date_string):
+    if not date_string:
+        return ""
+
+    value = datetime.fromisoformat(date_string).date()
+
+    weekdays = [
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+        "Domingo"
+    ]
+
+    return (
+        f"{weekdays[value.weekday()]} "
+        f"{value.day:02d}/{value.month:02d}"
+    )
+
+
+def get_matchday_dates(today):
+    """
+    Consideramos una jornada de viernes a lunes.
+
+    - Viernes, sábado y domingo -> jornada actual.
+    - Lunes -> jornada que empezó el viernes anterior.
+    - Martes, miércoles y jueves -> próxima jornada.
+    """
+
+    weekday = today.weekday()
+
+    # Lunes
+    if weekday == 0:
+        friday = today - timedelta(days=3)
+
+    # Martes, miércoles, jueves
+    elif weekday in [1, 2, 3]:
+        friday = today + timedelta(days=(4 - weekday))
+
+    # Viernes, sábado, domingo
+    else:
+        friday = today - timedelta(days=(weekday - 4))
+
+    return [
+        friday,
+        friday + timedelta(days=1),
+        friday + timedelta(days=2),
+        friday + timedelta(days=3)
+    ]
+
+
+# --------------------------------------------------
+# OPENFOOT - TODOS LOS PARTIDOS
+# --------------------------------------------------
+
+def get_all_openfoot_matches():
     all_matches = []
     cursor = None
 
@@ -91,14 +185,17 @@ def get_all_openfoot_matches():
         response = requests.get(
             f"{OPENFOOT_BASE_URL}/matches",
             headers=openfoot_headers,
-            params=params
+            params=params,
+            timeout=30
         )
 
         response.raise_for_status()
 
         data = response.json()
 
-        all_matches.extend(data.get("data", []))
+        all_matches.extend(
+            data.get("data", [])
+        )
 
         pagination = (
             data
@@ -114,15 +211,15 @@ def get_all_openfoot_matches():
     return all_matches
 
 
-def calculate_team_stats(team_id, matches):
-    """
-    Calcula estadísticas de un equipo a partir
-    de sus partidos terminados.
-    """
+# --------------------------------------------------
+# ESTADÍSTICAS
+# --------------------------------------------------
 
+def calculate_team_stats(team_id, matches):
     team_matches = []
 
     for match in matches:
+
         if match.get("status") != "finished":
             continue
 
@@ -142,13 +239,24 @@ def calculate_team_stats(team_id, matches):
 
         is_home = home["id"] == team_id
 
-        goals_for = home_score if is_home else away_score
-        goals_against = away_score if is_home else home_score
+        goals_for = (
+            home_score
+            if is_home
+            else away_score
+        )
+
+        goals_against = (
+            away_score
+            if is_home
+            else home_score
+        )
 
         if goals_for > goals_against:
             result = "W"
+
         elif goals_for == goals_against:
             result = "D"
+
         else:
             result = "L"
 
@@ -157,10 +265,12 @@ def calculate_team_stats(team_id, matches):
             "result": result,
             "goalsFor": goals_for,
             "goalsAgainst": goals_against,
-            "btts": goals_for > 0 and goals_against > 0
+            "btts": (
+                goals_for > 0
+                and goals_against > 0
+            )
         })
 
-    # Orden cronológico
     team_matches.sort(
         key=lambda item: item["date"] or ""
     )
@@ -170,51 +280,70 @@ def calculate_team_stats(team_id, matches):
     if not last_five:
         return None
 
-    # Forma
+
+    # Forma últimos cinco
+
     form = [
         match["result"]
         for match in last_five
     ]
 
+
     # Media goles marcados
+
     avg_goals = (
-        sum(match["goalsFor"] for match in last_five)
+        sum(
+            match["goalsFor"]
+            for match in last_five
+        )
         / len(last_five)
     )
 
-    # BTTS
+
+    # Ambos marcaron
+
     btts_count = sum(
         1
         for match in last_five
         if match["btts"]
     )
 
+
     # Racha sin perder
+
     unbeaten_streak = 0
 
     for match in reversed(team_matches):
+
         if match["result"] == "L":
             break
 
         unbeaten_streak += 1
 
+
     # Racha marcando
+
     scoring_streak = 0
 
     for match in reversed(team_matches):
+
         if match["goalsFor"] == 0:
             break
 
         scoring_streak += 1
 
+
     # Racha de victorias
+
     win_streak = 0
 
     for match in reversed(team_matches):
+
         if match["result"] != "W":
             break
 
         win_streak += 1
+
 
     return {
         "form": form,
@@ -228,6 +357,81 @@ def calculate_team_stats(team_id, matches):
 
 
 # --------------------------------------------------
+# THESPORTSDB
+# --------------------------------------------------
+
+def get_events_for_date(day):
+    response = requests.get(
+        f"{SPORTSDB_BASE_URL}/eventsday.php",
+        params={
+            "d": day.isoformat(),
+            "l": SPORTSDB_LEAGUE_ID
+        },
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    return data.get("events") or []
+
+
+def format_sportsdb_event(event):
+    event_date = event.get("dateEvent")
+    event_time = event.get("strTime")
+
+    home_score = event.get("intHomeScore")
+    away_score = event.get("intAwayScore")
+
+    if home_score not in [None, ""]:
+        try:
+            home_score = int(home_score)
+        except ValueError:
+            pass
+
+    if away_score not in [None, ""]:
+        try:
+            away_score = int(away_score)
+        except ValueError:
+            pass
+
+    return {
+        "id": event.get("idEvent"),
+
+        "date": event_date,
+
+        "dateLabel": format_date_label(
+            event_date
+        ),
+
+        "time": convert_utc_to_madrid(
+            event_date,
+            event_time
+        ),
+
+        "kickoffUtc": create_kickoff_utc(
+            event_date,
+            event_time
+        ),
+
+        "status": event.get("strStatus"),
+
+        "home": normalize_team_name(
+            event.get("strHomeTeam")
+        ),
+
+        "away": normalize_team_name(
+            event.get("strAwayTeam")
+        ),
+
+        "homeScore": home_score,
+
+        "awayScore": away_score
+    }
+
+
+# --------------------------------------------------
 # CLASIFICACIÓN
 # --------------------------------------------------
 
@@ -236,7 +440,8 @@ standings_response = requests.get(
     headers=openfoot_headers,
     params={
         "competition": OPENFOOT_COMPETITION
-    }
+    },
+    timeout=30
 )
 
 standings_response.raise_for_status()
@@ -244,34 +449,45 @@ standings_response.raise_for_status()
 standings_data = standings_response.json()
 
 standings = []
-
 teams = []
 
+
 for row in standings_data["data"]["table"]:
+
     team = row["team"]
 
+    normalized_name = normalize_team_name(
+        team["name"]
+    )
+
     teams.append({
-    "id": team["id"],
-    "name": normalize_team_name(team["name"])
-})
+        "id": team["id"],
+        "name": normalized_name
+    })
 
     standings.append({
         "pos": row["position"],
-        "team": normalize_team_name(team["name"]),
+        "team": normalized_name,
+
         "played": row["total"]["played"],
         "points": row["total"]["points"],
+
         "won": row["total"]["won"],
         "drawn": row["total"]["drawn"],
         "lost": row["total"]["lost"],
+
         "goalsFor": row["total"]["goalsFor"],
         "goalsAgainst": row["total"]["goalsAgainst"],
-        "goalDifference": row["total"]["goalDifference"],
+
+        "goalDifference":
+            row["total"]["goalDifference"],
+
         "form": row["form"]
     })
 
 
 # --------------------------------------------------
-# HISTÓRICO DE PARTIDOS OPENFOOT
+# HISTÓRICO OPENFOOT
 # --------------------------------------------------
 
 all_matches = get_all_openfoot_matches()
@@ -289,18 +505,21 @@ print(
 
 
 # --------------------------------------------------
-# ESTADÍSTICAS DE TODOS LOS EQUIPOS
+# ESTADÍSTICAS POR EQUIPO
 # --------------------------------------------------
 
 team_stats = {}
 
+
 for team in teams:
+
     stats = calculate_team_stats(
         team["id"],
         finished_matches
     )
 
     if stats:
+
         team_stats[team["id"]] = {
             "name": team["name"],
             **stats
@@ -308,7 +527,7 @@ for team in teams:
 
 
 # --------------------------------------------------
-# GENERAR CANDIDATOS A TENDENCIA
+# TENDENCIAS
 # --------------------------------------------------
 
 trend_groups = {
@@ -319,58 +538,76 @@ trend_groups = {
     "btts": []
 }
 
+
 for team_id, stats in team_stats.items():
+
     team_name = stats["name"]
 
+
     if stats["winStreak"] >= 3:
+
         trend_groups["wins"].append({
             "value": stats["winStreak"],
             "icon": "🔥",
             "title": team_name,
-            "text": f"{stats['winStreak']} victorias consecutivas"
+            "text":
+                f"{stats['winStreak']} "
+                f"victorias consecutivas"
         })
 
+
     if stats["unbeatenStreak"] >= 4:
+
         trend_groups["unbeaten"].append({
             "value": stats["unbeatenStreak"],
             "icon": "📈",
             "title": team_name,
             "text": (
-                f"{stats['unbeatenStreak']} partidos "
-                f"consecutivos sin perder"
+                f"{stats['unbeatenStreak']} "
+                f"partidos consecutivos "
+                f"sin perder"
             )
         })
 
+
     if stats["scoringStreak"] >= 4:
+
         trend_groups["scoring"].append({
             "value": stats["scoringStreak"],
             "icon": "⚽",
             "title": team_name,
             "text": (
                 f"Ha marcado en sus últimos "
-                f"{stats['scoringStreak']} partidos"
+                f"{stats['scoringStreak']} "
+                f"partidos"
             )
         })
 
+
     if stats["avgGoals"] >= 1.8:
+
         trend_groups["goals"].append({
             "value": stats["avgGoals"],
             "icon": "🎯",
             "title": team_name,
             "text": (
-                f"Promedia {stats['avgGoals']} goles "
+                f"Promedia "
+                f"{stats['avgGoals']} goles "
                 f"en sus últimos 5 partidos"
             )
         })
 
+
     if stats["btts"] >= 4:
+
         trend_groups["btts"].append({
             "value": stats["btts"],
             "icon": "🥅",
             "title": team_name,
             "text": (
-                f"Ambos equipos marcaron en "
-                f"{stats['btts']} de sus últimos 5 partidos"
+                f"Ambos equipos marcaron "
+                f"en {stats['btts']} "
+                f"de sus últimos 5 partidos"
             )
         })
 
@@ -387,7 +624,9 @@ category_order = [
     "unbeaten"
 ]
 
+
 for category in category_order:
+
     candidates = sorted(
         trend_groups[category],
         key=lambda item: item["value"],
@@ -395,104 +634,99 @@ for category in category_order:
     )
 
     for candidate in candidates:
+
         if candidate["title"] not in used_teams:
+
             trends.append({
                 "icon": candidate["icon"],
                 "title": candidate["title"],
                 "text": candidate["text"]
             })
 
-            used_teams.add(candidate["title"])
+            used_teams.add(
+                candidate["title"]
+            )
+
             break
 
 
 # --------------------------------------------------
-# PARTIDOS DE HOY - THESPORTSDB
+# PARTIDOS DE HOY
 # --------------------------------------------------
 
-today = date.today().isoformat()
+now_madrid = datetime.now(MADRID_TZ)
 
-today_response = requests.get(
-    f"{SPORTSDB_BASE_URL}/eventsday.php",
-    params={
-        "d": today,
-        "l": SPORTSDB_LEAGUE_ID
-    }
+today = now_madrid.date()
+
+today_events = get_events_for_date(
+    today
 )
 
-today_response.raise_for_status()
-
-today_data = today_response.json()
-
-today_events = today_data.get("events") or []
-
-matches = []
-
-for event in today_events:
-    event_date = event.get("dateEvent")
-    event_time = event.get("strTime")
-
-    local_time = convert_utc_to_madrid(
-        event_date,
-        event_time
-    )
-
-    matches.append({
-        "id": event.get("idEvent"),
-        "date": event_date,
-        "time": local_time,
-        "status": event.get("strStatus"),
-        "home": normalize_team_name(event.get("strHomeTeam")),
-        "away": normalize_team_name(event.get("strAwayTeam")),
-        "homeScore": event.get("intHomeScore"),
-        "awayScore": event.get("intAwayScore")
-    })
-
-
-section_title = "Partidos de hoy"
+today_matches = [
+    format_sportsdb_event(event)
+    for event in today_events
+]
 
 
 # --------------------------------------------------
-# SI NO HAY PARTIDO HOY -> PRÓXIMO PARTIDO
+# ESTA JORNADA
 # --------------------------------------------------
 
-if not matches:
-    next_response = requests.get(
-        f"{SPORTSDB_BASE_URL}/eventsnextleague.php",
-        params={
-            "id": SPORTSDB_LEAGUE_ID
-        }
+matchday_dates = get_matchday_dates(
+    today
+)
+
+journey_events = []
+
+seen_events = set()
+
+
+for matchday_date in matchday_dates:
+
+    events = get_events_for_date(
+        matchday_date
     )
 
-    next_response.raise_for_status()
+    for event in events:
 
-    next_data = next_response.json()
+        event_id = event.get("idEvent")
 
-    next_events = next_data.get("events") or []
+        if event_id and event_id in seen_events:
+            continue
 
-    if next_events:
-        event = next_events[0]
+        if event_id:
+            seen_events.add(event_id)
 
-        event_date = event.get("dateEvent")
-        event_time = event.get("strTime")
-
-        local_time = convert_utc_to_madrid(
-            event_date,
-            event_time
+        formatted_event = (
+            format_sportsdb_event(event)
         )
 
-        matches.append({
-            "id": event.get("idEvent"),
-            "date": event_date,
-            "time": local_time,
-            "status": event.get("strStatus"),
-            "home": event.get("strHomeTeam"),
-            "away": event.get("strAwayTeam"),
-            "homeScore": event.get("intHomeScore"),
-            "awayScore": event.get("intAwayScore")
-        })
+        # Los partidos de hoy ya aparecen arriba,
+        # así que no los repetimos en la jornada.
+        if formatted_event["date"] == today.isoformat():
+            continue
 
-        section_title = "Próximo partido"
+        journey_events.append(
+            formatted_event
+        )
+
+
+journey_events.sort(
+    key=lambda match: (
+        match["date"] or "",
+        match["time"] or ""
+    )
+)
+
+
+# --------------------------------------------------
+# ÚLTIMA ACTUALIZACIÓN
+# --------------------------------------------------
+
+last_updated = (
+    now_madrid
+    .strftime("%d/%m/%Y %H:%M")
+)
 
 
 # --------------------------------------------------
@@ -500,11 +734,17 @@ if not matches:
 # --------------------------------------------------
 
 output = {
-    "matchSectionTitle": section_title,
-    "matches": matches,
+    "todayMatches": today_matches,
+
+    "journeyMatches": journey_events,
+
     "trends": trends,
+
     "standings": standings,
-    "teamStats": team_stats
+
+    "teamStats": team_stats,
+
+    "lastUpdated": last_updated
 }
 
 
@@ -513,6 +753,7 @@ with open(
     "w",
     encoding="utf-8"
 ) as file:
+
     json.dump(
         output,
         file,
@@ -527,30 +768,70 @@ with open(
 
 print()
 print("Datos actualizados")
-print("Equipos:", len(standings))
-print("Tendencias:", len(trends))
-print(section_title + ":", len(matches))
+
+print(
+    "Equipos:",
+    len(standings)
+)
+
+print(
+    "Tendencias:",
+    len(trends)
+)
+
+print(
+    "Partidos de hoy:",
+    len(today_matches)
+)
+
+print(
+    "Otros partidos de la jornada:",
+    len(journey_events)
+)
+
+print(
+    "Última actualización:",
+    last_updated
+)
+
 
 print()
-print("TENDENCIAS:")
+print("PARTIDOS DE HOY:")
 
-for trend in trends:
+for match in today_matches:
+
     print(
-        trend["icon"],
-        trend["title"],
-        "-",
-        trend["text"]
-    )
-
-print()
-print("PARTIDOS:")
-
-for match in matches:
-    print(
-        match["date"],
         match["time"],
         "-",
         match["home"],
         "vs",
         match["away"]
+    )
+
+
+print()
+print("JORNADA:")
+
+for match in journey_events:
+
+    print(
+        match["dateLabel"],
+        match["time"],
+        "-",
+        match["home"],
+        "vs",
+        match["away"]
+    )
+
+
+print()
+print("TENDENCIAS:")
+
+for trend in trends:
+
+    print(
+        trend["icon"],
+        trend["title"],
+        "-",
+        trend["text"]
     )
