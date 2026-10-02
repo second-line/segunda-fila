@@ -10,10 +10,12 @@ const standings = data.standings;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <meta
       name="description"
       content="Estadísticas, tendencias y datos de Segunda División y Championship."
     />
+
     <title>Segunda Fila</title>
   </head>
 
@@ -33,31 +35,39 @@ const standings = data.standings;
 
     <main class="container page">
       <nav class="league-tabs">
-        <button class="league-tab active">Segunda</button>
-        <button class="league-tab">Championship</button>
+        <button class="league-tab active">
+          Segunda
+        </button>
+
+        <button class="league-tab disabled" disabled>
+          Championship
+        </button>
       </nav>
 
       <div class="content-grid">
         <div class="main-column">
+          <!-- PARTIDOS -->
+
           <section class="panel">
             <div class="panel-header">
               <div>
                 <h2>{data.matchSectionTitle}</h2>
               </div>
-
-              <button class="secondary-button">Próximos</button>
             </div>
 
             <div>
               {matches.map((match) => (
                 <article class="match-row">
-                  <div class="match-time">{match.time}</div>
+                  <div class="match-time">
+                    {match.time}
+                  </div>
 
                   <div class="teams">
                     <div class="team-row">
                       <div class="team-logo">
                         {match.home.charAt(0)}
                       </div>
+
                       <span>{match.home}</span>
                     </div>
 
@@ -65,15 +75,16 @@ const standings = data.standings;
                       <div class="team-logo">
                         {match.away.charAt(0)}
                       </div>
+
                       <span>{match.away}</span>
                     </div>
                   </div>
-
-                  <div class="match-arrow">→</div>
                 </article>
               ))}
             </div>
           </section>
+
+          <!-- TENDENCIAS -->
 
           <section class="panel">
             <div class="panel-header">
@@ -86,7 +97,9 @@ const standings = data.standings;
             <div>
               {trends.map((trend) => (
                 <article class="trend-row">
-                  <div class="trend-icon">{trend.icon}</div>
+                  <div class="trend-icon">
+                    {trend.icon}
+                  </div>
 
                   <div>
                     <strong>{trend.title}</strong>
@@ -97,6 +110,8 @@ const standings = data.standings;
             </div>
           </section>
         </div>
+
+        <!-- CLASIFICACIÓN -->
 
         <aside class="panel standings-panel">
           <div class="panel-header">
@@ -114,17 +129,28 @@ const standings = data.standings;
           </div>
 
           {standings.map((row) => (
-            <div class="standing-row">
-              <span>{row.pos}</span>
+            <div
+              class:list={[
+                "standing-row",
+                row.pos <= 2 && "promotion",
+                row.pos >= 3 && row.pos <= 6 && "playoff",
+                row.pos >= 19 && "relegation"
+              ]}
+            >
+              <span class="position">
+                {row.pos}
+              </span>
 
               <div class="standing-team">
                 <div class="small-logo">
                   {row.team.charAt(0)}
                 </div>
+
                 <span>{row.team}</span>
               </div>
 
               <span>{row.played}</span>
+
               <strong>{row.points}</strong>
             </div>
           ))}
@@ -162,10 +188,18 @@ const standings = data.standings;
     font: inherit;
   }
 
+  /* GENERAL */
+
   .container {
     width: min(1100px, 94%);
     margin: 0 auto;
   }
+
+  .page {
+    padding: 24px 0 60px;
+  }
+
+  /* HEADER */
 
   .topbar {
     background: #ffffff;
@@ -187,9 +221,12 @@ const standings = data.standings;
     height: 42px;
     display: grid;
     place-items: center;
+
     border-radius: 10px;
+
     background: #111827;
     color: white;
+
     font-weight: 800;
   }
 
@@ -204,9 +241,7 @@ const standings = data.standings;
     font-size: 13px;
   }
 
-  .page {
-    padding: 24px 0 60px;
-  }
+  /* LEAGUE TABS */
 
   .league-tabs {
     display: flex;
@@ -218,8 +253,11 @@ const standings = data.standings;
     border: none;
     background: transparent;
     color: #6b7280;
+
     padding: 9px 16px;
+
     border-radius: 20px;
+
     cursor: pointer;
     font-weight: 600;
   }
@@ -229,9 +267,22 @@ const standings = data.standings;
     color: white;
   }
 
+  .league-tab.disabled {
+    background: #eceef1;
+    color: #b0b4bb;
+
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+
+  /* LAYOUT */
+
   .content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    grid-template-columns:
+      minmax(0, 2fr)
+      minmax(280px, 1fr);
+
     gap: 20px;
     align-items: start;
   }
@@ -242,18 +293,24 @@ const standings = data.standings;
     gap: 20px;
   }
 
+  /* PANELS */
+
   .panel {
+    overflow: hidden;
+
     background: #ffffff;
+
     border: 1px solid #e5e7eb;
     border-radius: 12px;
-    overflow: hidden;
   }
 
   .panel-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     padding: 18px 20px;
+
     border-bottom: 1px solid #eeeeee;
   }
 
@@ -265,25 +322,23 @@ const standings = data.standings;
   .panel-header span {
     display: block;
     margin-top: 3px;
-    font-size: 12px;
+
     color: #9ca3af;
+
+    font-size: 12px;
   }
 
-  .secondary-button {
-    border: none;
-    background: #f3f4f6;
-    color: #4b5563;
-    border-radius: 7px;
-    padding: 7px 10px;
-    cursor: pointer;
-  }
+  /* MATCHES */
 
   .match-row {
     display: grid;
-    grid-template-columns: 65px minmax(0, 1fr) 30px;
+    grid-template-columns: 65px minmax(0, 1fr);
+
     gap: 12px;
     align-items: center;
+
     padding: 16px 20px;
+
     border-bottom: 1px solid #f0f0f0;
   }
 
@@ -292,8 +347,9 @@ const standings = data.standings;
   }
 
   .match-time {
-    font-size: 13px;
     color: #6b7280;
+
+    font-size: 13px;
     font-weight: 600;
   }
 
@@ -301,32 +357,40 @@ const standings = data.standings;
     display: flex;
     flex-direction: column;
     gap: 10px;
+
     min-width: 0;
   }
 
   .team-row {
     display: flex;
     align-items: center;
+
     gap: 10px;
     min-width: 0;
+
     font-size: 14px;
     font-weight: 600;
   }
 
   .team-row span {
-    white-space: nowrap;
     overflow: hidden;
+
+    white-space: nowrap;
     text-overflow: ellipsis;
   }
 
   .team-logo,
   .small-logo {
     flex-shrink: 0;
+
     display: grid;
     place-items: center;
+
     border-radius: 50%;
+
     background: #f3f4f6;
     color: #4b5563;
+
     font-weight: 700;
   }
 
@@ -342,17 +406,16 @@ const standings = data.standings;
     font-size: 10px;
   }
 
-  .match-arrow {
-    text-align: right;
-    color: #9ca3af;
-    font-size: 18px;
-  }
+  /* TRENDS */
 
   .trend-row {
     display: flex;
-    gap: 14px;
     align-items: flex-start;
+
+    gap: 14px;
+
     padding: 18px 20px;
+
     border-bottom: 1px solid #f0f0f0;
   }
 
@@ -362,11 +425,15 @@ const standings = data.standings;
 
   .trend-icon {
     flex-shrink: 0;
+
     width: 36px;
     height: 36px;
+
     display: grid;
     place-items: center;
+
     background: #f3f4f6;
+
     border-radius: 8px;
   }
 
@@ -376,44 +443,94 @@ const standings = data.standings;
 
   .trend-row p {
     margin: 4px 0 0;
+
     color: #6b7280;
+
     font-size: 13px;
     line-height: 1.4;
   }
 
+  /* STANDINGS */
+
   .standing-header,
   .standing-row {
     display: grid;
-    grid-template-columns: 30px minmax(0, 1fr) 35px 40px;
+
+    grid-template-columns:
+      30px
+      minmax(0, 1fr)
+      35px
+      40px;
+
     gap: 8px;
     align-items: center;
+
     padding: 10px 16px;
   }
 
   .standing-header {
     background: #fafafa;
     color: #9ca3af;
+
     font-size: 10px;
     font-weight: 700;
   }
 
   .standing-row {
+    position: relative;
+
     border-top: 1px solid #f0f0f0;
+
     font-size: 13px;
+  }
+
+  .standing-row::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 6px;
+    bottom: 6px;
+
+    width: 3px;
+
+    border-radius: 0 3px 3px 0;
+  }
+
+  .standing-row.promotion::before {
+    background: #16a34a;
+  }
+
+  .standing-row.playoff::before {
+    background: #86efac;
+  }
+
+  .standing-row.relegation::before {
+    background: #ef4444;
+  }
+
+  .position {
+    color: #6b7280;
+    font-weight: 600;
   }
 
   .standing-team {
     display: flex;
     align-items: center;
+
     gap: 8px;
     min-width: 0;
   }
 
   .standing-team span {
-    white-space: nowrap;
     overflow: hidden;
+
+    white-space: nowrap;
     text-overflow: ellipsis;
   }
+
+  /* MOBILE */
 
   @media (max-width: 750px) {
     .content-grid {
@@ -421,7 +538,7 @@ const standings = data.standings;
     }
 
     .match-row {
-      grid-template-columns: 55px minmax(0, 1fr) 20px;
+      grid-template-columns: 55px minmax(0, 1fr);
       padding: 14px 16px;
     }
 

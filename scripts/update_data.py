@@ -16,6 +16,20 @@ from dotenv import load_dotenv
 truststore.inject_into_ssl()
 load_dotenv()
 
+TEAM_NAMES = {
+    "Castellon": "Castellón",
+    "Leganes": "Leganés",
+    "Almeria": "Almería",
+    "Cordoba": "Córdoba",
+    "Cadiz": "Cádiz",
+    "Sp Gijon": "Real Sporting",
+    "Sociedad B": "Real Sociedad B",
+}
+
+
+def normalize_team_name(name):
+    return TEAM_NAMES.get(name, name)
+
 OPENFOOT_API_KEY = os.getenv("OPENFOOT_API_KEY")
 
 if not OPENFOOT_API_KEY:
@@ -237,13 +251,13 @@ for row in standings_data["data"]["table"]:
     team = row["team"]
 
     teams.append({
-        "id": team["id"],
-        "name": team["name"]
-    })
+    "id": team["id"],
+    "name": normalize_team_name(team["name"])
+})
 
     standings.append({
         "pos": row["position"],
-        "team": team["name"],
+        "team": normalize_team_name(team["name"]),
         "played": row["total"]["played"],
         "points": row["total"]["points"],
         "won": row["total"]["won"],
@@ -428,8 +442,8 @@ for event in today_events:
         "date": event_date,
         "time": local_time,
         "status": event.get("strStatus"),
-        "home": event.get("strHomeTeam"),
-        "away": event.get("strAwayTeam"),
+        "home": normalize_team_name(event.get("strHomeTeam")),
+        "away": normalize_team_name(event.get("strAwayTeam")),
         "homeScore": event.get("intHomeScore"),
         "awayScore": event.get("intAwayScore")
     })

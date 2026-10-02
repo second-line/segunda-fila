@@ -30,7 +30,7 @@
     },
     {
       "icon": "🎯",
-      "title": "Castellon",
+      "title": "Castellón",
       "text": "Promedia 2.6 goles en sus últimos 5 partidos"
     },
     {
@@ -42,7 +42,7 @@
   "standings": [
     {
       "pos": 1,
-      "team": "Castellon",
+      "team": "Castellón",
       "played": 7,
       "points": 19,
       "won": 6,
@@ -80,7 +80,7 @@
     },
     {
       "pos": 3,
-      "team": "Almeria",
+      "team": "Almería",
       "played": 7,
       "points": 15,
       "won": 5,
@@ -213,7 +213,7 @@
     },
     {
       "pos": 10,
-      "team": "Leganes",
+      "team": "Leganés",
       "played": 7,
       "points": 11,
       "won": 3,
@@ -251,7 +251,7 @@
     },
     {
       "pos": 12,
-      "team": "Sp Gijon",
+      "team": "Real Sporting",
       "played": 7,
       "points": 10,
       "won": 3,
@@ -289,7 +289,7 @@
     },
     {
       "pos": 14,
-      "team": "Sociedad B",
+      "team": "Real Sociedad B",
       "played": 7,
       "points": 8,
       "won": 2,
@@ -365,7 +365,7 @@
     },
     {
       "pos": 18,
-      "team": "Cordoba",
+      "team": "Córdoba",
       "played": 7,
       "points": 6,
       "won": 2,
@@ -403,7 +403,7 @@
     },
     {
       "pos": 20,
-      "team": "Cadiz",
+      "team": "Cádiz",
       "played": 7,
       "points": 4,
       "won": 0,
@@ -461,7 +461,7 @@
   ],
   "teamStats": {
     "team_castellon_es": {
-      "name": "Castellon",
+      "name": "Castellón",
       "form": [
         "W",
         "W",
@@ -493,7 +493,7 @@
       "matchesAnalysed": 5
     },
     "team_almeria_es": {
-      "name": "Almeria",
+      "name": "Almería",
       "form": [
         "L",
         "W",
@@ -605,7 +605,7 @@
       "matchesAnalysed": 5
     },
     "team_leganes_es": {
-      "name": "Leganes",
+      "name": "Leganés",
       "form": [
         "W",
         "D",
@@ -637,7 +637,7 @@
       "matchesAnalysed": 5
     },
     "team_sp_gijon_es": {
-      "name": "Sp Gijon",
+      "name": "Real Sporting",
       "form": [
         "W",
         "L",
@@ -669,7 +669,7 @@
       "matchesAnalysed": 5
     },
     "team_sociedad_b_es": {
-      "name": "Sociedad B",
+      "name": "Real Sociedad B",
       "form": [
         "D",
         "D",
@@ -733,7 +733,7 @@
       "matchesAnalysed": 5
     },
     "team_cordoba_es": {
-      "name": "Cordoba",
+      "name": "Córdoba",
       "form": [
         "L",
         "L",
@@ -765,7 +765,7 @@
       "matchesAnalysed": 5
     },
     "team_cadiz_es": {
-      "name": "Cadiz",
+      "name": "Cádiz",
       "form": [
         "D",
         "L",
