@@ -1,0 +1,436 @@
+{
+  "matchSectionTitle": "Partidos de hoy",
+  "matches": [
+    {
+      "id": "2505794",
+      "date": "2026-10-02",
+      "time": "18:30",
+      "status": "NS",
+      "home": "Eldense",
+      "away": "Real Oviedo",
+      "homeScore": null,
+      "awayScore": null
+    }
+  ],
+  "trends": [],
+  "standings": [
+    {
+      "pos": 1,
+      "team": "Castellon",
+      "played": 7,
+      "points": 19,
+      "won": 6,
+      "drawn": 1,
+      "lost": 0,
+      "goalsFor": 14,
+      "goalsAgainst": 2,
+      "goalDifference": 12,
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "pos": 2,
+      "team": "Eibar",
+      "played": 7,
+      "points": 18,
+      "won": 6,
+      "drawn": 0,
+      "lost": 1,
+      "goalsFor": 15,
+      "goalsAgainst": 6,
+      "goalDifference": 9,
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "pos": 3,
+      "team": "Almeria",
+      "played": 7,
+      "points": 15,
+      "won": 5,
+      "drawn": 0,
+      "lost": 2,
+      "goalsFor": 11,
+      "goalsAgainst": 4,
+      "goalDifference": 7,
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "L"
+      ]
+    },
+    {
+      "pos": 4,
+      "team": "Burgos",
+      "played": 7,
+      "points": 14,
+      "won": 4,
+      "drawn": 2,
+      "lost": 1,
+      "goalsFor": 11,
+      "goalsAgainst": 7,
+      "goalDifference": 4,
+      "form": [
+        "W",
+        "W",
+        "W",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "pos": 5,
+      "team": "Girona",
+      "played": 7,
+      "points": 13,
+      "won": 4,
+      "drawn": 1,
+      "lost": 2,
+      "goalsFor": 14,
+      "goalsAgainst": 8,
+      "goalDifference": 6,
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "pos": 6,
+      "team": "Mallorca",
+      "played": 7,
+      "points": 13,
+      "won": 4,
+      "drawn": 1,
+      "lost": 2,
+      "goalsFor": 8,
+      "goalsAgainst": 3,
+      "goalDifference": 5,
+      "form": [
+        "L",
+        "W",
+        "W",
+        "D",
+        "W"
+      ]
+    },
+    {
+      "pos": 7,
+      "team": "Sabadell",
+      "played": 7,
+      "points": 12,
+      "won": 3,
+      "drawn": 3,
+      "lost": 1,
+      "goalsFor": 8,
+      "goalsAgainst": 6,
+      "goalDifference": 2,
+      "form": [
+        "D",
+        "W",
+        "L",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "pos": 8,
+      "team": "Oviedo",
+      "played": 7,
+      "points": 11,
+      "won": 3,
+      "drawn": 2,
+      "lost": 2,
+      "goalsFor": 7,
+      "goalsAgainst": 4,
+      "goalDifference": 3,
+      "form": [
+        "W",
+        "L",
+        "W",
+        "D",
+        "W"
+      ]
+    },
+    {
+      "pos": 9,
+      "team": "Tenerife",
+      "played": 7,
+      "points": 11,
+      "won": 3,
+      "drawn": 2,
+      "lost": 2,
+      "goalsFor": 8,
+      "goalsAgainst": 9,
+      "goalDifference": -1,
+      "form": [
+        "D",
+        "L",
+        "W",
+        "D",
+        "L"
+      ]
+    },
+    {
+      "pos": 10,
+      "team": "Leganes",
+      "played": 7,
+      "points": 11,
+      "won": 3,
+      "drawn": 2,
+      "lost": 2,
+      "goalsFor": 6,
+      "goalsAgainst": 7,
+      "goalDifference": -1,
+      "form": [
+        "L",
+        "W",
+        "L",
+        "D",
+        "W"
+      ]
+    },
+    {
+      "pos": 11,
+      "team": "Las Palmas",
+      "played": 7,
+      "points": 10,
+      "won": 3,
+      "drawn": 1,
+      "lost": 3,
+      "goalsFor": 10,
+      "goalsAgainst": 11,
+      "goalDifference": -1,
+      "form": [
+        "L",
+        "L",
+        "W",
+        "D",
+        "L"
+      ]
+    },
+    {
+      "pos": 12,
+      "team": "Sp Gijon",
+      "played": 7,
+      "points": 10,
+      "won": 3,
+      "drawn": 1,
+      "lost": 3,
+      "goalsFor": 5,
+      "goalsAgainst": 6,
+      "goalDifference": -1,
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "pos": 13,
+      "team": "Granada",
+      "played": 7,
+      "points": 8,
+      "won": 2,
+      "drawn": 2,
+      "lost": 3,
+      "goalsFor": 10,
+      "goalsAgainst": 11,
+      "goalDifference": -1,
+      "form": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "pos": 14,
+      "team": "Sociedad B",
+      "played": 7,
+      "points": 8,
+      "won": 2,
+      "drawn": 2,
+      "lost": 3,
+      "goalsFor": 9,
+      "goalsAgainst": 10,
+      "goalDifference": -1,
+      "form": [
+        "L",
+        "L",
+        "W",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "pos": 15,
+      "team": "Celta B",
+      "played": 7,
+      "points": 8,
+      "won": 2,
+      "drawn": 2,
+      "lost": 3,
+      "goalsFor": 8,
+      "goalsAgainst": 11,
+      "goalDifference": -3,
+      "form": [
+        "D",
+        "L",
+        "L",
+        "W",
+        "L"
+      ]
+    },
+    {
+      "pos": 16,
+      "team": "Valladolid",
+      "played": 7,
+      "points": 8,
+      "won": 2,
+      "drawn": 2,
+      "lost": 3,
+      "goalsFor": 6,
+      "goalsAgainst": 9,
+      "goalDifference": -3,
+      "form": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "D"
+      ]
+    },
+    {
+      "pos": 17,
+      "team": "Andorra",
+      "played": 7,
+      "points": 6,
+      "won": 2,
+      "drawn": 0,
+      "lost": 5,
+      "goalsFor": 12,
+      "goalsAgainst": 15,
+      "goalDifference": -3,
+      "form": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "L"
+      ]
+    },
+    {
+      "pos": 18,
+      "team": "Cordoba",
+      "played": 7,
+      "points": 6,
+      "won": 2,
+      "drawn": 0,
+      "lost": 5,
+      "goalsFor": 10,
+      "goalsAgainst": 16,
+      "goalDifference": -6,
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ]
+    },
+    {
+      "pos": 19,
+      "team": "Eldense",
+      "played": 7,
+      "points": 5,
+      "won": 1,
+      "drawn": 2,
+      "lost": 4,
+      "goalsFor": 4,
+      "goalsAgainst": 9,
+      "goalDifference": -5,
+      "form": [
+        "L",
+        "L",
+        "W",
+        "D",
+        "L"
+      ]
+    },
+    {
+      "pos": 20,
+      "team": "Cadiz",
+      "played": 7,
+      "points": 4,
+      "won": 0,
+      "drawn": 4,
+      "lost": 3,
+      "goalsFor": 7,
+      "goalsAgainst": 10,
+      "goalDifference": -3,
+      "form": [
+        "D",
+        "L",
+        "L",
+        "L",
+        "D"
+      ]
+    },
+    {
+      "pos": 21,
+      "team": "Ceuta",
+      "played": 7,
+      "points": 4,
+      "won": 1,
+      "drawn": 1,
+      "lost": 5,
+      "goalsFor": 6,
+      "goalsAgainst": 17,
+      "goalDifference": -11,
+      "form": [
+        "W",
+        "D",
+        "L",
+        "L",
+        "L"
+      ]
+    },
+    {
+      "pos": 22,
+      "team": "Albacete",
+      "played": 7,
+      "points": 1,
+      "won": 0,
+      "drawn": 1,
+      "lost": 6,
+      "goalsFor": 4,
+      "goalsAgainst": 12,
+      "goalDifference": -8,
+      "form": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "L"
+      ]
+    }
+  ]
+}

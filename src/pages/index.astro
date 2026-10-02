@@ -1,17 +1,436 @@
 ---
+import data from "../data/segunda.json";
 
+const matches = data.matches;
+const trends = data.trends;
+const standings = data.standings;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Estadísticas, tendencias y datos de Segunda División y Championship."
+    />
+    <title>Segunda Fila</title>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="container header-content">
+        <div class="brand">
+          <div class="logo">SF</div>
+
+          <div>
+            <h1>Segunda Fila</h1>
+            <p>Fútbol más allá de Primera</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container page">
+      <nav class="league-tabs">
+        <button class="league-tab active">Segunda</button>
+        <button class="league-tab">Championship</button>
+      </nav>
+
+      <div class="content-grid">
+        <div class="main-column">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>{data.matchSectionTitle}</h2>
+              </div>
+
+              <button class="secondary-button">Próximos</button>
+            </div>
+
+            <div>
+              {matches.map((match) => (
+                <article class="match-row">
+                  <div class="match-time">{match.time}</div>
+
+                  <div class="teams">
+                    <div class="team-row">
+                      <div class="team-logo">
+                        {match.home.charAt(0)}
+                      </div>
+                      <span>{match.home}</span>
+                    </div>
+
+                    <div class="team-row">
+                      <div class="team-logo">
+                        {match.away.charAt(0)}
+                      </div>
+                      <span>{match.away}</span>
+                    </div>
+                  </div>
+
+                  <div class="match-arrow">→</div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Tendencias</h2>
+                <span>Datos destacados</span>
+              </div>
+            </div>
+
+            <div>
+              {trends.map((trend) => (
+                <article class="trend-row">
+                  <div class="trend-icon">{trend.icon}</div>
+
+                  <div>
+                    <strong>{trend.title}</strong>
+                    <p>{trend.text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <aside class="panel standings-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Clasificación</h2>
+              <span>Segunda División</span>
+            </div>
+          </div>
+
+          <div class="standing-header">
+            <span>#</span>
+            <span>Equipo</span>
+            <span>PJ</span>
+            <span>PTS</span>
+          </div>
+
+          {standings.map((row) => (
+            <div class="standing-row">
+              <span>{row.pos}</span>
+
+              <div class="standing-team">
+                <div class="small-logo">
+                  {row.team.charAt(0)}
+                </div>
+                <span>{row.team}</span>
+              </div>
+
+              <span>{row.played}</span>
+              <strong>{row.points}</strong>
+            </div>
+          ))}
+        </aside>
+      </div>
+    </main>
+  </body>
 </html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(html) {
+    background: #f3f4f6;
+    color-scheme: light;
+  }
+
+  :global(body) {
+    margin: 0;
+    min-height: 100vh;
+    background: #f3f4f6;
+    color: #202124;
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  :global(button) {
+    font: inherit;
+  }
+
+  .container {
+    width: min(1100px, 94%);
+    margin: 0 auto;
+  }
+
+  .topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .header-content {
+    padding: 18px 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-weight: 800;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .brand p {
+    margin: 3px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+  }
+
+  .page {
+    padding: 24px 0 60px;
+  }
+
+  .league-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .league-tab {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    padding: 9px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .league-tab.active {
+    background: #111827;
+    color: white;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .panel {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .panel-header h2 {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .panel-header span {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  .secondary-button {
+    border: none;
+    background: #f3f4f6;
+    color: #4b5563;
+    border-radius: 7px;
+    padding: 7px 10px;
+    cursor: pointer;
+  }
+
+  .match-row {
+    display: grid;
+    grid-template-columns: 65px minmax(0, 1fr) 30px;
+    gap: 12px;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .match-row:last-child {
+    border-bottom: none;
+  }
+
+  .match-time {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+  }
+
+  .teams {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .team-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .team-row span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .team-logo,
+  .small-logo {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #4b5563;
+    font-weight: 700;
+  }
+
+  .team-logo {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .small-logo {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .match-arrow {
+    text-align: right;
+    color: #9ca3af;
+    font-size: 18px;
+  }
+
+  .trend-row {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .trend-row:last-child {
+    border-bottom: none;
+  }
+
+  .trend-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    background: #f3f4f6;
+    border-radius: 8px;
+  }
+
+  .trend-row strong {
+    font-size: 14px;
+  }
+
+  .trend-row p {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .standing-header,
+  .standing-row {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) 35px 40px;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 16px;
+  }
+
+  .standing-header {
+    background: #fafafa;
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .standing-row {
+    border-top: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+
+  .standing-team {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .standing-team span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 750px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .match-row {
+      grid-template-columns: 55px minmax(0, 1fr) 20px;
+      padding: 14px 16px;
+    }
+
+    .panel-header {
+      padding: 16px;
+    }
+
+    .trend-row {
+      padding: 16px;
+    }
+  }
+</style>
