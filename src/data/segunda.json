@@ -12,7 +12,33 @@
       "awayScore": null
     }
   ],
-  "trends": [],
+  "trends": [
+    {
+      "icon": "🔥",
+      "title": "Eibar",
+      "text": "6 victorias consecutivas"
+    },
+    {
+      "icon": "⚽",
+      "title": "Girona",
+      "text": "Ha marcado en sus últimos 7 partidos"
+    },
+    {
+      "icon": "🥅",
+      "title": "Granada",
+      "text": "Ambos equipos marcaron en 4 de sus últimos 5 partidos"
+    },
+    {
+      "icon": "🎯",
+      "title": "Castellon",
+      "text": "Promedia 2.6 goles en sus últimos 5 partidos"
+    },
+    {
+      "icon": "📈",
+      "title": "Burgos",
+      "text": "5 partidos consecutivos sin perder"
+    }
+  ],
   "standings": [
     {
       "pos": 1,
@@ -432,5 +458,359 @@
         "L"
       ]
     }
-  ]
+  ],
+  "teamStats": {
+    "team_castellon_es": {
+      "name": "Castellon",
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "avgGoals": 2.6,
+      "btts": 2,
+      "unbeatenStreak": 7,
+      "scoringStreak": 5,
+      "winStreak": 5,
+      "matchesAnalysed": 5
+    },
+    "team_eibar_es": {
+      "name": "Eibar",
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "avgGoals": 2.6,
+      "btts": 2,
+      "unbeatenStreak": 6,
+      "scoringStreak": 7,
+      "winStreak": 6,
+      "matchesAnalysed": 5
+    },
+    "team_almeria_es": {
+      "name": "Almeria",
+      "form": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
+      "avgGoals": 1.6,
+      "btts": 1,
+      "unbeatenStreak": 4,
+      "scoringStreak": 4,
+      "winStreak": 4,
+      "matchesAnalysed": 5
+    },
+    "team_burgos_es": {
+      "name": "Burgos",
+      "form": [
+        "D",
+        "D",
+        "W",
+        "W",
+        "W"
+      ],
+      "avgGoals": 1.6,
+      "btts": 3,
+      "unbeatenStreak": 5,
+      "scoringStreak": 3,
+      "winStreak": 3,
+      "matchesAnalysed": 5
+    },
+    "team_girona_es": {
+      "name": "Girona",
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "avgGoals": 2.4,
+      "btts": 3,
+      "unbeatenStreak": 2,
+      "scoringStreak": 7,
+      "winStreak": 2,
+      "matchesAnalysed": 5
+    },
+    "team_mallorca_es": {
+      "name": "Mallorca",
+      "form": [
+        "W",
+        "D",
+        "W",
+        "W",
+        "L"
+      ],
+      "avgGoals": 1.2,
+      "btts": 0,
+      "unbeatenStreak": 0,
+      "scoringStreak": 0,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_sabadell_es": {
+      "name": "Sabadell",
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "D"
+      ],
+      "avgGoals": 1.6,
+      "btts": 3,
+      "unbeatenStreak": 2,
+      "scoringStreak": 2,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_oviedo_es": {
+      "name": "Oviedo",
+      "form": [
+        "W",
+        "D",
+        "W",
+        "L",
+        "W"
+      ],
+      "avgGoals": 1.4,
+      "btts": 1,
+      "unbeatenStreak": 1,
+      "scoringStreak": 3,
+      "winStreak": 1,
+      "matchesAnalysed": 5
+    },
+    "team_tenerife_es": {
+      "name": "Tenerife",
+      "form": [
+        "L",
+        "D",
+        "W",
+        "L",
+        "D"
+      ],
+      "avgGoals": 0.8,
+      "btts": 2,
+      "unbeatenStreak": 1,
+      "scoringStreak": 1,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_leganes_es": {
+      "name": "Leganes",
+      "form": [
+        "W",
+        "D",
+        "L",
+        "W",
+        "L"
+      ],
+      "avgGoals": 0.8,
+      "btts": 1,
+      "unbeatenStreak": 0,
+      "scoringStreak": 0,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_las_palmas_es": {
+      "name": "Las Palmas",
+      "form": [
+        "L",
+        "D",
+        "W",
+        "L",
+        "L"
+      ],
+      "avgGoals": 1.2,
+      "btts": 3,
+      "unbeatenStreak": 0,
+      "scoringStreak": 3,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_sp_gijon_es": {
+      "name": "Sp Gijon",
+      "form": [
+        "W",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "avgGoals": 0.8,
+      "btts": 1,
+      "unbeatenStreak": 0,
+      "scoringStreak": 0,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_granada_es": {
+      "name": "Granada",
+      "form": [
+        "W",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
+      "avgGoals": 1.6,
+      "btts": 4,
+      "unbeatenStreak": 0,
+      "scoringStreak": 3,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_sociedad_b_es": {
+      "name": "Sociedad B",
+      "form": [
+        "D",
+        "D",
+        "W",
+        "L",
+        "L"
+      ],
+      "avgGoals": 1.4,
+      "btts": 4,
+      "unbeatenStreak": 0,
+      "scoringStreak": 1,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_celta_b_es": {
+      "name": "Celta B",
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "D"
+      ],
+      "avgGoals": 0.8,
+      "btts": 2,
+      "unbeatenStreak": 1,
+      "scoringStreak": 1,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_real_valladolid_es": {
+      "name": "Valladolid",
+      "form": [
+        "D",
+        "W",
+        "L",
+        "D",
+        "W"
+      ],
+      "avgGoals": 1.2,
+      "btts": 3,
+      "unbeatenStreak": 2,
+      "scoringStreak": 2,
+      "winStreak": 1,
+      "matchesAnalysed": 5
+    },
+    "team_andorra_es": {
+      "name": "Andorra",
+      "form": [
+        "L",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "avgGoals": 1.0,
+      "btts": 3,
+      "unbeatenStreak": 1,
+      "scoringStreak": 3,
+      "winStreak": 1,
+      "matchesAnalysed": 5
+    },
+    "team_cordoba_es": {
+      "name": "Cordoba",
+      "form": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "avgGoals": 1.2,
+      "btts": 4,
+      "unbeatenStreak": 0,
+      "scoringStreak": 2,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_eldense_es": {
+      "name": "Eldense",
+      "form": [
+        "L",
+        "D",
+        "W",
+        "L",
+        "L"
+      ],
+      "avgGoals": 0.4,
+      "btts": 1,
+      "unbeatenStreak": 0,
+      "scoringStreak": 0,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_cadiz_es": {
+      "name": "Cadiz",
+      "form": [
+        "D",
+        "L",
+        "L",
+        "L",
+        "D"
+      ],
+      "avgGoals": 1.0,
+      "btts": 4,
+      "unbeatenStreak": 1,
+      "scoringStreak": 2,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    },
+    "team_ceuta_es": {
+      "name": "Ceuta",
+      "form": [
+        "L",
+        "L",
+        "L",
+        "D",
+        "W"
+      ],
+      "avgGoals": 1.0,
+      "btts": 3,
+      "unbeatenStreak": 2,
+      "scoringStreak": 3,
+      "winStreak": 1,
+      "matchesAnalysed": 5
+    },
+    "team_albacete_es": {
+      "name": "Albacete",
+      "form": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
+      "avgGoals": 0.4,
+      "btts": 2,
+      "unbeatenStreak": 0,
+      "scoringStreak": 0,
+      "winStreak": 0,
+      "matchesAnalysed": 5
+    }
+  }
 }
