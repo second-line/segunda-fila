@@ -203,6 +203,12 @@ const getMatchUrl = (match) => {
                   }
                 </div>
               </div>
+              <div
+  class="match-arrow"
+  data-match-arrow
+>
+  →
+</div>
             </a>
           );
         })}
@@ -403,7 +409,72 @@ const getMatchUrl = (match) => {
       </div>
     </main>
 
-    <script is:inline>
+   <script is:inline>
+  function setMatchClickable(
+    match,
+    clickable
+  ) {
+    const matchUrl =
+      match.dataset.matchUrl;
+
+    const arrow =
+      match.querySelector(
+        "[data-match-arrow]"
+      );
+
+    if (!matchUrl) {
+      if (arrow) {
+        arrow.hidden = true;
+      }
+
+      return;
+    }
+
+    if (clickable) {
+      match.setAttribute(
+        "href",
+        matchUrl
+      );
+
+      match.removeAttribute(
+        "aria-disabled"
+      );
+
+      match.removeAttribute(
+        "tabindex"
+      );
+
+      match.classList.remove(
+        "match-disabled"
+      );
+
+      if (arrow) {
+        arrow.hidden = false;
+      }
+
+      return;
+    }
+
+    match.removeAttribute("href");
+
+    match.setAttribute(
+      "aria-disabled",
+      "true"
+    );
+
+    match.setAttribute(
+      "tabindex",
+      "-1"
+    );
+
+    match.classList.add(
+      "match-disabled"
+    );
+
+    if (arrow) {
+      arrow.hidden = true;
+    }
+  }
       function setMatchClickable(
         match,
         clickable
