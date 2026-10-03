@@ -12,27 +12,29 @@ from dotenv import load_dotenv
 
 
 # --------------------------------------------------
-# CONFIGURACIÓN
+# CONFIGURACION
 # --------------------------------------------------
 
 truststore.inject_into_ssl()
-load_dotenv()
+load_dotenv(".env")
 
 OPENFOOT_API_KEY = os.getenv("OPENFOOT_API_KEY")
 
 if not OPENFOOT_API_KEY:
-    raise Exception("No se encontró OPENFOOT_API_KEY en .env")
-
+    raise Exception(
+        "No se encontro OPENFOOT_API_KEY en .env"
+    )
 
 OPENFOOT_BASE_URL = "https://openfootapi.com/v1"
 OPENFOOT_COMPETITION = "comp_segunda_es"
 SEASON = "2026/27"
 
-SPORTSDB_BASE_URL = "https://www.thesportsdb.com/api/v1/json/123"
+SPORTSDB_BASE_URL = (
+    "https://www.thesportsdb.com/api/v1/json/123"
+)
 SPORTSDB_LEAGUE_ID = 4400
 
 MADRID_TZ = ZoneInfo("Europe/Madrid")
-
 
 openfoot_headers = {
     "Accept": "application/json",
@@ -47,37 +49,40 @@ openfoot_headers = {
 TEAM_NAMES = {
     "Castellon": "Castellón",
     "CD Castellon": "Castellón",
+    "Castellón": "Castellón",
 
     "Leganes": "Leganés",
     "CD Leganes": "Leganés",
+    "Leganés": "Leganés",
 
     "Almeria": "Almería",
     "UD Almeria": "Almería",
+    "Almería": "Almería",
 
     "Cordoba": "Córdoba",
     "Cordoba CF": "Córdoba",
+    "Córdoba": "Córdoba",
 
     "Cadiz": "Cádiz",
     "Cadiz CF": "Cádiz",
+    "Cádiz": "Cádiz",
 
     "Sp Gijon": "Real Sporting",
     "Sporting Gijon": "Real Sporting",
+    "Sporting de Gijón": "Real Sporting",
+    "Real Sporting": "Real Sporting",
 
     "Sociedad B": "Real Sociedad B",
     "Real Sociedad B": "Real Sociedad B",
 
-    "Celta B": "Celta B",
     "Celta Fortuna": "Celta B",
+    "Celta B": "Celta B",
 
     "Real Oviedo": "Oviedo",
-"Oviedo": "Oviedo",
+    "Oviedo": "Oviedo",
 
-"Sporting de Gijón": "Real Sporting",
-"Sporting Gijon": "Real Sporting",
-"Sp Gijon": "Real Sporting",
-
-"Real Valladolid": "Valladolid",
-"Valladolid": "Valladolid",
+    "Real Valladolid": "Valladolid",
+    "Valladolid": "Valladolid",
 }
 
 
@@ -89,15 +94,18 @@ def normalize_team_name(name):
 
 
 def slugify(value):
+    if not value:
+        return ""
+
     value = unicodedata.normalize(
         "NFKD",
         value
     )
 
     value = "".join(
-        char
-        for char in value
-        if not unicodedata.combining(char)
+        character
+        for character in value
+        if not unicodedata.combining(character)
     )
 
     value = value.lower()
@@ -112,7 +120,7 @@ def slugify(value):
 
 
 # --------------------------------------------------
-# HELPERS DE FECHAS
+# FECHAS
 # --------------------------------------------------
 
 def convert_utc_to_madrid(
@@ -130,14 +138,11 @@ def convert_utc_to_madrid(
         tzinfo=timezone.utc
     )
 
-    madrid_datetime = (
-        utc_datetime
-        .astimezone(MADRID_TZ)
+    madrid_datetime = utc_datetime.astimezone(
+        MADRID_TZ
     )
 
-    return madrid_datetime.strftime(
-        "%H:%M"
-    )
+    return madrid_datetime.strftime("%H:%M")
 
 
 def create_kickoff_utc(
@@ -162,11 +167,9 @@ def format_date_label(date_string):
     if not date_string:
         return ""
 
-    value = (
-        datetime
-        .fromisoformat(date_string)
-        .date()
-    )
+    value = datetime.fromisoformat(
+        date_string
+    ).date()
 
     weekdays = [
         "Lunes",
@@ -185,35 +188,19 @@ def format_date_label(date_string):
 
 
 def get_matchday_dates(today):
-    """
-    Jornada aproximada de viernes a lunes.
-    """
-
     weekday = today.weekday()
 
-    # Lunes
     if weekday == 0:
-        friday = (
-            today
-            - timedelta(days=3)
-        )
+        friday = today - timedelta(days=3)
 
-    # Martes, miércoles y jueves
     elif weekday in [1, 2, 3]:
-        friday = (
-            today
-            + timedelta(
-                days=(4 - weekday)
-            )
+        friday = today + timedelta(
+            days=(4 - weekday)
         )
 
-    # Viernes, sábado y domingo
     else:
-        friday = (
-            today
-            - timedelta(
-                days=(weekday - 4)
-            )
+        friday = today - timedelta(
+            days=(weekday - 4)
         )
 
     return [
@@ -225,7 +212,65 @@ def get_matchday_dates(today):
 
 
 # --------------------------------------------------
-# OPENFOOT - TODOS LOS PARTIDOS
+# DATOS EXISTENTES / CACHE
+# --------------------------------------------------
+
+def load_existing_data():
+    path = "src/data/segunda.json"
+
+    if not os.path.exists(path):
+        return {}
+
+    try:
+        with open(
+            path,
+            "r",
+            encoding="utf-8"
+        ) as file:
+            return json.load(file)
+
+    except (
+        json.JSONDecodeError,
+        OSError
+    ):
+        return {}
+
+
+existing_data = load_existing_data()
+
+existing_matches = [
+    *existing_data.get(
+        "todayMatches",
+        []
+    ),
+    *existing_data.get(
+        "journeyMatches",
+        []
+    )
+]
+
+h2h_cache = {}
+
+for existing_match in existing_matches:
+    match_slug = existing_match.get(
+        "matchSlug"
+    )
+
+    head_to_head = existing_match.get(
+        "headToHead"
+    )
+
+    if (
+        match_slug and
+        head_to_head
+    ):
+        h2h_cache[
+            match_slug
+        ] = head_to_head
+
+
+# --------------------------------------------------
+# OPENFOOT - PARTIDOS
 # --------------------------------------------------
 
 def get_all_openfoot_matches():
@@ -252,14 +297,17 @@ def get_all_openfoot_matches():
 
         response.raise_for_status()
 
-        data = response.json()
+        payload = response.json()
 
         all_matches.extend(
-            data.get("data", [])
+            payload.get(
+                "data",
+                []
+            )
         )
 
         pagination = (
-            data
+            payload
             .get("meta", {})
             .get("pagination", {})
         )
@@ -275,8 +323,257 @@ def get_all_openfoot_matches():
 
 
 # --------------------------------------------------
-# ESTADÍSTICAS POR EQUIPO
+# ESTADISTICAS
 # --------------------------------------------------
+
+def calculate_period_stats(matches):
+    played = len(matches)
+
+    if played == 0:
+        return {
+            "played": 0,
+            "wins": 0,
+            "draws": 0,
+            "losses": 0,
+            "points": 0,
+            "pointsPerGame": 0,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "goalDifference": 0,
+            "avgGoalsFor": 0,
+            "avgGoalsAgainst": 0,
+            "avgTotalGoals": 0,
+            "btts": 0,
+            "bttsPercentage": 0,
+            "cleanSheets": 0,
+            "cleanSheetPercentage": 0,
+            "failedToScore": 0,
+            "failedToScorePercentage": 0,
+            "over15": 0,
+            "over15Percentage": 0,
+            "over25": 0,
+            "over25Percentage": 0,
+            "over35": 0,
+            "over35Percentage": 0,
+            "winPercentage": 0,
+            "unbeatenPercentage": 0
+        }
+
+    wins = sum(
+        1
+        for match in matches
+        if match["result"] == "W"
+    )
+
+    draws = sum(
+        1
+        for match in matches
+        if match["result"] == "D"
+    )
+
+    losses = sum(
+        1
+        for match in matches
+        if match["result"] == "L"
+    )
+
+    points = (
+        wins * 3 +
+        draws
+    )
+
+    goals_for = sum(
+        match["goalsFor"]
+        for match in matches
+    )
+
+    goals_against = sum(
+        match["goalsAgainst"]
+        for match in matches
+    )
+
+    btts = sum(
+        1
+        for match in matches
+        if match["btts"]
+    )
+
+    clean_sheets = sum(
+        1
+        for match in matches
+        if match["cleanSheet"]
+    )
+
+    failed_to_score = sum(
+        1
+        for match in matches
+        if match["failedToScore"]
+    )
+
+    over15 = sum(
+        1
+        for match in matches
+        if match["over15"]
+    )
+
+    over25 = sum(
+        1
+        for match in matches
+        if match["over25"]
+    )
+
+    over35 = sum(
+        1
+        for match in matches
+        if match["over35"]
+    )
+
+    unbeaten = wins + draws
+
+    return {
+        "played": played,
+        "wins": wins,
+        "draws": draws,
+        "losses": losses,
+        "points": points,
+
+        "pointsPerGame":
+            round(
+                points / played,
+                2
+            ),
+
+        "goalsFor":
+            goals_for,
+
+        "goalsAgainst":
+            goals_against,
+
+        "goalDifference":
+            goals_for -
+            goals_against,
+
+        "avgGoalsFor":
+            round(
+                goals_for /
+                played,
+                2
+            ),
+
+        "avgGoalsAgainst":
+            round(
+                goals_against /
+                played,
+                2
+            ),
+
+        "avgTotalGoals":
+            round(
+                (
+                    goals_for +
+                    goals_against
+                ) / played,
+                2
+            ),
+
+        "btts":
+            btts,
+
+        "bttsPercentage":
+            round(
+                btts /
+                played *
+                100,
+                1
+            ),
+
+        "cleanSheets":
+            clean_sheets,
+
+        "cleanSheetPercentage":
+            round(
+                clean_sheets /
+                played *
+                100,
+                1
+            ),
+
+        "failedToScore":
+            failed_to_score,
+
+        "failedToScorePercentage":
+            round(
+                failed_to_score /
+                played *
+                100,
+                1
+            ),
+
+        "over15":
+            over15,
+
+        "over15Percentage":
+            round(
+                over15 /
+                played *
+                100,
+                1
+            ),
+
+        "over25":
+            over25,
+
+        "over25Percentage":
+            round(
+                over25 /
+                played *
+                100,
+                1
+            ),
+
+        "over35":
+            over35,
+
+        "over35Percentage":
+            round(
+                over35 /
+                played *
+                100,
+                1
+            ),
+
+        "winPercentage":
+            round(
+                wins /
+                played *
+                100,
+                1
+            ),
+
+        "unbeatenPercentage":
+            round(
+                unbeaten /
+                played *
+                100,
+                1
+            )
+    }
+
+
+def calculate_streak(
+    matches,
+    condition
+):
+    streak = 0
+
+    for match in reversed(matches):
+        if not condition(match):
+            break
+
+        streak += 1
+
+    return streak
+
 
 def calculate_team_stats(
     team_id,
@@ -286,17 +583,24 @@ def calculate_team_stats(
 
     for match in matches:
         if (
-            match.get("status")
-            != "finished"
+            match.get("status") !=
+            "finished"
         ):
             continue
 
-        home = match["homeTeam"]
-        away = match["awayTeam"]
+        home = (
+            match.get("homeTeam")
+            or {}
+        )
+
+        away = (
+            match.get("awayTeam")
+            or {}
+        )
 
         if team_id not in [
-            home["id"],
-            away["id"]
+            home.get("id"),
+            away.get("id")
         ]:
             continue
 
@@ -305,24 +609,23 @@ def calculate_team_stats(
             or {}
         )
 
-        home_score = score.get("home")
-        away_score = score.get("away")
+        home_score = score.get(
+            "home"
+        )
+
+        away_score = score.get(
+            "away"
+        )
 
         if (
-            home_score is None
-            or away_score is None
+            home_score is None or
+            away_score is None
         ):
             continue
 
         is_home = (
-            home["id"]
-            == team_id
-        )
-
-        opponent = (
-            away
-            if is_home
-            else home
+            home.get("id") ==
+            team_id
         )
 
         goals_for = (
@@ -337,18 +640,29 @@ def calculate_team_stats(
             else home_score
         )
 
-        if goals_for > goals_against:
+        if (
+            goals_for >
+            goals_against
+        ):
             result = "W"
 
-        elif goals_for == goals_against:
+        elif (
+            goals_for ==
+            goals_against
+        ):
             result = "D"
 
         else:
             result = "L"
 
-        total_goals = (
-            goals_for
-            + goals_against
+        opponent_team = (
+            away
+            if is_home
+            else home
+        )
+
+        opponent = normalize_team_name(
+            opponent_team.get("name")
         )
 
         team_matches.append({
@@ -368,13 +682,13 @@ def calculate_team_stats(
                 is_home,
 
             "opponent":
-                normalize_team_name(
-                    opponent.get("name")
-                ),
+                opponent,
 
             "btts":
-                goals_for > 0
-                and goals_against > 0,
+                (
+                    goals_for > 0 and
+                    goals_against > 0
+                ),
 
             "cleanSheet":
                 goals_against == 0,
@@ -383,13 +697,22 @@ def calculate_team_stats(
                 goals_for == 0,
 
             "over15":
-                total_goals > 1,
+                (
+                    goals_for +
+                    goals_against
+                ) > 1,
 
             "over25":
-                total_goals > 2,
+                (
+                    goals_for +
+                    goals_against
+                ) > 2,
 
             "over35":
-                total_goals > 3
+                (
+                    goals_for +
+                    goals_against
+                ) > 3
         })
 
     team_matches.sort(
@@ -400,277 +723,11 @@ def calculate_team_stats(
     if not team_matches:
         return None
 
-
-    # --------------------------------------------------
-    # ESTADÍSTICAS DE UN PERIODO
-    # --------------------------------------------------
-
-    def calculate_period_stats(
-        selected_matches
-    ):
-        if not selected_matches:
-            return None
-
-        games = len(
-            selected_matches
-        )
-
-        wins = sum(
-            1
-            for match
-            in selected_matches
-            if match["result"] == "W"
-        )
-
-        draws = sum(
-            1
-            for match
-            in selected_matches
-            if match["result"] == "D"
-        )
-
-        losses = sum(
-            1
-            for match
-            in selected_matches
-            if match["result"] == "L"
-        )
-
-        goals_for = sum(
-            match["goalsFor"]
-            for match
-            in selected_matches
-        )
-
-        goals_against = sum(
-            match["goalsAgainst"]
-            for match
-            in selected_matches
-        )
-
-        total_goals = (
-            goals_for
-            + goals_against
-        )
-
-        btts = sum(
-            1
-            for match
-            in selected_matches
-            if match["btts"]
-        )
-
-        clean_sheets = sum(
-            1
-            for match
-            in selected_matches
-            if match["cleanSheet"]
-        )
-
-        failed_to_score = sum(
-            1
-            for match
-            in selected_matches
-            if match["failedToScore"]
-        )
-
-        over15 = sum(
-            1
-            for match
-            in selected_matches
-            if match["over15"]
-        )
-
-        over25 = sum(
-            1
-            for match
-            in selected_matches
-            if match["over25"]
-        )
-
-        over35 = sum(
-            1
-            for match
-            in selected_matches
-            if match["over35"]
-        )
-
-        points = (
-            wins * 3
-            + draws
-        )
-
-        return {
-            "played":
-                games,
-
-            "wins":
-                wins,
-
-            "draws":
-                draws,
-
-            "losses":
-                losses,
-
-            "points":
-                points,
-
-            "pointsPerGame":
-                round(
-                    points / games,
-                    2
-                ),
-
-            "goalsFor":
-                goals_for,
-
-            "goalsAgainst":
-                goals_against,
-
-            "goalDifference":
-                goals_for
-                - goals_against,
-
-            "avgGoalsFor":
-                round(
-                    goals_for / games,
-                    2
-                ),
-
-            "avgGoalsAgainst":
-                round(
-                    goals_against / games,
-                    2
-                ),
-
-            "avgTotalGoals":
-                round(
-                    total_goals / games,
-                    2
-                ),
-
-            "btts":
-                btts,
-
-            "bttsPercentage":
-                round(
-                    btts
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "cleanSheets":
-                clean_sheets,
-
-            "cleanSheetPercentage":
-                round(
-                    clean_sheets
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "failedToScore":
-                failed_to_score,
-
-            "failedToScorePercentage":
-                round(
-                    failed_to_score
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "over15":
-                over15,
-
-            "over15Percentage":
-                round(
-                    over15
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "over25":
-                over25,
-
-            "over25Percentage":
-                round(
-                    over25
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "over35":
-                over35,
-
-            "over35Percentage":
-                round(
-                    over35
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "winPercentage":
-                round(
-                    wins
-                    / games
-                    * 100,
-                    1
-                ),
-
-            "unbeatenPercentage":
-                round(
-                    (
-                        wins
-                        + draws
-                    )
-                    / games
-                    * 100,
-                    1
-                )
-        }
-
-
-    # --------------------------------------------------
-    # HELPERS DE RACHAS
-    # --------------------------------------------------
-
-    def calculate_streak(
-        condition,
-        selected_matches=None
-    ):
-        source = (
-            selected_matches
-            if selected_matches is not None
-            else team_matches
-        )
-
-        streak = 0
-
-        for match in reversed(source):
-            if not condition(match):
-                break
-
-            streak += 1
-
-        return streak
-
-
-    # --------------------------------------------------
-    # BLOQUES
-    # --------------------------------------------------
-
-    last_five = (
+    last5_matches = (
         team_matches[-5:]
     )
 
-    last_ten = (
+    last10_matches = (
         team_matches[-10:]
     )
 
@@ -678,209 +735,364 @@ def calculate_team_stats(
         match
         for match in team_matches
         if match["isHome"]
-    ]
+    ][-5:]
 
     away_matches = [
         match
         for match in team_matches
         if not match["isHome"]
+    ][-5:]
+
+    all_home_matches = [
+        match
+        for match in team_matches
+        if match["isHome"]
     ]
 
+    all_away_matches = [
+        match
+        for match in team_matches
+        if not match["isHome"]
+    ]
 
-    # --------------------------------------------------
-    # RACHAS GENERALES
-    # --------------------------------------------------
-
-    win_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                == "W"
-        )
-    )
-
-    unbeaten_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                != "L"
-        )
-    )
-
-    losing_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                == "L"
-        )
-    )
-
-    winless_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                != "W"
-        )
-    )
-
-    scoring_streak = (
-        calculate_streak(
-            lambda match:
-                match["goalsFor"]
-                > 0
-        )
-    )
-
-    conceding_streak = (
-        calculate_streak(
-            lambda match:
-                match["goalsAgainst"]
-                > 0
-        )
-    )
-
-    clean_sheet_streak = (
-        calculate_streak(
-            lambda match:
-                match["goalsAgainst"]
-                == 0
-        )
-    )
-
-    no_score_streak = (
-        calculate_streak(
-            lambda match:
-                match["goalsFor"]
-                == 0
-        )
-    )
-
-
-    # --------------------------------------------------
-    # RACHAS LOCAL
-    # --------------------------------------------------
-
-    home_win_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                == "W",
-            home_matches
-        )
-    )
-
-    home_unbeaten_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                != "L",
-            home_matches
-        )
-    )
-
-
-    # --------------------------------------------------
-    # RACHAS VISITANTE
-    # --------------------------------------------------
-
-    away_win_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                == "W",
-            away_matches
-        )
-    )
-
-    away_unbeaten_streak = (
-        calculate_streak(
-            lambda match:
-                match["result"]
-                != "L",
-            away_matches
-        )
-    )
-
-
-    # --------------------------------------------------
-    # RESULTADO FINAL
-    # --------------------------------------------------
+    form = [
+        match["result"]
+        for match in last5_matches
+    ]
 
     return {
-        "form": [
-            match["result"]
-            for match
-            in last_five
-        ],
-
-        "form10": [
-            match["result"]
-            for match
-            in last_ten
-        ],
-
-        "matchesAnalysed":
-            len(team_matches),
+        "form":
+            form,
 
         "winStreak":
-            win_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["result"]
+                    == "W"
+            ),
 
         "unbeatenStreak":
-            unbeaten_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["result"]
+                    != "L"
+            ),
 
         "losingStreak":
-            losing_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["result"]
+                    == "L"
+            ),
 
         "winlessStreak":
-            winless_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["result"]
+                    != "W"
+            ),
 
         "scoringStreak":
-            scoring_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["goalsFor"] > 0
+            ),
 
         "concedingStreak":
-            conceding_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["goalsAgainst"] > 0
+            ),
 
         "cleanSheetStreak":
-            clean_sheet_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["goalsAgainst"] == 0
+            ),
 
         "noScoreStreak":
-            no_score_streak,
+            calculate_streak(
+                team_matches,
+                lambda match:
+                    match["goalsFor"] == 0
+            ),
 
         "homeWinStreak":
-            home_win_streak,
+            calculate_streak(
+                all_home_matches,
+                lambda match:
+                    match["result"] == "W"
+            ),
 
         "homeUnbeatenStreak":
-            home_unbeaten_streak,
+            calculate_streak(
+                all_home_matches,
+                lambda match:
+                    match["result"] != "L"
+            ),
 
         "awayWinStreak":
-            away_win_streak,
+            calculate_streak(
+                all_away_matches,
+                lambda match:
+                    match["result"] == "W"
+            ),
 
         "awayUnbeatenStreak":
-            away_unbeaten_streak,
+            calculate_streak(
+                all_away_matches,
+                lambda match:
+                    match["result"] != "L"
+            ),
 
         "last5":
             calculate_period_stats(
-                last_five
+                last5_matches
             ),
 
         "last10":
             calculate_period_stats(
-                last_ten
+                last10_matches
             ),
 
         "home":
             calculate_period_stats(
-                home_matches[-5:]
+                home_matches
             ),
 
         "away":
             calculate_period_stats(
-                away_matches[-5:]
+                away_matches
             ),
 
         "recentMatches":
-            team_matches[-5:]
+            last5_matches
     }
+
+
+# --------------------------------------------------
+# H2H HISTORICO OPENFOOT
+# --------------------------------------------------
+
+def get_h2h_from_openfoot(
+    team_id,
+    opponent_id,
+    current_match_date,
+    limit=5
+):
+    response = requests.get(
+        (
+            f"{OPENFOOT_BASE_URL}"
+            f"/teams/{team_id}/h2h"
+        ),
+        headers=openfoot_headers,
+        params={
+            "opponent":
+                opponent_id
+        },
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    payload = response.json()
+
+    h2h_data = (
+        payload.get("data")
+        or {}
+    )
+
+    recent_meetings = (
+        h2h_data.get(
+            "recentMeetings"
+        )
+        or []
+    )
+
+    meetings = []
+
+    for meeting in recent_meetings:
+        score = (
+            meeting.get("score")
+            or {}
+        )
+
+        home_score = score.get(
+            "home"
+        )
+
+        away_score = score.get(
+            "away"
+        )
+
+        # No queremos partidos futuros.
+        if (
+            home_score is None or
+            away_score is None
+        ):
+            continue
+
+        meeting_date = (
+            meeting.get("date")
+            or ""
+        )[:10]
+
+        # Solo encuentros anteriores
+        # al partido que estamos mostrando.
+        if (
+            current_match_date and
+            meeting_date >=
+            current_match_date
+        ):
+            continue
+
+        raw_home = (
+            meeting.get("homeTeam")
+            or {}
+        )
+
+        raw_away = (
+            meeting.get("awayTeam")
+            or {}
+        )
+
+        home_name = normalize_team_name(
+            raw_home.get("name")
+        )
+
+        away_name = normalize_team_name(
+            raw_away.get("name")
+        )
+
+        meetings.append({
+            "date":
+                meeting_date,
+
+            "home":
+                home_name,
+
+            "away":
+                away_name,
+
+            "homeSlug":
+                slugify(
+                    home_name
+                ),
+
+            "awaySlug":
+                slugify(
+                    away_name
+                ),
+
+            "homeScore":
+                home_score,
+
+            "awayScore":
+                away_score
+        })
+
+    meetings.sort(
+        key=lambda item:
+            item["date"],
+        reverse=True
+    )
+
+    meetings = meetings[:limit]
+
+    return build_h2h_summary(
+        team_id,
+        opponent_id,
+        meetings
+    )
+
+
+def build_h2h_summary(
+    team_id,
+    opponent_id,
+    meetings
+):
+    # El endpoint beta ha mostrado
+    # IDs inconsistentes en algunos
+    # recentMeetings, asi que el resumen
+    # visual se calcula posteriormente
+    # usando los nombres del partido.
+    return {
+        "meetings":
+            meetings
+    }
+
+
+def enrich_match_with_h2h(
+    match,
+    team_ids_by_slug
+):
+    match_slug = match.get(
+        "matchSlug"
+    )
+
+    # Si ya lo descargamos en una
+    # ejecucion anterior, reutilizamos
+    # el dato y ahorramos cuota.
+    if (
+        match_slug in
+        h2h_cache
+    ):
+        match["headToHead"] = (
+            h2h_cache[
+                match_slug
+            ]
+        )
+
+        return
+
+    home_id = team_ids_by_slug.get(
+        match.get("homeSlug")
+    )
+
+    away_id = team_ids_by_slug.get(
+        match.get("awaySlug")
+    )
+
+    if (
+        not home_id or
+        not away_id
+    ):
+        match["headToHead"] = {
+            "meetings": []
+        }
+
+        return
+
+    try:
+        match["headToHead"] = (
+            get_h2h_from_openfoot(
+                home_id,
+                away_id,
+                match.get("date"),
+                limit=5
+            )
+        )
+
+    except requests.RequestException as error:
+        print(
+            "No se pudo obtener H2H para",
+            match.get("home"),
+            "-",
+            match.get("away"),
+            ":",
+            error
+        )
+
+        match["headToHead"] = {
+            "meetings": []
+        }
 
 
 # --------------------------------------------------
@@ -889,10 +1101,14 @@ def calculate_team_stats(
 
 def get_events_for_date(day):
     response = requests.get(
-        f"{SPORTSDB_BASE_URL}/eventsday.php",
+        (
+            f"{SPORTSDB_BASE_URL}"
+            "/eventsday.php"
+        ),
         params={
             "d":
                 day.isoformat(),
+
             "l":
                 SPORTSDB_LEAGUE_ID
         },
@@ -901,31 +1117,59 @@ def get_events_for_date(day):
 
     response.raise_for_status()
 
-    data = response.json()
+    payload = response.json()
 
     return (
-        data.get("events")
+        payload.get("events")
         or []
     )
 
 
 def format_sportsdb_event(event):
-    event_date = event.get("dateEvent")
-    event_time = event.get("strTime")
+    event_date = event.get(
+        "dateEvent"
+    )
 
-    home_score = event.get("intHomeScore")
-    away_score = event.get("intAwayScore")
+    event_time = event.get(
+        "strTime"
+    )
 
-    if home_score not in [None, ""]:
+    home_score = event.get(
+        "intHomeScore"
+    )
+
+    away_score = event.get(
+        "intAwayScore"
+    )
+
+    if home_score not in [
+        None,
+        ""
+    ]:
         try:
-            home_score = int(home_score)
-        except (ValueError, TypeError):
+            home_score = int(
+                home_score
+            )
+
+        except (
+            ValueError,
+            TypeError
+        ):
             pass
 
-    if away_score not in [None, ""]:
+    if away_score not in [
+        None,
+        ""
+    ]:
         try:
-            away_score = int(away_score)
-        except (ValueError, TypeError):
+            away_score = int(
+                away_score
+            )
+
+        except (
+            ValueError,
+            TypeError
+        ):
             pass
 
     home_name = normalize_team_name(
@@ -936,12 +1180,21 @@ def format_sportsdb_event(event):
         event.get("strAwayTeam")
     )
 
-    home_slug = slugify(home_name)
-    away_slug = slugify(away_name)
+    home_slug = slugify(
+        home_name
+    )
+
+    away_slug = slugify(
+        away_name
+    )
 
     match_slug = None
 
-    if event_date and home_slug and away_slug:
+    if (
+        event_date and
+        home_slug and
+        away_slug
+    ):
         match_slug = (
             f"{home_slug}-vs-"
             f"{away_slug}-"
@@ -996,106 +1249,10 @@ def format_sportsdb_event(event):
         "awayScore":
             away_score
     }
-    event_date = (
-        event.get("dateEvent")
-    )
-
-    event_time = (
-        event.get("strTime")
-    )
-
-    home_score = (
-        event.get("intHomeScore")
-    )
-
-    away_score = (
-        event.get("intAwayScore")
-    )
-
-
-    if home_score not in [
-        None,
-        ""
-    ]:
-        try:
-            home_score = int(
-                home_score
-            )
-
-        except (
-            ValueError,
-            TypeError
-        ):
-            pass
-
-
-    if away_score not in [
-        None,
-        ""
-    ]:
-        try:
-            away_score = int(
-                away_score
-            )
-
-        except (
-            ValueError,
-            TypeError
-        ):
-            pass
-
-
-    return {
-        "id":
-            event.get("idEvent"),
-
-        "date":
-            event_date,
-
-        "dateLabel":
-            format_date_label(
-                event_date
-            ),
-
-        "time":
-            convert_utc_to_madrid(
-                event_date,
-                event_time
-            ),
-
-        "kickoffUtc":
-            create_kickoff_utc(
-                event_date,
-                event_time
-            ),
-
-        "status":
-            event.get("strStatus"),
-
-        "home":
-            normalize_team_name(
-                event.get(
-                    "strHomeTeam"
-                )
-            ),
-
-        "away":
-            normalize_team_name(
-                event.get(
-                    "strAwayTeam"
-                )
-            ),
-
-        "homeScore":
-            home_score,
-
-        "awayScore":
-            away_score
-    }
 
 
 # --------------------------------------------------
-# CLASIFICACIÓN
+# CLASIFICACION
 # --------------------------------------------------
 
 standings_response = requests.get(
@@ -1110,83 +1267,130 @@ standings_response = requests.get(
 
 standings_response.raise_for_status()
 
-standings_data = (
+standings_payload = (
     standings_response.json()
+)
+
+table = (
+    standings_payload
+    .get("data", {})
+    .get("table", [])
 )
 
 standings = []
 teams = []
 
+for row in table:
+    raw_team = (
+        row.get("team")
+        or {}
+    )
 
-for row in (
-    standings_data["data"]["table"]
-):
-    team = row["team"]
-
-    normalized_name = (
-        normalize_team_name(
-            team["name"]
-        )
+    team_name = normalize_team_name(
+        raw_team.get("name")
     )
 
     team_slug = slugify(
-        normalized_name
+        team_name
     )
 
-    teams.append({
+    team = {
         "id":
-            team["id"],
+            raw_team.get("id"),
 
         "name":
-            normalized_name,
+            team_name,
 
         "slug":
             team_slug
-    })
+    }
+
+    teams.append(team)
+
+    total = (
+        row.get("total")
+        or {}
+    )
 
     standings.append({
         "pos":
-            row["position"],
+            row.get("position"),
 
         "team":
-            normalized_name,
+            team_name,
 
         "slug":
             team_slug,
 
         "played":
-            row["total"]["played"],
+            total.get(
+                "played",
+                0
+            ),
 
         "points":
-            row["total"]["points"],
+            total.get(
+                "points",
+                0
+            ),
 
         "won":
-            row["total"]["won"],
+            total.get(
+                "won",
+                0
+            ),
 
         "drawn":
-            row["total"]["drawn"],
+            total.get(
+                "drawn",
+                0
+            ),
 
         "lost":
-            row["total"]["lost"],
+            total.get(
+                "lost",
+                0
+            ),
 
         "goalsFor":
-            row["total"]["goalsFor"],
+            total.get(
+                "goalsFor",
+                0
+            ),
 
         "goalsAgainst":
-            row["total"]["goalsAgainst"],
+            total.get(
+                "goalsAgainst",
+                0
+            ),
 
         "goalDifference":
-            row["total"][
-                "goalDifference"
-            ],
+            total.get(
+                "goalDifference",
+                0
+            ),
 
         "form":
-            row["form"]
+            row.get(
+                "form",
+                []
+            )
     })
 
 
+team_ids_by_slug = {
+    team["slug"]:
+        team["id"]
+    for team in teams
+    if (
+        team.get("slug") and
+        team.get("id")
+    )
+}
+
+
 # --------------------------------------------------
-# HISTÓRICO OPENFOOT
+# HISTORICO TEMPORADA ACTUAL
 # --------------------------------------------------
 
 all_matches = (
@@ -1195,11 +1399,10 @@ all_matches = (
 
 finished_matches = [
     match
-    for match
-    in all_matches
+    for match in all_matches
     if (
-        match.get("status")
-        == "finished"
+        match.get("status") ==
+        "finished"
     )
 ]
 
@@ -1210,39 +1413,38 @@ print(
 
 
 # --------------------------------------------------
-# ESTADÍSTICAS POR EQUIPO
+# ESTADISTICAS EQUIPOS
 # --------------------------------------------------
 
 team_stats = {}
 
-
 for team in teams:
-    stats = (
-        calculate_team_stats(
-            team["id"],
-            finished_matches
-        )
+    stats = calculate_team_stats(
+        team["id"],
+        finished_matches
     )
 
-    if stats:
-        team_stats[
-            team["id"]
-        ] = {
-            "id":
-                team["id"],
+    if not stats:
+        continue
 
-            "name":
-                team["name"],
+    team_stats[
+        team["id"]
+    ] = {
+        "id":
+            team["id"],
 
-            "slug":
-                team["slug"],
+        "name":
+            team["name"],
 
-            **stats
-        }
+        "slug":
+            team["slug"],
+
+        **stats
+    }
 
 
 # --------------------------------------------------
-# TENDENCIAS DESTACADAS
+# TENDENCIAS
 # --------------------------------------------------
 
 trend_groups = {
@@ -1256,17 +1458,11 @@ trend_groups = {
     "away": []
 }
 
-
 for team_id, stats in (
     team_stats.items()
 ):
     team_name = stats["name"]
     team_slug = stats["slug"]
-
-    last5 = stats["last5"]
-
-
-    # Racha de victorias
 
     if stats["winStreak"] >= 3:
         trend_groups[
@@ -1284,14 +1480,12 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"{stats['winStreak']} "
-                f"victorias consecutivas"
-            )
+            "text":
+                (
+                    f"{stats['winStreak']} "
+                    "victorias consecutivas"
+                )
         })
-
-
-    # Sin perder
 
     if (
         stats["unbeatenStreak"]
@@ -1306,7 +1500,7 @@ for team_id, stats in (
                 ],
 
             "icon":
-                "📈",
+                "🛡️",
 
             "title":
                 team_name,
@@ -1314,15 +1508,12 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"{stats['unbeatenStreak']} "
-                f"partidos consecutivos "
-                f"sin perder"
-            )
+            "text":
+                (
+                    f"{stats['unbeatenStreak']} "
+                    "partidos sin perder"
+                )
         })
-
-
-    # Marcando
 
     if (
         stats["scoringStreak"]
@@ -1345,26 +1536,24 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"Ha marcado en sus últimos "
-                f"{stats['scoringStreak']} "
-                f"partidos"
-            )
+            "text":
+                (
+                    "Ha marcado en sus últimos "
+                    f"{stats['scoringStreak']} "
+                    "partidos"
+                )
         })
 
-
-    # Goles últimos 5
-
     if (
-        last5
-        and last5["avgGoalsFor"]
-        >= 1.8
+        stats["last5"][
+            "avgGoalsFor"
+        ] >= 1.8
     ):
         trend_groups[
             "goals"
         ].append({
             "value":
-                last5[
+                stats["last5"][
                     "avgGoalsFor"
                 ],
 
@@ -1377,27 +1566,27 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"Promedia "
-                f"{last5['avgGoalsFor']} "
-                f"goles en sus últimos "
-                f"5 partidos"
-            )
+            "text":
+                (
+                    "Promedia "
+                    f"{stats['last5']['avgGoalsFor']} "
+                    "goles por partido "
+                    "en sus últimos 5"
+                )
         })
 
-
-    # Ambos marcan
-
     if (
-        last5
-        and last5["btts"]
-        >= 4
+        stats["last5"][
+            "bttsPercentage"
+        ] >= 60
     ):
         trend_groups[
             "btts"
         ].append({
             "value":
-                last5["btts"],
+                stats["last5"][
+                    "bttsPercentage"
+                ],
 
             "icon":
                 "🥅",
@@ -1408,27 +1597,26 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"Ambos equipos marcaron "
-                f"en {last5['btts']} "
-                f"de sus últimos 5 partidos"
-            )
+            "text":
+                (
+                    "Ambos equipos marcaron "
+                    "en el "
+                    f"{stats['last5']['bttsPercentage']}% "
+                    "de sus últimos 5 partidos"
+                )
         })
 
-
-    # Porterías a cero
-
     if (
-        last5
-        and last5["cleanSheets"]
-        >= 3
+        stats["last5"][
+            "cleanSheetPercentage"
+        ] >= 60
     ):
         trend_groups[
             "cleanSheets"
         ].append({
             "value":
-                last5[
-                    "cleanSheets"
+                stats["last5"][
+                    "cleanSheetPercentage"
                 ],
 
             "icon":
@@ -1440,27 +1628,26 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"Ha dejado la portería "
-                f"a cero en "
-                f"{last5['cleanSheets']} "
-                f"de sus últimos 5 partidos"
-            )
+            "text":
+                (
+                    "Portería a cero en "
+                    f"{stats['last5']['cleanSheets']} "
+                    "de sus últimos 5 partidos"
+                )
         })
 
-
-    # Local
-
     if (
-        stats["homeWinStreak"]
-        >= 3
+        stats["home"]["played"] >= 3 and
+        stats["home"][
+            "winPercentage"
+        ] >= 60
     ):
         trend_groups[
             "home"
         ].append({
             "value":
-                stats[
-                    "homeWinStreak"
+                stats["home"][
+                    "winPercentage"
                 ],
 
             "icon":
@@ -1472,26 +1659,27 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"{stats['homeWinStreak']} "
-                f"victorias consecutivas "
-                f"como local"
-            )
+            "text":
+                (
+                    "Ha ganado el "
+                    f"{stats['home']['winPercentage']}% "
+                    "de sus últimos partidos "
+                    "como local"
+                )
         })
 
-
-    # Visitante
-
     if (
-        stats["awayWinStreak"]
-        >= 3
+        stats["away"]["played"] >= 3 and
+        stats["away"][
+            "winPercentage"
+        ] >= 60
     ):
         trend_groups[
             "away"
         ].append({
             "value":
-                stats[
-                    "awayWinStreak"
+                stats["away"][
+                    "winPercentage"
                 ],
 
             "icon":
@@ -1503,33 +1691,29 @@ for team_id, stats in (
             "slug":
                 team_slug,
 
-            "text": (
-                f"{stats['awayWinStreak']} "
-                f"victorias consecutivas "
-                f"como visitante"
-            )
+            "text":
+                (
+                    "Ha ganado el "
+                    f"{stats['away']['winPercentage']}% "
+                    "de sus últimos partidos "
+                    "como visitante"
+                )
         })
 
 
-# --------------------------------------------------
-# SELECCIÓN DE TOP TENDENCIAS
-# --------------------------------------------------
-
 trends = []
-
 used_teams = set()
 
 category_order = [
     "wins",
     "unbeaten",
     "scoring",
-    "cleanSheets",
     "goals",
     "btts",
+    "cleanSheets",
     "home",
     "away"
 ]
-
 
 for category in category_order:
     candidates = sorted(
@@ -1541,28 +1725,30 @@ for category in category_order:
 
     for candidate in candidates:
         if (
-            candidate["title"]
-            not in used_teams
+            candidate["slug"]
+            in used_teams
         ):
-            trends.append({
-                "icon":
-                    candidate["icon"],
+            continue
 
-                "title":
-                    candidate["title"],
+        trends.append({
+            "icon":
+                candidate["icon"],
 
-                "slug":
-                    candidate["slug"],
+            "title":
+                candidate["title"],
 
-                "text":
-                    candidate["text"]
-            })
+            "slug":
+                candidate["slug"],
 
-            used_teams.add(
-                candidate["title"]
-            )
+            "text":
+                candidate["text"]
+        })
 
-            break
+        used_teams.add(
+            candidate["slug"]
+        )
+
+        break
 
     if len(trends) >= 6:
         break
@@ -1578,18 +1764,15 @@ now_madrid = datetime.now(
 
 today = now_madrid.date()
 
-today_events = (
-    get_events_for_date(
-        today
-    )
+today_events = get_events_for_date(
+    today
 )
 
 today_matches = [
     format_sportsdb_event(
         event
     )
-    for event
-    in today_events
+    for event in today_events
 ]
 
 
@@ -1597,34 +1780,27 @@ today_matches = [
 # ESTA JORNADA
 # --------------------------------------------------
 
-matchday_dates = (
-    get_matchday_dates(
-        today
-    )
+matchday_dates = get_matchday_dates(
+    today
 )
 
 journey_events = []
+
 seen_events = set()
 
-
-for matchday_date in (
-    matchday_dates
-):
-    events = (
-        get_events_for_date(
-            matchday_date
-        )
+for matchday_date in matchday_dates:
+    events = get_events_for_date(
+        matchday_date
     )
 
     for event in events:
-        event_id = (
-            event.get("idEvent")
+        event_id = event.get(
+            "idEvent"
         )
 
         if (
-            event_id
-            and event_id
-            in seen_events
+            event_id and
+            event_id in seen_events
         ):
             continue
 
@@ -1639,11 +1815,9 @@ for matchday_date in (
             )
         )
 
-        # Los de hoy ya están arriba
-
         if (
-            formatted_event["date"]
-            == today.isoformat()
+            formatted_event["date"] ==
+            today.isoformat()
         ):
             continue
 
@@ -1659,6 +1833,289 @@ journey_events.sort(
     )
 )
 
+
+# --------------------------------------------------
+# AÑADIR H2H HISTORICO
+# --------------------------------------------------
+
+all_current_matches = [
+    *today_matches,
+    *journey_events
+]
+
+for match in all_current_matches:
+    enrich_match_with_h2h(
+        match,
+        team_ids_by_slug
+    )
+
+
+def validate_output_data(
+    teams,
+    standings,
+    team_stats,
+    today_matches,
+    journey_matches
+):
+    errors = []
+    warnings = []
+
+    all_matches = [
+        *today_matches,
+        *journey_matches
+    ]
+
+    team_slugs = [
+        team.get("slug")
+        for team in teams
+        if team.get("slug")
+    ]
+
+    stats_slugs = {
+        stats.get("slug")
+        for stats in team_stats.values()
+        if stats.get("slug")
+    }
+
+    # 1. Numero esperado de equipos
+    if len(teams) != 22:
+        errors.append(
+            f"Se esperaban 22 equipos y hay {len(teams)}"
+        )
+
+    if len(standings) != 22:
+        errors.append(
+            f"La clasificacion tiene {len(standings)} equipos"
+        )
+
+    # 2. Slugs duplicados
+    duplicated_slugs = {
+        slug
+        for slug in team_slugs
+        if team_slugs.count(slug) > 1
+    }
+
+    if duplicated_slugs:
+        errors.append(
+            "Slugs duplicados: "
+            + ", ".join(
+                sorted(duplicated_slugs)
+            )
+        )
+
+    # 3. Equipos sin estadisticas
+    missing_stats = [
+        team["name"]
+        for team in teams
+        if team.get("slug") not in stats_slugs
+    ]
+
+    if missing_stats:
+        errors.append(
+            "Equipos sin teamStats: "
+            + ", ".join(missing_stats)
+        )
+
+    # 4. Partidos sin slug o equipos
+    for match in all_matches:
+        label = (
+            f"{match.get('home')} - "
+            f"{match.get('away')}"
+        )
+
+        if not match.get("matchSlug"):
+            errors.append(
+                f"Partido sin matchSlug: {label}"
+            )
+
+        if not match.get("homeSlug"):
+            errors.append(
+                f"Partido sin homeSlug: {label}"
+            )
+
+        if not match.get("awaySlug"):
+            errors.append(
+                f"Partido sin awaySlug: {label}"
+            )
+
+    # 5. Equipos de partidos sin estadisticas
+    for match in all_matches:
+        label = (
+            f"{match.get('home')} - "
+            f"{match.get('away')}"
+        )
+
+        home_slug = match.get(
+            "homeSlug"
+        )
+
+        away_slug = match.get(
+            "awaySlug"
+        )
+
+        if (
+            home_slug and
+            home_slug not in stats_slugs
+        ):
+            errors.append(
+                f"Local sin teamStats: "
+                f"{label} -> {home_slug}"
+            )
+
+        if (
+            away_slug and
+            away_slug not in stats_slugs
+        ):
+            errors.append(
+                f"Visitante sin teamStats: "
+                f"{label} -> {away_slug}"
+            )
+
+    # 6. Resultados incompletos
+    for match in all_matches:
+        home_score = match.get(
+            "homeScore"
+        )
+
+        away_score = match.get(
+            "awayScore"
+        )
+
+        one_score_only = (
+            (
+                home_score is not None and
+                away_score is None
+            )
+            or
+            (
+                home_score is None and
+                away_score is not None
+            )
+        )
+
+        if one_score_only:
+            warnings.append(
+                "Marcador incompleto: "
+                f"{match.get('home')} - "
+                f"{match.get('away')}"
+            )
+
+    # 7. H2H
+    for match in all_matches:
+        h2h = (
+            match
+            .get("headToHead", {})
+            .get("meetings", [])
+        )
+
+        for meeting in h2h:
+            if (
+                meeting.get("homeScore")
+                is None or
+                meeting.get("awayScore")
+                is None
+            ):
+                errors.append(
+                    "H2H con marcador vacio: "
+                    f"{match.get('home')} - "
+                    f"{match.get('away')}"
+                )
+
+    # 8. Estadisticas basicas coherentes
+    for stats in team_stats.values():
+        last5 = stats.get(
+            "last5",
+            {}
+        )
+
+        played = last5.get(
+            "played",
+            0
+        )
+
+        wins = last5.get(
+            "wins",
+            0
+        )
+
+        draws = last5.get(
+            "draws",
+            0
+        )
+
+        losses = last5.get(
+            "losses",
+            0
+        )
+
+        if (
+            wins +
+            draws +
+            losses !=
+            played
+        ):
+            errors.append(
+                f"Stats incoherentes en "
+                f"{stats.get('name')}: "
+                f"V+E+D != PJ"
+            )
+
+        if played > 5:
+            errors.append(
+                f"last5 tiene mas de 5 partidos "
+                f"para {stats.get('name')}"
+            )
+
+    print()
+    print("VALIDACION")
+    print("----------")
+
+    if warnings:
+        print()
+        print("Avisos:")
+
+        for warning in warnings:
+            print(
+                f"  - {warning}"
+            )
+
+    if errors:
+        print()
+        print("Errores:")
+
+        for error in errors:
+            print(
+                f"  - {error}"
+            )
+
+        raise Exception(
+            "La validacion de datos ha fallado"
+        )
+
+    print(
+        "OK - Datos consistentes"
+    )
+
+    print(
+        f"  Equipos: {len(teams)}"
+    )
+
+    print(
+        f"  TeamStats: {len(team_stats)}"
+    )
+
+    print(
+        f"  Partidos: {len(all_matches)}"
+    )
+
+
+validate_output_data(
+    teams,
+    standings,
+    team_stats,
+    today_matches,
+    journey_events
+)
 
 # --------------------------------------------------
 # JSON FINAL
@@ -1704,10 +2161,11 @@ with open(
 
 print()
 print("Datos actualizados")
+print()
 
 print(
     "Equipos:",
-    len(standings)
+    len(teams)
 )
 
 print(
@@ -1725,83 +2183,18 @@ print(
     len(journey_events)
 )
 
-
 print()
-print("TENDENCIAS:")
+print("H2H:")
 
-for trend in trends:
-    print(
-        trend["icon"],
-        trend["title"],
-        "-",
-        trend["text"]
-    )
-
-
-print()
-print("PARTIDOS DE HOY:")
-
-for match in today_matches:
-    print(
-        match["time"],
-        "-",
-        match["home"],
-        "vs",
-        match["away"]
-    )
-
-
-print()
-print("JORNADA:")
-
-for match in journey_events:
-    print(
-        match["dateLabel"],
-        match["time"],
-        "-",
-        match["home"],
-        "vs",
-        match["away"]
-    )
-
-
-print()
-print("EJEMPLO ESTADÍSTICAS:")
-
-for team_id, stats in team_stats.items():
-    print()
-    print(
-        stats["name"]
+for match in all_current_matches:
+    h2h = (
+        match
+        .get("headToHead", {})
+        .get("meetings", [])
     )
 
     print(
-        "Slug:",
-        stats["slug"]
+        f"{match['home']} - "
+        f"{match['away']}: "
+        f"{len(h2h)} anteriores"
     )
-
-    print(
-        "Forma:",
-        stats["form"]
-    )
-
-    print(
-        "Racha victorias:",
-        stats["winStreak"]
-    )
-
-    print(
-        "Sin perder:",
-        stats["unbeatenStreak"]
-    )
-
-    print(
-        "Marcando:",
-        stats["scoringStreak"]
-    )
-
-    print(
-        "Últimos 5:",
-        stats["last5"]
-    )
-
-    break

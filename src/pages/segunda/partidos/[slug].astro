@@ -11,7 +11,10 @@ export function getStaticPaths() {
     new Map(
       matches
         .filter((match) => match.matchSlug)
-        .map((match) => [match.matchSlug, match])
+        .map((match) => [
+          match.matchSlug,
+          match
+        ])
     ).values()
   );
 
@@ -32,27 +35,42 @@ const allTeamStats = Object.values(
 );
 
 const homeStats = allTeamStats.find(
-  (team) => team.slug === match.homeSlug
+  (team) =>
+    team.slug === match.homeSlug
 );
 
 const awayStats = allTeamStats.find(
-  (team) => team.slug === match.awaySlug
+  (team) =>
+    team.slug === match.awaySlug
 );
 
-const homeLast5 = homeStats?.last5;
-const awayLast5 = awayStats?.last5;
+const homeLast5 =
+  homeStats?.last5;
 
-const homeHomeStats = homeStats?.home;
-const awayAwayStats = awayStats?.away;
+const awayLast5 =
+  awayStats?.last5;
 
-const homeForm = homeStats?.form ?? [];
-const awayForm = awayStats?.form ?? [];
+const homeHomeStats =
+  homeStats?.home;
+
+const awayAwayStats =
+  awayStats?.away;
+
+const homeForm =
+  homeStats?.form ?? [];
+
+const awayForm =
+  awayStats?.form ?? [];
+
+const headToHead =
+  match.headToHead?.meetings ?? [];
 
 const formLabels = {
   W: "V",
   D: "E",
   L: "D"
 };
+
 
 const status = (
   match.status ?? ""
@@ -64,30 +82,30 @@ const hasScore =
   match.awayScore !== null &&
   match.awayScore !== "";
 
-const kickoff = match.kickoffUtc
-  ? new Date(match.kickoffUtc)
-  : null;
+const kickoff =
+  match.kickoffUtc
+    ? new Date(match.kickoffUtc)
+    : null;
 
 const now = new Date();
 
-const estimatedEnd = kickoff
-  ? new Date(
-      kickoff.getTime() +
-      135 * 60 * 1000
-    )
-  : null;
+const estimatedEnd =
+  kickoff
+    ? new Date(
+        kickoff.getTime() +
+        135 * 60 * 1000
+      )
+    : null;
+
+const isFinished =
+  providerFinished;
 
 const providerFinished =
   status.includes("finished") ||
   status.includes("ft");
 
 const isFinished =
-  providerFinished ||
-  (
-    hasScore &&
-    estimatedEnd &&
-    now > estimatedEnd
-  );
+  providerFinished;
 
 const isLive =
   !isFinished &&
@@ -100,6 +118,19 @@ const isWaitingForFinal =
   !isFinished &&
   estimatedEnd &&
   now > estimatedEnd;
+
+const isLive =
+  !isFinished &&
+  kickoff &&
+  estimatedEnd &&
+  now >= kickoff &&
+  now <= estimatedEnd;
+
+const isWaitingForFinal =
+  !isFinished &&
+  estimatedEnd &&
+  now > estimatedEnd;
+
 
 const formatMatchDate = (date) => {
   if (!date) {
@@ -120,6 +151,27 @@ const formatMatchDate = (date) => {
   ).format(value);
 };
 
+
+const formatShortDate = (date) => {
+  if (!date) {
+    return "";
+  }
+
+  const value = new Date(
+    `${date}T12:00:00`
+  );
+
+  return new Intl.DateTimeFormat(
+    "es-ES",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  ).format(value);
+};
+
+
 const historyContainsMatch = (
   teamStats,
   opponent,
@@ -128,12 +180,17 @@ const historyContainsMatch = (
   const matches =
     teamStats?.recentMatches ?? [];
 
-  return matches.some(
-    (item) =>
-      item.date === date &&
+  return matches.some((item) => {
+    const itemDate =
+      item.date?.slice(0, 10);
+
+    return (
+      itemDate === date &&
       item.opponent === opponent
-  );
+    );
+  });
 };
+
 
 const homeStatsUpdated =
   historyContainsMatch(
@@ -154,9 +211,55 @@ const statsUpdated =
   homeStatsUpdated &&
   awayStatsUpdated;
 
-/*
- * PREVIA
- */
+
+/* --------------------------------
+   RESUMEN H2H
+-------------------------------- */
+
+let homeH2HWins = 0;
+let awayH2HWins = 0;
+let h2hDraws = 0;
+
+for (const previous of headToHead) {
+  const previousHomeSlug =
+    previous.homeSlug;
+
+  const previousAwaySlug =
+    previous.awaySlug;
+
+  if (
+    previous.homeScore ===
+    previous.awayScore
+  ) {
+    h2hDraws += 1;
+    continue;
+  }
+
+  const winnerSlug =
+    previous.homeScore >
+    previous.awayScore
+      ? previousHomeSlug
+      : previousAwaySlug;
+
+  if (
+    winnerSlug ===
+    match.homeSlug
+  ) {
+    homeH2HWins += 1;
+  }
+
+  if (
+    winnerSlug ===
+    match.awaySlug
+  ) {
+    awayH2HWins += 1;
+  }
+}
+
+
+/* --------------------------------
+   PREVIA
+-------------------------------- */
 
 const previewReads = [];
 
@@ -167,37 +270,47 @@ if (
   homeStats &&
   awayStats
 ) {
-  if (homeStats.winStreak >= 3) {
+  if (
+    homeStats.winStreak >= 3
+  ) {
     previewReads.push(
       `${match.home} llega con ${homeStats.winStreak} victorias consecutivas`
     );
+
   } else if (
     homeStats.unbeatenStreak >= 4
   ) {
     previewReads.push(
       `${match.home} encadena ${homeStats.unbeatenStreak} partidos sin perder`
     );
+
   } else if (homeLast5) {
     previewReads.push(
       `${match.home} ha sumado ${homeLast5.points} de los últimos ${homeLast5.played * 3} puntos`
     );
   }
 
-  if (awayStats.winStreak >= 3) {
+
+  if (
+    awayStats.winStreak >= 3
+  ) {
     previewReads.push(
       `${match.away} llega con ${awayStats.winStreak} victorias consecutivas`
     );
+
   } else if (
     awayStats.unbeatenStreak >= 4
   ) {
     previewReads.push(
       `${match.away} lleva ${awayStats.unbeatenStreak} partidos sin perder`
     );
+
   } else if (awayLast5) {
     previewReads.push(
       `${match.away} ha sumado ${awayLast5.points} de los últimos ${awayLast5.played * 3} puntos`
     );
   }
+
 
   if (
     homeHomeStats &&
@@ -206,6 +319,7 @@ if (
     previewReads.push(
       `${match.home} ha ganado ${homeHomeStats.wins} de sus últimos ${homeHomeStats.played} partidos en casa`
     );
+
   } else if (
     awayAwayStats &&
     awayAwayStats.wins >= 3
@@ -214,6 +328,7 @@ if (
       `${match.away} ha ganado ${awayAwayStats.wins} de sus últimos ${awayAwayStats.played} partidos como visitante`
     );
   }
+
 
   if (
     homeLast5 &&
@@ -225,50 +340,62 @@ if (
   }
 }
 
-/*
- * POSTPARTIDO
- */
+
+/* --------------------------------
+   POSTPARTIDO
+-------------------------------- */
 
 let resultSummary = "";
 
-if (isFinished && hasScore) {
+if (
+  isFinished &&
+  hasScore
+) {
   if (
     match.homeScore >
     match.awayScore
   ) {
     resultSummary =
       `${match.home} se impuso ${match.homeScore}-${match.awayScore} a ${match.away}.`;
+
   } else if (
     match.awayScore >
     match.homeScore
   ) {
     resultSummary =
       `${match.away} se llevó el partido por ${match.awayScore}-${match.homeScore} ante ${match.home}.`;
+
   } else {
     resultSummary =
       `${match.home} y ${match.away} empataron ${match.homeScore}-${match.awayScore}.`;
   }
 }
 
+
 const postMatchReads = [];
 
 if (statsUpdated) {
-  if (homeStats.winStreak >= 2) {
+  if (
+    homeStats.winStreak >= 2
+  ) {
     postMatchReads.push(
       `${match.home} encadena ahora ${homeStats.winStreak} victorias consecutivas`
     );
+
   } else if (
     homeStats.unbeatenStreak >= 3
   ) {
     postMatchReads.push(
       `${match.home} amplía a ${homeStats.unbeatenStreak} su racha de partidos sin perder`
     );
+
   } else if (
     homeStats.losingStreak >= 2
   ) {
     postMatchReads.push(
       `${match.home} suma ${homeStats.losingStreak} derrotas consecutivas`
     );
+
   } else if (
     homeStats.winlessStreak >= 3
   ) {
@@ -277,22 +404,28 @@ if (statsUpdated) {
     );
   }
 
-  if (awayStats.winStreak >= 2) {
+
+  if (
+    awayStats.winStreak >= 2
+  ) {
     postMatchReads.push(
       `${match.away} encadena ahora ${awayStats.winStreak} victorias consecutivas`
     );
+
   } else if (
     awayStats.unbeatenStreak >= 3
   ) {
     postMatchReads.push(
       `${match.away} amplía a ${awayStats.unbeatenStreak} su racha de partidos sin perder`
     );
+
   } else if (
     awayStats.losingStreak >= 2
   ) {
     postMatchReads.push(
       `${match.away} suma ${awayStats.losingStreak} derrotas consecutivas`
     );
+
   } else if (
     awayStats.winlessStreak >= 3
   ) {
@@ -301,22 +434,30 @@ if (statsUpdated) {
     );
   }
 
-  if (homeStats.scoringStreak >= 3) {
+
+  if (
+    homeStats.scoringStreak >= 3
+  ) {
     postMatchReads.push(
       `${match.home} ha marcado en sus últimos ${homeStats.scoringStreak} partidos`
     );
   }
 
-  if (awayStats.scoringStreak >= 3) {
+
+  if (
+    awayStats.scoringStreak >= 3
+  ) {
     postMatchReads.push(
       `${match.away} ha marcado en sus últimos ${awayStats.scoringStreak} partidos`
     );
   }
 }
 
-const pageTitle = isFinished
-  ? `${match.home} ${match.homeScore ?? ""} - ${match.awayScore ?? ""} ${match.away}`
-  : `${match.home} - ${match.away}`;
+
+const pageTitle =
+  isFinished
+    ? `${match.home} ${match.homeScore ?? ""} - ${match.awayScore ?? ""} ${match.away}`
+    : `${match.home} - ${match.away}`;
 ---
 
 <html lang="es">
@@ -333,7 +474,7 @@ const pageTitle = isFinished
       content={
         isFinished
           ? `Resultado, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`
-          : `Previa, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`
+          : `Previa, forma, estadísticas y enfrentamientos entre ${match.home} y ${match.away}.`
       }
     />
 
@@ -343,31 +484,52 @@ const pageTitle = isFinished
   </head>
 
   <body>
+
     <header class="topbar">
       <div class="container header-content">
-        <a href="/" class="brand">
-          <div class="logo">SF</div>
+
+        <a
+          href="/"
+          class="brand"
+        >
+          <div class="logo">
+            SF
+          </div>
 
           <div>
-            <h1>Segunda Fila</h1>
-            <p>Fútbol más allá de Primera</p>
+            <h1>
+              Segunda Fila
+            </h1>
+
+            <p>
+              Fútbol más allá de Primera
+            </p>
           </div>
         </a>
+
       </div>
     </header>
 
+
     <main class="container page">
 
-      <a href="/" class="back-link">
+      <a
+        href="/"
+        class="back-link"
+      >
         ← Segunda División
       </a>
+
 
       <!-- CABECERA -->
 
       <section class="match-hero">
 
         <div class="match-meta">
-          <span>Segunda División</span>
+
+          <span>
+            Segunda División
+          </span>
 
           <strong>
             {formatMatchDate(match.date)}
@@ -377,10 +539,14 @@ const pageTitle = isFinished
             !isFinished &&
             !isLive &&
             !isWaitingForFinal && (
-              <span>{match.time}</span>
+              <span>
+                {match.time}
+              </span>
             )
           }
+
         </div>
+
 
         <div class="match-teams">
 
@@ -388,27 +554,37 @@ const pageTitle = isFinished
             href={`/segunda/equipos/${match.homeSlug}`}
             class="hero-team"
           >
+
             <div class="team-avatar">
               {match.home.charAt(0)}
             </div>
 
-            <strong>{match.home}</strong>
+            <strong>
+              {match.home}
+            </strong>
+
           </a>
 
+
           <div class="match-center">
+
             {
               isFinished &&
               hasScore ? (
                 <div class="final-score">
+
                   <strong>
                     {match.homeScore}
                   </strong>
 
-                  <span>-</span>
+                  <span>
+                    -
+                  </span>
 
                   <strong>
                     {match.awayScore}
                   </strong>
+
                 </div>
               ) : (
                 <div class="versus">
@@ -416,76 +592,96 @@ const pageTitle = isFinished
                 </div>
               )
             }
+
           </div>
+
 
           <a
             href={`/segunda/equipos/${match.awaySlug}`}
             class="hero-team"
           >
+
             <div class="team-avatar">
               {match.away.charAt(0)}
             </div>
 
-            <strong>{match.away}</strong>
+            <strong>
+              {match.away}
+            </strong>
+
           </a>
 
         </div>
-
-        {
-          isFinished ? (
-            <div class="state-label final">
-              Final
-            </div>
-          ) : isLive ? (
-            <div class="state-label live">
-              En curso
-            </div>
-          ) : isWaitingForFinal ? (
-            <div class="state-label waiting">
-              Pendiente de resultado final
-            </div>
-          ) : (
-            <div class="state-label preview">
-              Previa del partido
-            </div>
-          )
-        }
-
+        <div
+  class:list={[
+    "state-label",
+    isFinished && "final",
+    isLive && "live",
+    isWaitingForFinal && "waiting",
+    !isFinished &&
+      !isLive &&
+      !isWaitingForFinal &&
+      "preview"
+  ]}
+  data-match-page-status
+  data-kickoff={match.kickoffUtc}
+  data-status={match.status ?? ""}
+>
+  {
+    isFinished
+      ? "Final"
+      : isLive
+        ? "En curso"
+        : isWaitingForFinal
+          ? "Pendiente de resultado final"
+          : "Previa del partido"
+  }
+</div>
       </section>
+
 
       <!-- EN CURSO -->
 
       {
         isLive && (
           <section class="panel info-panel">
-            <strong>Partido en curso</strong>
+
+            <strong>
+              Partido en curso
+            </strong>
 
             <p>
-              La página se actualizará con el resultado y las
-              nuevas rachas cuando termine el encuentro y los
-              datos estén disponibles.
+              La página se actualizará con el
+              resultado y las nuevas rachas cuando
+              termine el encuentro y los datos
+              estén disponibles.
             </p>
+
           </section>
         )
       }
+
 
       <!-- ESPERANDO RESULTADO -->
 
       {
         isWaitingForFinal && (
           <section class="panel info-panel">
+
             <strong>
               Esperando actualización del resultado
             </strong>
 
             <p>
-              El horario estimado del partido ya ha terminado,
-              pero todavía no tenemos un resultado final
-              confirmado.
+              El horario estimado del partido ya ha
+              terminado, pero todavía no tenemos un
+              resultado final confirmado.
             </p>
+
           </section>
         )
       }
+
 
       <!-- PREVIA -->
 
@@ -494,44 +690,75 @@ const pageTitle = isFinished
         !isLive &&
         !isWaitingForFinal && (
           <>
+
             {
               previewReads.length > 0 && (
                 <section class="panel">
+
                   <div class="panel-header">
                     <div>
-                      <h2>Claves del partido</h2>
+
+                      <h2>
+                        Claves del partido
+                      </h2>
+
                       <span>
                         Cómo llegan los dos equipos
                       </span>
+
                     </div>
                   </div>
 
+
                   <div class="quick-list">
-                    {previewReads.slice(0, 4).map(
-                      (item) => (
-                        <div class="quick-item">
-                          <span class="quick-dot"></span>
-                          <p>{item}</p>
-                        </div>
-                      )
-                    )}
+
+                    {
+                      previewReads
+                        .slice(0, 4)
+                        .map((item) => (
+                          <div class="quick-item">
+
+                            <span
+                              class="quick-dot"
+                            ></span>
+
+                            <p>
+                              {item}
+                            </p>
+
+                          </div>
+                        ))
+                    }
+
                   </div>
+
                 </section>
               )
             }
+
 
             {
               homeStats &&
               awayStats && (
                 <section class="panel">
+
                   <div class="panel-header">
                     <div>
-                      <h2>Cómo llegan</h2>
-                      <span>Últimos 5 partidos</span>
+
+                      <h2>
+                        Cómo llegan
+                      </h2>
+
+                      <span>
+                        Últimos 5 partidos
+                      </span>
+
                     </div>
                   </div>
 
+
                   <div class="comparison-head">
+
                     <strong>
                       {match.home}
                     </strong>
@@ -541,139 +768,242 @@ const pageTitle = isFinished
                     <strong>
                       {match.away}
                     </strong>
+
                   </div>
 
+
                   <div class="form-comparison">
+
                     <div class="form-list">
-                      {homeForm.map(
-                        (result) => (
-                          <span
-                            class:list={[
-                              "form-item",
-                              result === "W" && "win",
-                              result === "D" && "draw",
-                              result === "L" && "loss"
-                            ]}
-                          >
-                            {formLabels[result]}
-                          </span>
+
+                      {
+                        homeForm.map(
+                          (result) => (
+                            <span
+                              class:list={[
+                                "form-item",
+                                result === "W" &&
+                                  "win",
+                                result === "D" &&
+                                  "draw",
+                                result === "L" &&
+                                  "loss"
+                              ]}
+                            >
+                              {
+                                formLabels[
+                                  result
+                                ]
+                              }
+                            </span>
+                          )
                         )
-                      )}
+                      }
+
                     </div>
+
 
                     <span class="comparison-label">
                       Forma
                     </span>
 
+
                     <div class="form-list">
-                      {awayForm.map(
-                        (result) => (
-                          <span
-                            class:list={[
-                              "form-item",
-                              result === "W" && "win",
-                              result === "D" && "draw",
-                              result === "L" && "loss"
-                            ]}
-                          >
-                            {formLabels[result]}
-                          </span>
+
+                      {
+                        awayForm.map(
+                          (result) => (
+                            <span
+                              class:list={[
+                                "form-item",
+                                result === "W" &&
+                                  "win",
+                                result === "D" &&
+                                  "draw",
+                                result === "L" &&
+                                  "loss"
+                              ]}
+                            >
+                              {
+                                formLabels[
+                                  result
+                                ]
+                              }
+                            </span>
+                          )
                         )
-                      )}
+                      }
+
                     </div>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.points ?? "-"}
-                    </strong>
-
-                    <span>Puntos</span>
 
                     <strong>
-                      {awayLast5?.points ?? "-"}
+                      {
+                        homeLast5?.points ??
+                        "-"
+                      }
                     </strong>
+
+                    <span>
+                      Puntos
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.points ??
+                        "-"
+                      }
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.avgGoalsFor ?? "-"}
-                    </strong>
-
-                    <span>Goles / partido</span>
 
                     <strong>
-                      {awayLast5?.avgGoalsFor ?? "-"}
+                      {
+                        homeLast5?.avgGoalsFor ??
+                        "-"
+                      }
                     </strong>
+
+                    <span>
+                      Goles / partido
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.avgGoalsFor ??
+                        "-"
+                      }
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.avgGoalsAgainst ?? "-"}
-                    </strong>
-
-                    <span>Encajados / partido</span>
 
                     <strong>
-                      {awayLast5?.avgGoalsAgainst ?? "-"}
+                      {
+                        homeLast5?.avgGoalsAgainst ??
+                        "-"
+                      }
                     </strong>
+
+                    <span>
+                      Encajados / partido
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.avgGoalsAgainst ??
+                        "-"
+                      }
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.unbeatenPercentage ?? "-"}%
-                    </strong>
-
-                    <span>Sin perder</span>
 
                     <strong>
-                      {awayLast5?.unbeatenPercentage ?? "-"}%
+                      {
+                        homeLast5?.unbeatenPercentage ??
+                        "-"
+                      }%
                     </strong>
+
+                    <span>
+                      Sin perder
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.unbeatenPercentage ??
+                        "-"
+                      }%
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.over25Percentage ?? "-"}%
-                    </strong>
-
-                    <span>Más de 2,5</span>
 
                     <strong>
-                      {awayLast5?.over25Percentage ?? "-"}%
+                      {
+                        homeLast5?.over25Percentage ??
+                        "-"
+                      }%
                     </strong>
+
+                    <span>
+                      Más de 2,5
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.over25Percentage ??
+                        "-"
+                      }%
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.bttsPercentage ?? "-"}%
-                    </strong>
-
-                    <span>Ambos marcan</span>
 
                     <strong>
-                      {awayLast5?.bttsPercentage ?? "-"}%
+                      {
+                        homeLast5?.bttsPercentage ??
+                        "-"
+                      }%
                     </strong>
+
+                    <span>
+                      Ambos marcan
+                    </span>
+
+                    <strong>
+                      {
+                        awayLast5?.bttsPercentage ??
+                        "-"
+                      }%
+                    </strong>
+
                   </div>
+
                 </section>
               )
             }
+
 
             {
               homeHomeStats &&
               awayAwayStats && (
                 <section class="panel">
+
                   <div class="panel-header">
                     <div>
-                      <h2>Local vs visitante</h2>
+
+                      <h2>
+                        Local vs visitante
+                      </h2>
 
                       <span>
                         Rendimiento en la condición
                         de este partido
                       </span>
+
                     </div>
                   </div>
 
+
                   <div class="comparison-head">
+
                     <strong>
                       {match.home} en casa
                     </strong>
@@ -683,79 +1013,134 @@ const pageTitle = isFinished
                     <strong>
                       {match.away} fuera
                     </strong>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
                       {homeHomeStats.wins}
                     </strong>
 
-                    <span>Victorias</span>
+                    <span>
+                      Victorias
+                    </span>
 
                     <strong>
                       {awayAwayStats.wins}
                     </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeHomeStats.avgGoalsFor}
-                    </strong>
-
-                    <span>Goles / partido</span>
 
                     <strong>
-                      {awayAwayStats.avgGoalsFor}
+                      {
+                        homeHomeStats
+                          .avgGoalsFor
+                      }
                     </strong>
+
+                    <span>
+                      Goles / partido
+                    </span>
+
+                    <strong>
+                      {
+                        awayAwayStats
+                          .avgGoalsFor
+                      }
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeHomeStats.avgGoalsAgainst}
-                    </strong>
-
-                    <span>Encajados</span>
 
                     <strong>
-                      {awayAwayStats.avgGoalsAgainst}
+                      {
+                        homeHomeStats
+                          .avgGoalsAgainst
+                      }
                     </strong>
+
+                    <span>
+                      Encajados
+                    </span>
+
+                    <strong>
+                      {
+                        awayAwayStats
+                          .avgGoalsAgainst
+                      }
+                    </strong>
+
                   </div>
+
 
                   <div class="comparison-row">
-                    <strong>
-                      {homeHomeStats.unbeatenPercentage}%
-                    </strong>
-
-                    <span>Sin perder</span>
 
                     <strong>
-                      {awayAwayStats.unbeatenPercentage}%
+                      {
+                        homeHomeStats
+                          .unbeatenPercentage
+                      }%
                     </strong>
+
+                    <span>
+                      Sin perder
+                    </span>
+
+                    <strong>
+                      {
+                        awayAwayStats
+                          .unbeatenPercentage
+                      }%
+                    </strong>
+
                   </div>
+
                 </section>
               )
             }
+
           </>
         )
       }
+
 
       <!-- POSTPARTIDO -->
 
       {
         isFinished && (
           <>
+
             <section class="panel">
+
               <div class="panel-header">
                 <div>
-                  <h2>Resumen del partido</h2>
-                  <span>Resultado final</span>
+
+                  <h2>
+                    Resumen del partido
+                  </h2>
+
+                  <span>
+                    Resultado final
+                  </span>
+
                 </div>
               </div>
 
+
               <div class="match-summary">
+
                 {
                   resultSummary ? (
-                    <p>{resultSummary}</p>
+                    <p>
+                      {resultSummary}
+                    </p>
                   ) : (
                     <p>
                       El partido ha finalizado.
@@ -767,25 +1152,32 @@ const pageTitle = isFinished
                   statsUpdated &&
                   postMatchReads.length > 0 && (
                     <p>
-                      {postMatchReads[0]}.
+                      {
+                        postMatchReads[0]
+                      }.
                     </p>
                   )
                 }
+
               </div>
+
             </section>
+
 
             {
               !statsUpdated && (
                 <section class="panel update-pending">
+
                   <strong>
                     Estadísticas en actualización
                   </strong>
 
                   <p>
                     Ya tenemos el resultado final,
-                    pero las nuevas rachas y estadísticas
-                    todavía no se han incorporado a los
-                    datos de la competición.
+                    pero las nuevas rachas y
+                    estadísticas todavía no se han
+                    incorporado a los datos de la
+                    competición.
                   </p>
 
                   <span>
@@ -793,16 +1185,20 @@ const pageTitle = isFinished
                     cuando el proveedor incorpore
                     el partido.
                   </span>
+
                 </section>
               )
             }
+
 
             {
               statsUpdated &&
               postMatchReads.length > 0 && (
                 <section class="panel">
+
                   <div class="panel-header">
                     <div>
+
                       <h2>
                         Después del partido
                       </h2>
@@ -810,40 +1206,62 @@ const pageTitle = isFinished
                       <span>
                         Cómo quedan las rachas
                       </span>
+
                     </div>
                   </div>
 
+
                   <div class="quick-list">
-                    {postMatchReads.slice(0, 4).map(
-                      (item) => (
-                        <div class="quick-item">
-                          <span class="quick-dot"></span>
-                          <p>{item}</p>
-                        </div>
-                      )
-                    )}
+
+                    {
+                      postMatchReads
+                        .slice(0, 4)
+                        .map((item) => (
+                          <div class="quick-item">
+
+                            <span
+                              class="quick-dot"
+                            ></span>
+
+                            <p>
+                              {item}
+                            </p>
+
+                          </div>
+                        ))
+                    }
+
                   </div>
+
                 </section>
               )
             }
+
 
             {
               statsUpdated &&
               homeStats &&
               awayStats && (
                 <section class="panel">
+
                   <div class="panel-header">
                     <div>
-                      <h2>Forma actualizada</h2>
+
+                      <h2>
+                        Forma actualizada
+                      </h2>
 
                       <span>
                         Últimos 5 partidos incluyendo
                         este resultado
                       </span>
+
                     </div>
                   </div>
 
+
                   <div class="comparison-head">
+
                     <strong>
                       {match.home}
                     </strong>
@@ -853,24 +1271,38 @@ const pageTitle = isFinished
                     <strong>
                       {match.away}
                     </strong>
+
                   </div>
 
+
                   <div class="form-comparison">
+
                     <div class="form-list">
-                      {homeForm.map(
-                        (result) => (
-                          <span
-                            class:list={[
-                              "form-item",
-                              result === "W" && "win",
-                              result === "D" && "draw",
-                              result === "L" && "loss"
-                            ]}
-                          >
-                            {formLabels[result]}
-                          </span>
+
+                      {
+                        homeForm.map(
+                          (result) => (
+                            <span
+                              class:list={[
+                                "form-item",
+                                result === "W" &&
+                                  "win",
+                                result === "D" &&
+                                  "draw",
+                                result === "L" &&
+                                  "loss"
+                              ]}
+                            >
+                              {
+                                formLabels[
+                                  result
+                                ]
+                              }
+                            </span>
+                          )
                         )
-                      )}
+                      }
+
                     </div>
 
                     <span class="comparison-label">
@@ -878,26 +1310,43 @@ const pageTitle = isFinished
                     </span>
 
                     <div class="form-list">
-                      {awayForm.map(
-                        (result) => (
-                          <span
-                            class:list={[
-                              "form-item",
-                              result === "W" && "win",
-                              result === "D" && "draw",
-                              result === "L" && "loss"
-                            ]}
-                          >
-                            {formLabels[result]}
-                          </span>
+
+                      {
+                        awayForm.map(
+                          (result) => (
+                            <span
+                              class:list={[
+                                "form-item",
+                                result === "W" &&
+                                  "win",
+                                result === "D" &&
+                                  "draw",
+                                result === "L" &&
+                                  "loss"
+                              ]}
+                            >
+                              {
+                                formLabels[
+                                  result
+                                ]
+                              }
+                            </span>
+                          )
                         )
-                      )}
+                      }
+
                     </div>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
-                      {homeLast5?.points ?? "-"}
+                      {
+                        homeLast5?.points ??
+                        "-"
+                      }
                     </strong>
 
                     <span>
@@ -905,11 +1354,17 @@ const pageTitle = isFinished
                     </span>
 
                     <strong>
-                      {awayLast5?.points ?? "-"}
+                      {
+                        awayLast5?.points ??
+                        "-"
+                      }
                     </strong>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
                       {homeStats.winStreak}
                     </strong>
@@ -921,11 +1376,16 @@ const pageTitle = isFinished
                     <strong>
                       {awayStats.winStreak}
                     </strong>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
-                      {homeStats.unbeatenStreak}
+                      {
+                        homeStats.unbeatenStreak
+                      }
                     </strong>
 
                     <span>
@@ -933,13 +1393,20 @@ const pageTitle = isFinished
                     </span>
 
                     <strong>
-                      {awayStats.unbeatenStreak}
+                      {
+                        awayStats.unbeatenStreak
+                      }
                     </strong>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
-                      {homeStats.scoringStreak}
+                      {
+                        homeStats.scoringStreak
+                      }
                     </strong>
 
                     <span>
@@ -947,13 +1414,21 @@ const pageTitle = isFinished
                     </span>
 
                     <strong>
-                      {awayStats.scoringStreak}
+                      {
+                        awayStats.scoringStreak
+                      }
                     </strong>
+
                   </div>
 
+
                   <div class="comparison-row">
+
                     <strong>
-                      {homeLast5?.avgGoalsFor ?? "-"}
+                      {
+                        homeLast5?.avgGoalsFor ??
+                        "-"
+                      }
                     </strong>
 
                     <span>
@@ -961,31 +1436,147 @@ const pageTitle = isFinished
                     </span>
 
                     <strong>
-                      {awayLast5?.avgGoalsFor ?? "-"}
+                      {
+                        awayLast5?.avgGoalsFor ??
+                        "-"
+                      }
                     </strong>
+
                   </div>
 
-                  <div class="comparison-row">
-                    <strong>
-                      {homeLast5?.avgGoalsAgainst ?? "-"}
-                    </strong>
-
-                    <span>
-                      Encajados / partido
-                    </span>
-
-                    <strong>
-                      {awayLast5?.avgGoalsAgainst ?? "-"}
-                    </strong>
-                  </div>
                 </section>
               )
             }
+
           </>
         )
       }
 
-      <!-- FICHAS DE EQUIPO -->
+
+      <!-- H2H -->
+
+      {
+        headToHead.length > 0 && (
+          <section class="panel">
+
+            <div class="panel-header">
+              <div>
+
+                <h2>
+                  Enfrentamientos directos
+                </h2>
+
+                <span>
+                  Últimos partidos entre ambos
+                </span>
+
+              </div>
+            </div>
+
+
+            <div class="h2h-summary">
+
+              <div>
+                <strong>
+                  {homeH2HWins}
+                </strong>
+
+                <span>
+                  Victorias {match.home}
+                </span>
+              </div>
+
+
+              <div>
+                <strong>
+                  {h2hDraws}
+                </strong>
+
+                <span>
+                  Empates
+                </span>
+              </div>
+
+
+              <div>
+                <strong>
+                  {awayH2HWins}
+                </strong>
+
+                <span>
+                  Victorias {match.away}
+                </span>
+              </div>
+
+            </div>
+
+
+            <div class="h2h-list">
+
+              {
+                headToHead.map(
+                  (previous) => (
+                    <div class="h2h-row">
+
+                      <div class="h2h-date">
+                        {
+                          formatShortDate(
+                            previous.date
+                          )
+                        }
+                      </div>
+
+
+                      <div class="h2h-match">
+
+                        <div class="h2h-team">
+
+                          <span>
+                            {
+                              previous.home
+                            }
+                          </span>
+
+                          <strong>
+                            {
+                              previous.homeScore
+                            }
+                          </strong>
+
+                        </div>
+
+
+                        <div class="h2h-team">
+
+                          <span>
+                            {
+                              previous.away
+                            }
+                          </span>
+
+                          <strong>
+                            {
+                              previous.awayScore
+                            }
+                          </strong>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+                  )
+                )
+              }
+
+            </div>
+
+          </section>
+        )
+      }
+
+
+      <!-- EQUIPOS -->
 
       <section class="team-links">
 
@@ -993,33 +1584,143 @@ const pageTitle = isFinished
           href={`/segunda/equipos/${match.homeSlug}`}
           class="team-link-card"
         >
-          <span>Ver estadísticas</span>
 
-          <strong>{match.home}</strong>
+          <span>
+            Ver estadísticas
+          </span>
+
+          <strong>
+            {match.home}
+          </strong>
 
           <span class="arrow">
             →
           </span>
+
         </a>
+
 
         <a
           href={`/segunda/equipos/${match.awaySlug}`}
           class="team-link-card"
         >
-          <span>Ver estadísticas</span>
 
-          <strong>{match.away}</strong>
+          <span>
+            Ver estadísticas
+          </span>
+
+          <strong>
+            {match.away}
+          </strong>
 
           <span class="arrow">
             →
           </span>
+
         </a>
 
       </section>
 
     </main>
+<script is:inline>
+  function updateMatchPageStatus() {
+    const element =
+      document.querySelector(
+        "[data-match-page-status]"
+      );
+
+    if (!element) {
+      return;
+    }
+
+    const kickoffValue =
+      element.dataset.kickoff;
+
+    const rawStatus =
+      (
+        element.dataset.status || ""
+      ).toLowerCase();
+
+    if (!kickoffValue) {
+      return;
+    }
+
+    const kickoff =
+      new Date(kickoffValue);
+
+    const estimatedEnd =
+      new Date(
+        kickoff.getTime() +
+        135 * 60 * 1000
+      );
+
+    const now = new Date();
+
+    const finished =
+      rawStatus.includes("finished") ||
+      rawStatus.includes("ft");
+
+    element.classList.remove(
+      "preview",
+      "live",
+      "waiting",
+      "final"
+    );
+
+    if (finished) {
+      element.textContent =
+        "Final";
+
+      element.classList.add(
+        "final"
+      );
+
+      return;
+    }
+
+    if (
+      now >= kickoff &&
+      now <= estimatedEnd
+    ) {
+      element.textContent =
+        "En curso";
+
+      element.classList.add(
+        "live"
+      );
+
+      return;
+    }
+
+    if (now > estimatedEnd) {
+      element.textContent =
+        "Pendiente de resultado final";
+
+      element.classList.add(
+        "waiting"
+      );
+
+      return;
+    }
+
+    element.textContent =
+      "Previa del partido";
+
+    element.classList.add(
+      "preview"
+    );
+  }
+
+  updateMatchPageStatus();
+
+  setInterval(
+    updateMatchPageStatus,
+    30000
+  );
+</script>
   </body>
 </html>
+
 
 <style>
   :global(*) {
@@ -1033,6 +1734,7 @@ const pageTitle = isFinished
 
   :global(body) {
     margin: 0;
+
     min-height: 100vh;
 
     background: #f3f4f6;
@@ -1051,8 +1753,6 @@ const pageTitle = isFinished
     width: min(900px, 94%);
     margin: 0 auto;
   }
-
-  /* HEADER */
 
   .topbar {
     background: #ffffff;
@@ -1104,8 +1804,6 @@ const pageTitle = isFinished
     font-size: 13px;
   }
 
-  /* PAGE */
-
   .page {
     display: flex;
     flex-direction: column;
@@ -1129,6 +1827,7 @@ const pageTitle = isFinished
   .back-link:hover {
     color: #111827;
   }
+
 
   /* HERO */
 
@@ -1189,8 +1888,8 @@ const pageTitle = isFinished
     gap: 10px;
 
     color: inherit;
-    text-decoration: none;
 
+    text-decoration: none;
     text-align: center;
   }
 
@@ -1235,8 +1934,6 @@ const pageTitle = isFinished
   }
 
   .final-score strong {
-    color: #111827;
-
     font-size: 32px;
     font-weight: 800;
   }
@@ -1259,10 +1956,12 @@ const pageTitle = isFinished
     font-weight: 800;
 
     text-transform: uppercase;
+
     letter-spacing: 0.04em;
   }
 
-  .state-label.preview {
+  .state-label.preview,
+  .state-label.waiting {
     background: #fafafa;
     color: #6b7280;
   }
@@ -1277,10 +1976,6 @@ const pageTitle = isFinished
     color: #dc2626;
   }
 
-  .state-label.waiting {
-    background: #fafafa;
-    color: #6b7280;
-  }
 
   /* PANEL */
 
@@ -1318,6 +2013,7 @@ const pageTitle = isFinished
     font-size: 12px;
   }
 
+
   /* INFO */
 
   .info-panel,
@@ -1354,6 +2050,7 @@ const pageTitle = isFinished
     font-size: 11px;
   }
 
+
   /* RESUMEN */
 
   .match-summary {
@@ -1372,6 +2069,7 @@ const pageTitle = isFinished
   .match-summary p + p {
     margin-top: 8px;
   }
+
 
   /* CLAVES */
 
@@ -1418,7 +2116,8 @@ const pageTitle = isFinished
     background: #111827;
   }
 
-  /* COMPARACIÓN */
+
+  /* COMPARACIONES */
 
   .comparison-head {
     display: grid;
@@ -1479,6 +2178,7 @@ const pageTitle = isFinished
     font-weight: 600;
   }
 
+
   /* FORMA */
 
   .form-list {
@@ -1514,6 +2214,119 @@ const pageTitle = isFinished
   .form-item.loss {
     background: #dc2626;
   }
+
+
+  /* H2H */
+
+  .h2h-summary {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    border-bottom:
+      1px solid #eeeeee;
+
+    background: #fafafa;
+  }
+
+  .h2h-summary div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 3px;
+
+    padding: 16px 10px;
+
+    text-align: center;
+  }
+
+  .h2h-summary div + div {
+    border-left:
+      1px solid #eeeeee;
+  }
+
+  .h2h-summary strong {
+    color: #111827;
+
+    font-size: 20px;
+  }
+
+  .h2h-summary span {
+    color: #9ca3af;
+
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .h2h-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .h2h-row {
+    display: grid;
+
+    grid-template-columns:
+      100px
+      minmax(0, 1fr);
+
+    gap: 16px;
+
+    align-items: center;
+
+    padding: 14px 20px;
+
+    border-bottom:
+      1px solid #f0f0f0;
+  }
+
+  .h2h-row:last-child {
+    border-bottom: none;
+  }
+
+  .h2h-date {
+    color: #9ca3af;
+
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .h2h-match {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+  }
+
+  .h2h-team {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 13px;
+  }
+
+  .h2h-team span {
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .h2h-team strong {
+    min-width: 20px;
+
+    text-align: right;
+
+    font-size: 14px;
+  }
+
 
   /* LINKS EQUIPOS */
 
@@ -1576,6 +2389,7 @@ const pageTitle = isFinished
     border-color: #d1d5db;
   }
 
+
   /* MOBILE */
 
   @media (max-width: 650px) {
@@ -1626,8 +2440,25 @@ const pageTitle = isFinished
       font-size: 9px;
     }
 
+    .h2h-summary span {
+      font-size: 9px;
+    }
+
+    .h2h-row {
+      grid-template-columns:
+        78px
+        1fr;
+
+      gap: 10px;
+
+      padding:
+        14px
+        16px;
+    }
+
     .team-links {
-      grid-template-columns: 1fr;
+      grid-template-columns:
+        1fr;
     }
   }
 </style>

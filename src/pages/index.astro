@@ -26,6 +26,17 @@ const getMatchUrl = (match) => {
 
   return `/segunda/partidos/${match.matchSlug}`;
 };
+
+const isProviderFinished = (match) => {
+  const status = (
+    match.status ?? ""
+  ).toLowerCase();
+
+  return (
+    status.includes("finished") ||
+    status.includes("ft")
+  );
+};
 ---
 
 <html lang="es">
@@ -142,15 +153,16 @@ const getMatchUrl = (match) => {
                               <span>{match.home}</span>
 
                               {
-                                match.homeScore !== null &&
-                                match.homeScore !== ""
-                                  ? (
-                                    <strong class="score">
-                                      {match.homeScore}
-                                    </strong>
-                                  )
-                                  : null
-                              }
+  isProviderFinished(match) &&
+  match.homeScore !== null &&
+  match.homeScore !== ""
+    ? (
+      <strong class="score">
+        {match.homeScore}
+      </strong>
+    )
+    : null
+}
                             </div>
 
                             <div class="team-row">
@@ -161,6 +173,7 @@ const getMatchUrl = (match) => {
                               <span>{match.away}</span>
 
                               {
+                                isProviderFinished(match) &&
                                 match.awayScore !== null &&
                                 match.awayScore !== ""
                                   ? (
@@ -504,213 +517,211 @@ const getMatchUrl = (match) => {
     </main>
 
     <script is:inline>
-      function setMatchClickable(match, clickable) {
-        const matchUrl =
-          match.dataset.matchUrl;
+  function setMatchClickable(
+    match,
+    clickable
+  ) {
+    const matchUrl =
+      match.dataset.matchUrl;
 
-        if (
-          !matchUrl ||
-          match.tagName !== "A"
-        ) {
-          return;
-        }
+    if (
+      !matchUrl ||
+      match.tagName !== "A"
+    ) {
+      return;
+    }
 
-        const arrow =
-          match.querySelector(
-            "[data-match-arrow]"
-          );
-
-        if (clickable) {
-          match.setAttribute(
-            "href",
-            matchUrl
-          );
-
-          match.removeAttribute(
-            "aria-disabled"
-          );
-
-          match.removeAttribute(
-            "tabindex"
-          );
-
-          match.classList.remove(
-            "match-disabled"
-          );
-
-          match.classList.add(
-            "match-link"
-          );
-
-          if (arrow) {
-            arrow.hidden = false;
-          }
-
-          return;
-        }
-
-        match.removeAttribute("href");
-
-        match.setAttribute(
-          "aria-disabled",
-          "true"
-        );
-
-        match.setAttribute(
-          "tabindex",
-          "-1"
-        );
-
-        match.classList.add(
-          "match-disabled"
-        );
-
-        if (arrow) {
-          arrow.hidden = true;
-        }
-      }
-
-      function updateMatchStatuses() {
-        const matches =
-          document.querySelectorAll(
-            "[data-match]"
-          );
-
-        const now = new Date();
-
-        matches.forEach((match) => {
-          const kickoffValue =
-            match.dataset.kickoff;
-
-          const rawStatus =
-            (
-              match.dataset.status || ""
-            ).toLowerCase();
-
-          const statusElement =
-            match.querySelector(
-              "[data-match-status]"
-            );
-
-          if (
-            !kickoffValue ||
-            !statusElement
-          ) {
-            return;
-          }
-
-          const kickoff =
-            new Date(kickoffValue);
-
-          const matchEnd =
-            new Date(
-              kickoff.getTime() +
-              135 * 60 * 1000
-            );
-
-          const finished =
-            rawStatus.includes("finished") ||
-            rawStatus.includes("ft");
-
-          statusElement.classList.remove(
-            "status-live",
-            "status-final"
-          );
-
-          /*
-           * FINAL confirmado por la API
-           */
-
-          if (finished) {
-            statusElement.textContent =
-              "FINAL";
-
-            statusElement.classList.add(
-              "status-final"
-            );
-
-            setMatchClickable(
-              match,
-              true
-            );
-
-            return;
-          }
-
-          /*
-           * EN CURSO
-           */
-
-          if (
-            now >= kickoff &&
-            now <= matchEnd
-          ) {
-            statusElement.textContent =
-              "EN CURSO";
-
-            statusElement.classList.add(
-              "status-live"
-            );
-
-            setMatchClickable(
-              match,
-              false
-            );
-
-            return;
-          }
-
-          /*
-           * FINAL estimado
-           */
-
-          if (now > matchEnd) {
-            statusElement.textContent =
-              "FINAL";
-
-            statusElement.classList.add(
-              "status-final"
-            );
-
-            setMatchClickable(
-              match,
-              true
-            );
-
-            return;
-          }
-
-          /*
-           * TODAVÍA NO HA EMPEZADO
-           */
-
-          const formatter =
-            new Intl.DateTimeFormat(
-              "es-ES",
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-                timeZone: "Europe/Madrid"
-              }
-            );
-
-          statusElement.textContent =
-            formatter.format(kickoff);
-
-          setMatchClickable(
-            match,
-            true
-          );
-        });
-      }
-
-      updateMatchStatuses();
-
-      setInterval(
-        updateMatchStatuses,
-        30000
+    const arrow =
+      match.querySelector(
+        "[data-match-arrow]"
       );
-    </script>
+
+    if (clickable) {
+      match.setAttribute(
+        "href",
+        matchUrl
+      );
+
+      match.removeAttribute(
+        "aria-disabled"
+      );
+
+      match.removeAttribute(
+        "tabindex"
+      );
+
+      match.classList.remove(
+        "match-disabled"
+      );
+
+      match.classList.add(
+        "match-link"
+      );
+
+      if (arrow) {
+        arrow.hidden = false;
+      }
+
+      return;
+    }
+
+    match.removeAttribute("href");
+
+    match.setAttribute(
+      "aria-disabled",
+      "true"
+    );
+
+    match.setAttribute(
+      "tabindex",
+      "-1"
+    );
+
+    match.classList.add(
+      "match-disabled"
+    );
+
+    if (arrow) {
+      arrow.hidden = true;
+    }
+  }
+
+
+  function updateMatchStatuses() {
+    const matches =
+      document.querySelectorAll(
+        "[data-match]"
+      );
+
+    const now = new Date();
+
+    matches.forEach((match) => {
+      const kickoffValue =
+        match.dataset.kickoff;
+
+      const rawStatus =
+        (
+          match.dataset.status || ""
+        ).toLowerCase();
+
+      const statusElement =
+        match.querySelector(
+          "[data-match-status]"
+        );
+
+      if (
+        !kickoffValue ||
+        !statusElement
+      ) {
+        return;
+      }
+
+      const kickoff =
+        new Date(kickoffValue);
+
+      const estimatedEnd =
+        new Date(
+          kickoff.getTime() +
+          135 * 60 * 1000
+        );
+
+      const finished =
+        rawStatus.includes(
+          "finished"
+        ) ||
+        rawStatus.includes("ft");
+
+      statusElement.classList.remove(
+        "status-live",
+        "status-final"
+      );
+
+
+      // FINAL SOLO SI LO CONFIRMA
+      // EL PROVEEDOR
+      if (finished) {
+        statusElement.textContent =
+          "FINAL";
+
+        statusElement.classList.add(
+          "status-final"
+        );
+
+        setMatchClickable(
+          match,
+          true
+        );
+
+        return;
+      }
+
+
+      // PARTIDO EN CURSO
+      if (
+        now >= kickoff &&
+        now <= estimatedEnd
+      ) {
+        statusElement.textContent =
+          "EN CURSO";
+
+        statusElement.classList.add(
+          "status-live"
+        );
+
+        setMatchClickable(
+          match,
+          false
+        );
+
+        return;
+      }
+
+
+      // YA DEBERIA HABER TERMINADO,
+      // PERO NO ESTA CONFIRMADO
+      if (now > estimatedEnd) {
+        statusElement.textContent =
+          "PENDIENTE";
+
+        setMatchClickable(
+          match,
+          true
+        );
+
+        return;
+      }
+
+
+      // TODAVIA NO HA EMPEZADO
+      const formatter =
+        new Intl.DateTimeFormat(
+          "es-ES",
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone:
+              "Europe/Madrid"
+          }
+        );
+
+      statusElement.textContent =
+        formatter.format(kickoff);
+
+      setMatchClickable(
+        match,
+        true
+      );
+    });
+  }
+
+
+  updateMatchStatuses();
+
+  setInterval(
+    updateMatchStatuses,
+    30000
+  );
+</script>
   </body>
 </html>
 

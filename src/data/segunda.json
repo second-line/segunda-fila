@@ -118,14 +118,63 @@
       "dateLabel": "Sábado 03/10",
       "time": "14:00",
       "kickoffUtc": "2026-10-03T12:00:00+00:00",
-      "status": "1H",
+      "status": "FT",
       "home": "Albacete",
       "away": "Eibar",
       "homeSlug": "albacete",
       "awaySlug": "eibar",
       "matchSlug": "albacete-vs-eibar-2026-10-03",
       "homeScore": 1,
-      "awayScore": 0
+      "awayScore": 3,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-04-24",
+            "home": "Albacete",
+            "away": "Eibar",
+            "homeSlug": "albacete",
+            "awaySlug": "eibar",
+            "homeScore": 0,
+            "awayScore": 3
+          },
+          {
+            "date": "2025-11-08",
+            "home": "Eibar",
+            "away": "Albacete",
+            "homeSlug": "eibar",
+            "awaySlug": "albacete",
+            "homeScore": 3,
+            "awayScore": 2
+          },
+          {
+            "date": "2025-01-18",
+            "home": "Eibar",
+            "away": "Albacete",
+            "homeSlug": "eibar",
+            "awaySlug": "albacete",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-09-09",
+            "home": "Albacete",
+            "away": "Eibar",
+            "homeSlug": "albacete",
+            "awaySlug": "eibar",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-04-28",
+            "home": "Albacete",
+            "away": "Eibar",
+            "homeSlug": "albacete",
+            "awaySlug": "eibar",
+            "homeScore": 2,
+            "awayScore": 1
+          }
+        ]
+      }
     },
     {
       "id": "2505788",
@@ -133,14 +182,63 @@
       "dateLabel": "Sábado 03/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-03T14:15:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Almería",
       "away": "Burgos",
       "homeSlug": "almeria",
       "awaySlug": "burgos",
       "matchSlug": "almeria-vs-burgos-2026-10-03",
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 0,
+      "awayScore": 0,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-09",
+            "home": "Burgos CF",
+            "away": "Almería",
+            "homeSlug": "burgos-cf",
+            "awaySlug": "almeria",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-12-14",
+            "home": "Almería",
+            "away": "Burgos CF",
+            "homeSlug": "almeria",
+            "awaySlug": "burgos-cf",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2025-03-21",
+            "home": "Burgos CF",
+            "away": "Almería",
+            "homeSlug": "burgos-cf",
+            "awaySlug": "almeria",
+            "homeScore": 3,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-10-05",
+            "home": "Almería",
+            "away": "Burgos CF",
+            "homeSlug": "almeria",
+            "awaySlug": "burgos-cf",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2022-04-30",
+            "home": "Burgos CF",
+            "away": "Almería",
+            "homeSlug": "burgos-cf",
+            "awaySlug": "almeria",
+            "homeScore": 0,
+            "awayScore": 2
+          }
+        ]
+      }
     },
     {
       "id": "2505789",
@@ -155,7 +253,29 @@
       "awaySlug": "leganes",
       "matchSlug": "cadiz-vs-leganes-2026-10-03",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-24",
+            "home": "Cádiz",
+            "away": "Leganés",
+            "homeSlug": "cadiz",
+            "awaySlug": "leganes",
+            "homeScore": 3,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-08-22",
+            "home": "Leganés",
+            "away": "Cádiz",
+            "homeSlug": "leganes",
+            "awaySlug": "cadiz",
+            "homeScore": 1,
+            "awayScore": 1
+          }
+        ]
+      }
     }
   ],
   "journeyMatches": [
@@ -172,7 +292,47 @@
       "awaySlug": "oviedo",
       "matchSlug": "eldense-vs-oviedo-2026-10-02",
       "homeScore": 4,
-      "awayScore": 1
+      "awayScore": 1,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-02-10",
+            "home": "Oviedo",
+            "away": "Eldense",
+            "homeSlug": "oviedo",
+            "awaySlug": "eldense",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-09-21",
+            "home": "Eldense",
+            "away": "Oviedo",
+            "homeSlug": "eldense",
+            "awaySlug": "oviedo",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-02-04",
+            "home": "Oviedo",
+            "away": "Eldense",
+            "homeSlug": "oviedo",
+            "awaySlug": "eldense",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2023-10-01",
+            "home": "Eldense",
+            "away": "Oviedo",
+            "homeSlug": "eldense",
+            "awaySlug": "oviedo",
+            "homeScore": 1,
+            "awayScore": 3
+          }
+        ]
+      }
     },
     {
       "id": "2505790",
@@ -187,7 +347,10 @@
       "awaySlug": "celta-b",
       "matchSlug": "real-sporting-vs-celta-b-2026-10-04",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
     },
     {
       "id": "2505784",
@@ -202,7 +365,56 @@
       "awaySlug": "valladolid",
       "matchSlug": "las-palmas-vs-valladolid-2026-10-04",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-03",
+            "home": "Las Palmas",
+            "away": "Valladolid",
+            "homeSlug": "las-palmas",
+            "awaySlug": "valladolid",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-11-14",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-02-28",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-12-07",
+            "home": "Las Palmas",
+            "away": "Valladolid",
+            "homeSlug": "las-palmas",
+            "awaySlug": "valladolid",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2022-03-19",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
+            "homeScore": 0,
+            "awayScore": 1
+          }
+        ]
+      }
     },
     {
       "id": "2505785",
@@ -217,7 +429,56 @@
       "awaySlug": "mallorca",
       "matchSlug": "girona-vs-mallorca-2026-10-04",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-01",
+            "home": "Girona",
+            "away": "Mallorca",
+            "homeSlug": "girona",
+            "awaySlug": "mallorca",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2026-01-04",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2025-05-05",
+            "home": "Girona",
+            "away": "Mallorca",
+            "homeSlug": "girona",
+            "awaySlug": "mallorca",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-12-14",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-03-03",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
     },
     {
       "id": "2505786",
@@ -232,7 +493,56 @@
       "awaySlug": "tenerife",
       "matchSlug": "cordoba-vs-tenerife-2026-10-05",
       "homeScore": null,
-      "awayScore": null
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-02-15",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
+            "homeScore": 2,
+            "awayScore": 3
+          },
+          {
+            "date": "2024-12-08",
+            "home": "Córdoba",
+            "away": "Tenerife",
+            "homeSlug": "cordoba",
+            "awaySlug": "tenerife",
+            "homeScore": 3,
+            "awayScore": 0
+          },
+          {
+            "date": "2019-02-09",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
+            "homeScore": 0,
+            "awayScore": 2
+          },
+          {
+            "date": "2018-09-22",
+            "home": "Córdoba",
+            "away": "Tenerife",
+            "homeSlug": "cordoba",
+            "awaySlug": "tenerife",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2018-02-11",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
+            "homeScore": 5,
+            "awayScore": 1
+          }
+        ]
+      }
     }
   ],
   "trends": [
@@ -243,10 +553,10 @@
       "text": "6 victorias consecutivas"
     },
     {
-      "icon": "📈",
+      "icon": "🛡️",
       "title": "Castellón",
       "slug": "castellon",
-      "text": "7 partidos consecutivos sin perder"
+      "text": "7 partidos sin perder"
     },
     {
       "icon": "⚽",
@@ -255,22 +565,22 @@
       "text": "Ha marcado en sus últimos 7 partidos"
     },
     {
-      "icon": "🧱",
-      "title": "Mallorca",
-      "slug": "mallorca",
-      "text": "Ha dejado la portería a cero en 4 de sus últimos 5 partidos"
-    },
-    {
       "icon": "🥅",
       "title": "Granada",
       "slug": "granada",
-      "text": "Ambos equipos marcaron en 4 de sus últimos 5 partidos"
+      "text": "Ambos equipos marcaron en el 80.0% de sus últimos 5 partidos"
+    },
+    {
+      "icon": "🧱",
+      "title": "Mallorca",
+      "slug": "mallorca",
+      "text": "Portería a cero en 4 de sus últimos 5 partidos"
     },
     {
       "icon": "🏠",
       "title": "Almería",
       "slug": "almeria",
-      "text": "3 victorias consecutivas como local"
+      "text": "Ha ganado el 100.0% de sus últimos partidos como local"
     }
   ],
   "standings": [
@@ -727,16 +1037,6 @@
         "W",
         "W"
       ],
-      "form10": [
-        "W",
-        "D",
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 5,
       "unbeatenStreak": 7,
       "losingStreak": 0,
@@ -945,16 +1245,6 @@
         "W",
         "W"
       ],
-      "form10": [
-        "L",
-        "W",
-        "W",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 6,
       "unbeatenStreak": 6,
       "losingStreak": 0,
@@ -1163,16 +1453,6 @@
         "W",
         "W"
       ],
-      "form10": [
-        "W",
-        "L",
-        "L",
-        "W",
-        "W",
-        "W",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 4,
       "unbeatenStreak": 4,
       "losingStreak": 0,
@@ -1381,16 +1661,6 @@
         "W",
         "W"
       ],
-      "form10": [
-        "W",
-        "L",
-        "D",
-        "D",
-        "W",
-        "W",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 3,
       "unbeatenStreak": 5,
       "losingStreak": 0,
@@ -1599,16 +1869,6 @@
         "W",
         "W"
       ],
-      "form10": [
-        "D",
-        "L",
-        "W",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 2,
       "unbeatenStreak": 2,
       "losingStreak": 0,
@@ -1817,16 +2077,6 @@
         "W",
         "L"
       ],
-      "form10": [
-        "W",
-        "L",
-        "W",
-        "D",
-        "W",
-        "W",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 1,
@@ -2035,16 +2285,6 @@
         "W",
         "D"
       ],
-      "form10": [
-        "D",
-        "D",
-        "W",
-        "W",
-        "L",
-        "W",
-        "D"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 2,
       "losingStreak": 0,
@@ -2253,16 +2493,6 @@
         "L",
         "W"
       ],
-      "form10": [
-        "D",
-        "L",
-        "W",
-        "D",
-        "W",
-        "L",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 1,
       "unbeatenStreak": 1,
       "losingStreak": 0,
@@ -2471,16 +2701,6 @@
         "L",
         "D"
       ],
-      "form10": [
-        "W",
-        "W",
-        "L",
-        "D",
-        "W",
-        "L",
-        "D"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 1,
       "losingStreak": 0,
@@ -2689,16 +2909,6 @@
         "W",
         "L"
       ],
-      "form10": [
-        "D",
-        "W",
-        "W",
-        "D",
-        "L",
-        "W",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 1,
@@ -2907,16 +3117,6 @@
         "L",
         "L"
       ],
-      "form10": [
-        "W",
-        "W",
-        "L",
-        "D",
-        "W",
-        "L",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 2,
@@ -3125,16 +3325,6 @@
         "W",
         "L"
       ],
-      "form10": [
-        "D",
-        "W",
-        "W",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 1,
@@ -3343,16 +3533,6 @@
         "L",
         "L"
       ],
-      "form10": [
-        "D",
-        "W",
-        "W",
-        "L",
-        "D",
-        "L",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 2,
@@ -3561,16 +3741,6 @@
         "L",
         "L"
       ],
-      "form10": [
-        "L",
-        "W",
-        "D",
-        "D",
-        "W",
-        "L",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 2,
@@ -3779,16 +3949,6 @@
         "L",
         "D"
       ],
-      "form10": [
-        "D",
-        "W",
-        "L",
-        "W",
-        "L",
-        "L",
-        "D"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 1,
       "losingStreak": 0,
@@ -3997,16 +4157,6 @@
         "D",
         "W"
       ],
-      "form10": [
-        "L",
-        "L",
-        "D",
-        "W",
-        "L",
-        "D",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 1,
       "unbeatenStreak": 2,
       "losingStreak": 0,
@@ -4215,16 +4365,6 @@
         "L",
         "W"
       ],
-      "form10": [
-        "W",
-        "L",
-        "L",
-        "L",
-        "L",
-        "L",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 1,
       "unbeatenStreak": 1,
       "losingStreak": 0,
@@ -4433,16 +4573,6 @@
         "W",
         "L"
       ],
-      "form10": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L",
-        "W",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 1,
@@ -4651,16 +4781,6 @@
         "L",
         "L"
       ],
-      "form10": [
-        "L",
-        "D",
-        "L",
-        "D",
-        "W",
-        "L",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 2,
@@ -4869,16 +4989,6 @@
         "L",
         "D"
       ],
-      "form10": [
-        "D",
-        "D",
-        "D",
-        "L",
-        "L",
-        "L",
-        "D"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 1,
       "losingStreak": 0,
@@ -5087,16 +5197,6 @@
         "D",
         "W"
       ],
-      "form10": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "L",
-        "D",
-        "W"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 1,
       "unbeatenStreak": 2,
       "losingStreak": 0,
@@ -5305,16 +5405,6 @@
         "L",
         "L"
       ],
-      "form10": [
-        "L",
-        "L",
-        "L",
-        "L",
-        "D",
-        "L",
-        "L"
-      ],
-      "matchesAnalysed": 7,
       "winStreak": 0,
       "unbeatenStreak": 0,
       "losingStreak": 2,
