@@ -1,0 +1,920 @@
+---
+import data from "../../../data/segunda.json";
+
+export function getStaticPaths() {
+  const matches = [
+    ...(data.todayMatches ?? []),
+    ...(data.journeyMatches ?? [])
+  ];
+
+  const uniqueMatches = Array.from(
+    new Map(
+      matches
+        .filter((match) => match.matchSlug)
+        .map((match) => [match.matchSlug, match])
+    ).values()
+  );
+
+  return uniqueMatches.map((match) => ({
+    params: {
+      slug: match.matchSlug
+    },
+    props: {
+      match
+    }
+  }));
+}
+
+const { match } = Astro.props;
+
+const allTeamStats = Object.values(
+  data.teamStats ?? {}
+);
+
+const homeStats = allTeamStats.find(
+  (team) => team.slug === match.homeSlug
+);
+
+const awayStats = allTeamStats.find(
+  (team) => team.slug === match.awaySlug
+);
+
+const homeLast5 = homeStats?.last5;
+const awayLast5 = awayStats?.last5;
+
+const homeHomeStats = homeStats?.home;
+const awayAwayStats = awayStats?.away;
+
+const formLabels = {
+  W: "V",
+  D: "E",
+  L: "D"
+};
+
+const formatMatchDate = (date) => {
+  if (!date) {
+    return "";
+  }
+
+  const value = new Date(`${date}T12:00:00`);
+
+  return new Intl.DateTimeFormat(
+    "es-ES",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    }
+  ).format(value);
+};
+
+const previewReads = [];
+
+if (homeStats && awayStats) {
+  if (homeStats.winStreak >= 3) {
+    previewReads.push(
+      `${match.home} llega con ${homeStats.winStreak} victorias consecutivas`
+    );
+  } else if (homeStats.unbeatenStreak >= 4) {
+    previewReads.push(
+      `${match.home} encadena ${homeStats.unbeatenStreak} partidos sin perder`
+    );
+  } else if (homeLast5) {
+    previewReads.push(
+      `${match.home} ha sumado ${homeLast5.points} de los últimos ${homeLast5.played * 3} puntos`
+    );
+  }
+
+  if (awayStats.winStreak >= 3) {
+    previewReads.push(
+      `${match.away} llega con ${awayStats.winStreak} victorias consecutivas`
+    );
+  } else if (awayStats.unbeatenStreak >= 4) {
+    previewReads.push(
+      `${match.away} lleva ${awayStats.unbeatenStreak} partidos sin perder`
+    );
+  } else if (awayLast5) {
+    previewReads.push(
+      `${match.away} ha sumado ${awayLast5.points} de los últimos ${awayLast5.played * 3} puntos`
+    );
+  }
+
+  if (
+    homeLast5 &&
+    awayLast5
+  ) {
+    previewReads.push(
+      `En sus últimos cinco partidos promedian ${homeLast5.avgGoalsFor} y ${awayLast5.avgGoalsFor} goles por encuentro, respectivamente`
+    );
+  }
+}
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content={`Previa, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`}
+    />
+
+    <title>
+      {match.home} - {match.away} | Segunda Fila
+    </title>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="container header-content">
+        <a href="/" class="brand">
+          <div class="logo">SF</div>
+
+          <div>
+            <h1>Segunda Fila</h1>
+            <p>Fútbol más allá de Primera</p>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main class="container page">
+
+      <a href="/" class="back-link">
+        ← Segunda División
+      </a>
+
+      <!-- CABECERA PARTIDO -->
+
+      <section class="match-hero">
+        <div class="match-meta">
+          <span>Segunda División</span>
+
+          <strong>
+            {formatMatchDate(match.date)}
+          </strong>
+
+          <span>
+            {match.time}
+          </span>
+        </div>
+
+        <div class="match-teams">
+          <a
+            href={`/segunda/equipos/${match.homeSlug}`}
+            class="hero-team"
+          >
+            <div class="team-avatar">
+              {match.home.charAt(0)}
+            </div>
+
+            <strong>{match.home}</strong>
+          </a>
+
+          <div class="versus">
+            VS
+          </div>
+
+          <a
+            href={`/segunda/equipos/${match.awaySlug}`}
+            class="hero-team"
+          >
+            <div class="team-avatar">
+              {match.away.charAt(0)}
+            </div>
+
+            <strong>{match.away}</strong>
+          </a>
+        </div>
+
+        <div class="preview-label">
+          Previa del partido
+        </div>
+      </section>
+
+      <!-- CLAVES -->
+
+      {
+        previewReads.length > 0 && (
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Claves del partido</h2>
+                <span>Cómo llegan los dos equipos</span>
+              </div>
+            </div>
+
+            <div class="quick-list">
+              {previewReads.map((item) => (
+                <div class="quick-item">
+                  <span class="quick-dot"></span>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      <!-- FORMA -->
+
+      {
+        homeStats && awayStats && (
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Cómo llegan</h2>
+                <span>Últimos 5 partidos</span>
+              </div>
+            </div>
+
+            <div class="comparison-head">
+              <strong>{match.home}</strong>
+
+              <span></span>
+
+              <strong>{match.away}</strong>
+            </div>
+
+            <div class="form-comparison">
+              <div class="form-list">
+                {homeStats.form.map((result) => (
+                  <span
+                    class:list={[
+                      "form-item",
+                      result === "W" && "win",
+                      result === "D" && "draw",
+                      result === "L" && "loss"
+                    ]}
+                  >
+                    {formLabels[result]}
+                  </span>
+                ))}
+              </div>
+
+              <span class="comparison-label">
+                Forma
+              </span>
+
+              <div class="form-list away-form">
+                {awayStats.form.map((result) => (
+                  <span
+                    class:list={[
+                      "form-item",
+                      result === "W" && "win",
+                      result === "D" && "draw",
+                      result === "L" && "loss"
+                    ]}
+                  >
+                    {formLabels[result]}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div class="comparison-row">
+              <strong>{homeLast5?.points ?? "-"}</strong>
+              <span>Puntos</span>
+              <strong>{awayLast5?.points ?? "-"}</strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>{homeLast5?.avgGoalsFor ?? "-"}</strong>
+              <span>Goles / partido</span>
+              <strong>{awayLast5?.avgGoalsFor ?? "-"}</strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>{homeLast5?.avgGoalsAgainst ?? "-"}</strong>
+              <span>Encajados / partido</span>
+              <strong>{awayLast5?.avgGoalsAgainst ?? "-"}</strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeLast5?.unbeatenPercentage ?? "-"}%
+              </strong>
+
+              <span>Sin perder</span>
+
+              <strong>
+                {awayLast5?.unbeatenPercentage ?? "-"}%
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeLast5?.over25Percentage ?? "-"}%
+              </strong>
+
+              <span>Más de 2,5</span>
+
+              <strong>
+                {awayLast5?.over25Percentage ?? "-"}%
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeLast5?.bttsPercentage ?? "-"}%
+              </strong>
+
+              <span>Ambos marcan</span>
+
+              <strong>
+                {awayLast5?.bttsPercentage ?? "-"}%
+              </strong>
+            </div>
+          </section>
+        )
+      }
+
+      <!-- LOCAL VS VISITANTE -->
+
+      {
+        homeHomeStats && awayAwayStats && (
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Local vs visitante</h2>
+                <span>
+                  Rendimiento en la condición de este partido
+                </span>
+              </div>
+            </div>
+
+            <div class="comparison-head">
+              <strong>
+                {match.home} en casa
+              </strong>
+
+              <span></span>
+
+              <strong>
+                {match.away} fuera
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeHomeStats.wins}
+              </strong>
+
+              <span>Victorias</span>
+
+              <strong>
+                {awayAwayStats.wins}
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeHomeStats.avgGoalsFor}
+              </strong>
+
+              <span>Goles / partido</span>
+
+              <strong>
+                {awayAwayStats.avgGoalsFor}
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeHomeStats.avgGoalsAgainst}
+              </strong>
+
+              <span>Encajados</span>
+
+              <strong>
+                {awayAwayStats.avgGoalsAgainst}
+              </strong>
+            </div>
+
+            <div class="comparison-row">
+              <strong>
+                {homeHomeStats.unbeatenPercentage}%
+              </strong>
+
+              <span>Sin perder</span>
+
+              <strong>
+                {awayAwayStats.unbeatenPercentage}%
+              </strong>
+            </div>
+          </section>
+        )
+      }
+
+      <!-- FICHAS -->
+
+      <section class="team-links">
+        <a
+          href={`/segunda/equipos/${match.homeSlug}`}
+          class="team-link-card"
+        >
+          <span>Ver estadísticas</span>
+          <strong>{match.home}</strong>
+          <span class="arrow">→</span>
+        </a>
+
+        <a
+          href={`/segunda/equipos/${match.awaySlug}`}
+          class="team-link-card"
+        >
+          <span>Ver estadísticas</span>
+          <strong>{match.away}</strong>
+          <span class="arrow">→</span>
+        </a>
+      </section>
+
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(html) {
+    background: #f3f4f6;
+    color-scheme: light;
+  }
+
+  :global(body) {
+    margin: 0;
+    min-height: 100vh;
+
+    background: #f3f4f6;
+    color: #202124;
+
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+
+  .container {
+    width: min(900px, 94%);
+    margin: 0 auto;
+  }
+
+  .topbar {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .header-content {
+    padding: 18px 0;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .logo {
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 10px;
+
+    background: #111827;
+    color: white;
+
+    font-weight: 800;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .brand p {
+    margin: 3px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+  }
+
+  .page {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+
+    padding: 24px 0 60px;
+  }
+
+  .back-link {
+    width: fit-content;
+
+    color: #6b7280;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .back-link:hover {
+    color: #111827;
+  }
+
+  /* HERO */
+
+  .match-hero {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+  }
+
+  .match-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 13px 20px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+  }
+
+  .match-meta strong {
+    color: #4b5563;
+
+    text-transform: capitalize;
+  }
+
+  .match-teams {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      55px
+      minmax(0, 1fr);
+
+    align-items: center;
+
+    padding: 30px 24px;
+  }
+
+  .hero-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 10px;
+
+    color: inherit;
+    text-decoration: none;
+
+    text-align: center;
+  }
+
+  .hero-team strong {
+    font-size: 18px;
+  }
+
+  .team-avatar {
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #111827;
+    color: white;
+
+    font-size: 21px;
+    font-weight: 800;
+  }
+
+  .versus {
+    color: #9ca3af;
+
+    text-align: center;
+
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .preview-label {
+    padding: 11px 20px;
+
+    border-top: 1px solid #eeeeee;
+
+    background: #fafafa;
+    color: #6b7280;
+
+    text-align: center;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* PANEL */
+
+  .panel {
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+  }
+
+  .panel-header {
+    padding: 16px 20px;
+
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .panel-header h2 {
+    margin: 0;
+
+    font-size: 15px;
+  }
+
+  .panel-header span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+  }
+
+  /* CLAVES */
+
+  .quick-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quick-item {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 14px 20px;
+
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .quick-item:last-child {
+    border-bottom: none;
+  }
+
+  .quick-item p {
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .quick-dot {
+    flex-shrink: 0;
+
+    width: 7px;
+    height: 7px;
+
+    margin-top: 6px;
+
+    border-radius: 50%;
+
+    background: #111827;
+  }
+
+  /* COMPARACIÓN */
+
+  .comparison-head {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      150px
+      minmax(0, 1fr);
+
+    align-items: center;
+
+    padding: 14px 20px;
+
+    background: #fafafa;
+
+    border-bottom: 1px solid #eeeeee;
+
+    text-align: center;
+
+    font-size: 12px;
+  }
+
+  .form-comparison,
+  .comparison-row {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      150px
+      minmax(0, 1fr);
+
+    align-items: center;
+
+    min-height: 54px;
+
+    padding: 10px 20px;
+
+    border-bottom: 1px solid #f0f0f0;
+
+    text-align: center;
+  }
+
+  .comparison-row:last-child {
+    border-bottom: none;
+  }
+
+  .comparison-row strong {
+    font-size: 14px;
+  }
+
+  .comparison-row span,
+  .comparison-label {
+    color: #9ca3af;
+
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* FORMA */
+
+  .form-list {
+    display: flex;
+    justify-content: center;
+
+    gap: 5px;
+  }
+
+  .form-item {
+    width: 27px;
+    height: 27px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .form-item.win {
+    background: #16a34a;
+  }
+
+  .form-item.draw {
+    background: #9ca3af;
+  }
+
+  .form-item.loss {
+    background: #dc2626;
+  }
+
+  /* LINKS EQUIPOS */
+
+  .team-links {
+    display: grid;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+  }
+
+  .team-link-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    padding: 18px 20px;
+
+    background: #ffffff;
+    color: inherit;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    text-decoration: none;
+  }
+
+  .team-link-card > span:first-child {
+    color: #9ca3af;
+
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .team-link-card strong {
+    padding-right: 30px;
+
+    font-size: 14px;
+  }
+
+  .team-link-card .arrow {
+    position: absolute;
+
+    right: 20px;
+    top: 50%;
+
+    color: #9ca3af;
+
+    transform: translateY(-50%);
+  }
+
+  .team-link-card:hover {
+    border-color: #d1d5db;
+  }
+
+  @media (max-width: 650px) {
+    .match-teams {
+      padding: 24px 12px;
+    }
+
+    .hero-team strong {
+      font-size: 15px;
+    }
+
+    .team-avatar {
+      width: 50px;
+      height: 50px;
+
+      font-size: 18px;
+    }
+
+    .comparison-head,
+    .form-comparison,
+    .comparison-row {
+      grid-template-columns:
+        minmax(0, 1fr)
+        95px
+        minmax(0, 1fr);
+
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .form-list {
+      gap: 3px;
+    }
+
+    .form-item {
+      width: 23px;
+      height: 23px;
+
+      font-size: 9px;
+    }
+
+    .team-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -5,6 +5,7 @@ const todayMatches = data.todayMatches ?? [];
 const journeyMatches = data.journeyMatches ?? [];
 const trends = data.trends ?? [];
 const standings = data.standings ?? [];
+const teams = data.teams ?? [];
 
 const journeyByDay = journeyMatches.reduce((acc, match) => {
   const day = match.dateLabel ?? "";
@@ -17,6 +18,47 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
   return acc;
 }, {});
+
+const isMatchCurrentlyLive = (match) => {
+  if (!match.kickoffUtc) {
+    return false;
+  }
+
+  const kickoff = new Date(match.kickoffUtc);
+  const now = new Date();
+
+  const estimatedEnd = new Date(
+    kickoff.getTime() + 135 * 60 * 1000
+  );
+
+  const status = (
+    match.status ?? ""
+  ).toLowerCase();
+
+  const finished =
+    status.includes("finished") ||
+    status.includes("ft");
+
+  if (finished) {
+    return false;
+  }
+
+  return (
+    now >= kickoff &&
+    now <= estimatedEnd
+  );
+};
+
+const getMatchUrl = (match) => {
+  if (
+    !match.matchSlug ||
+    isMatchCurrentlyLive(match)
+  ) {
+    return null;
+  }
+
+  return `/segunda/partidos/${match.matchSlug}`;
+};
 ---
 
 <html lang="es">
@@ -51,6 +93,7 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     </header>
 
     <main class="container page">
+
       <!-- LIGAS -->
 
       <nav class="league-tabs">
@@ -66,6 +109,26 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
         </button>
       </nav>
 
+      <!-- EQUIPOS -->
+
+      <div class="team-chips">
+        <a
+          href="/"
+          class="team-chip active"
+        >
+          General
+        </a>
+
+        {teams.map((team) => (
+          <a
+            href={`/segunda/equipos/${team.slug}`}
+            class="team-chip"
+          >
+            {team.name}
+          </a>
+        ))}
+      </div>
+
       <div class="content-grid">
         <div class="main-column">
 
@@ -75,7 +138,10 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
             <div class="panel-header">
               <div>
                 <h2>Partidos de hoy</h2>
-                <span>Resultados y horarios se actualizan periódicamente</span>
+
+                <span>
+                  Resultados y horarios se actualizan periódicamente
+                </span>
               </div>
             </div>
 
@@ -83,62 +149,128 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
               todayMatches.length > 0 ? (
                 <div class="matches-list">
 
-                  {todayMatches.map((match) => (
+                  {todayMatches.map((match) => {
+                    const matchUrl = getMatchUrl(match);
 
-                    <article
-                      class="match-row"
-                      data-match
-                      data-kickoff={match.kickoffUtc}
-                      data-status={match.status ?? ""}
-                    >
-                      <div class="match-time">
-                        <span data-match-status>
-                          {match.time}
+                    return matchUrl ? (
+                      <a
+                        href={matchUrl}
+                        class="match-row match-link"
+                        data-match
+                        data-kickoff={match.kickoffUtc}
+                        data-status={match.status ?? ""}
+                        data-match-url={matchUrl}
+                      >
+                        <div class="match-time">
+                          <span data-match-status>
+                            {match.time}
+                          </span>
+                        </div>
+
+                        <div class="teams">
+                          <div class="team-row">
+                            <div class="team-logo">
+                              {match.home.charAt(0)}
+                            </div>
+
+                            <span>{match.home}</span>
+
+                            {
+                              match.homeScore !== null &&
+                              match.homeScore !== ""
+                                ? (
+                                  <strong class="score">
+                                    {match.homeScore}
+                                  </strong>
+                                )
+                                : null
+                            }
+                          </div>
+
+                          <div class="team-row">
+                            <div class="team-logo">
+                              {match.away.charAt(0)}
+                            </div>
+
+                            <span>{match.away}</span>
+
+                            {
+                              match.awayScore !== null &&
+                              match.awayScore !== ""
+                                ? (
+                                  <strong class="score">
+                                    {match.awayScore}
+                                  </strong>
+                                )
+                                : null
+                            }
+                          </div>
+                        </div>
+
+                        <span class="match-arrow">
+                          →
                         </span>
-                      </div>
-
-                      <div class="teams">
-                        <div class="team-row">
-                          <div class="team-logo">
-                            {match.home.charAt(0)}
-                          </div>
-
-                          <span>{match.home}</span>
-
-                          {
-                            match.homeScore !== null &&
-                            match.homeScore !== ""
-                              ? (
-                                <strong class="score">
-                                  {match.homeScore}
-                                </strong>
-                              )
-                              : null
-                          }
+                      </a>
+                    ) : (
+                      <div
+                        class="match-row match-disabled"
+                        data-match
+                        data-kickoff={match.kickoffUtc}
+                        data-status={match.status ?? ""}
+                        data-match-url={
+                          match.matchSlug
+                            ? `/segunda/partidos/${match.matchSlug}`
+                            : ""
+                        }
+                      >
+                        <div class="match-time">
+                          <span data-match-status>
+                            {match.time}
+                          </span>
                         </div>
 
-                        <div class="team-row">
-                          <div class="team-logo">
-                            {match.away.charAt(0)}
+                        <div class="teams">
+                          <div class="team-row">
+                            <div class="team-logo">
+                              {match.home.charAt(0)}
+                            </div>
+
+                            <span>{match.home}</span>
+
+                            {
+                              match.homeScore !== null &&
+                              match.homeScore !== ""
+                                ? (
+                                  <strong class="score">
+                                    {match.homeScore}
+                                  </strong>
+                                )
+                                : null
+                            }
                           </div>
 
-                          <span>{match.away}</span>
+                          <div class="team-row">
+                            <div class="team-logo">
+                              {match.away.charAt(0)}
+                            </div>
 
-                          {
-                            match.awayScore !== null &&
-                            match.awayScore !== ""
-                              ? (
-                                <strong class="score">
-                                  {match.awayScore}
-                                </strong>
-                              )
-                              : null
-                          }
+                            <span>{match.away}</span>
+
+                            {
+                              match.awayScore !== null &&
+                              match.awayScore !== ""
+                                ? (
+                                  <strong class="score">
+                                    {match.awayScore}
+                                  </strong>
+                                )
+                                : null
+                            }
+                          </div>
                         </div>
                       </div>
-                    </article>
-
-                  ))}
+                    );
+                  })}
 
                 </div>
               ) : (
@@ -165,7 +297,6 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
                   {Object.entries(journeyByDay).map(
                     ([day, matches]) => (
-
                       <div class="matchday-group">
 
                         <div class="matchday-title">
@@ -174,68 +305,131 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
                         <div class="matches-list">
 
-                          {matches.map((match) => (
+                          {matches.map((match) => {
+                            const matchUrl = getMatchUrl(match);
 
-                            <article
-                              class="match-row"
-                              data-match
-                              data-kickoff={match.kickoffUtc}
-                              data-status={match.status ?? ""}
-                            >
-                              <div class="match-time">
-                                <span data-match-status>
-                                  {match.time}
+                            return matchUrl ? (
+                              <a
+                                href={matchUrl}
+                                class="match-row match-link"
+                                data-match
+                                data-kickoff={match.kickoffUtc}
+                                data-status={match.status ?? ""}
+                                data-match-url={matchUrl}
+                              >
+                                <div class="match-time">
+                                  <span data-match-status>
+                                    {match.time}
+                                  </span>
+                                </div>
+
+                                <div class="teams">
+                                  <div class="team-row">
+                                    <div class="team-logo">
+                                      {match.home.charAt(0)}
+                                    </div>
+
+                                    <span>{match.home}</span>
+
+                                    {
+                                      match.homeScore !== null &&
+                                      match.homeScore !== ""
+                                        ? (
+                                          <strong class="score">
+                                            {match.homeScore}
+                                          </strong>
+                                        )
+                                        : null
+                                    }
+                                  </div>
+
+                                  <div class="team-row">
+                                    <div class="team-logo">
+                                      {match.away.charAt(0)}
+                                    </div>
+
+                                    <span>{match.away}</span>
+
+                                    {
+                                      match.awayScore !== null &&
+                                      match.awayScore !== ""
+                                        ? (
+                                          <strong class="score">
+                                            {match.awayScore}
+                                          </strong>
+                                        )
+                                        : null
+                                    }
+                                  </div>
+                                </div>
+
+                                <span class="match-arrow">
+                                  →
                                 </span>
-                              </div>
-
-                              <div class="teams">
-
-                                <div class="team-row">
-                                  <div class="team-logo">
-                                    {match.home.charAt(0)}
-                                  </div>
-
-                                  <span>{match.home}</span>
-
-                                  {
-                                    match.homeScore !== null &&
-                                    match.homeScore !== ""
-                                      ? (
-                                        <strong class="score">
-                                          {match.homeScore}
-                                        </strong>
-                                      )
-                                      : null
-                                  }
+                              </a>
+                            ) : (
+                              <div
+                                class="match-row match-disabled"
+                                data-match
+                                data-kickoff={match.kickoffUtc}
+                                data-status={match.status ?? ""}
+                                data-match-url={
+                                  match.matchSlug
+                                    ? `/segunda/partidos/${match.matchSlug}`
+                                    : ""
+                                }
+                              >
+                                <div class="match-time">
+                                  <span data-match-status>
+                                    {match.time}
+                                  </span>
                                 </div>
 
-                                <div class="team-row">
-                                  <div class="team-logo">
-                                    {match.away.charAt(0)}
+                                <div class="teams">
+                                  <div class="team-row">
+                                    <div class="team-logo">
+                                      {match.home.charAt(0)}
+                                    </div>
+
+                                    <span>{match.home}</span>
+
+                                    {
+                                      match.homeScore !== null &&
+                                      match.homeScore !== ""
+                                        ? (
+                                          <strong class="score">
+                                            {match.homeScore}
+                                          </strong>
+                                        )
+                                        : null
+                                    }
                                   </div>
 
-                                  <span>{match.away}</span>
+                                  <div class="team-row">
+                                    <div class="team-logo">
+                                      {match.away.charAt(0)}
+                                    </div>
 
-                                  {
-                                    match.awayScore !== null &&
-                                    match.awayScore !== ""
-                                      ? (
-                                        <strong class="score">
-                                          {match.awayScore}
-                                        </strong>
-                                      )
-                                      : null
-                                  }
+                                    <span>{match.away}</span>
+
+                                    {
+                                      match.awayScore !== null &&
+                                      match.awayScore !== ""
+                                        ? (
+                                          <strong class="score">
+                                            {match.awayScore}
+                                          </strong>
+                                        )
+                                        : null
+                                    }
+                                  </div>
                                 </div>
-
                               </div>
-                            </article>
-
-                          ))}
+                            );
+                          })}
 
                         </div>
                       </div>
-
                     )
                   )}
 
@@ -253,29 +447,36 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
           <section class="panel">
             <div class="panel-header">
               <div>
-                <h2>Tendencias</h2>
-                <span>Datos destacados</span>
+                <h2>Tendencias destacadas</h2>
+
+                <span>
+                  Lo más llamativo de la Segunda ahora mismo
+                </span>
               </div>
             </div>
 
             <div>
               {trends.map((trend) => (
-                <article class="trend-row">
-
+                <a
+                  href={`/segunda/equipos/${trend.slug}`}
+                  class="trend-row trend-link"
+                >
                   <div class="trend-icon">
                     {trend.icon}
                   </div>
 
-                  <div>
+                  <div class="trend-content">
                     <strong>{trend.title}</strong>
                     <p>{trend.text}</p>
                   </div>
 
-                </article>
+                  <div class="trend-arrow">
+                    →
+                  </div>
+                </a>
               ))}
             </div>
           </section>
-
         </div>
 
         <!-- CLASIFICACIÓN -->
@@ -311,13 +512,16 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
                 {row.pos}
               </span>
 
-              <div class="standing-team">
+              <a
+                href={`/segunda/equipos/${row.slug}`}
+                class="standing-team standing-team-link"
+              >
                 <div class="small-logo">
                   {row.team.charAt(0)}
                 </div>
 
                 <span>{row.team}</span>
-              </div>
+              </a>
 
               <span>{row.played}</span>
 
@@ -327,8 +531,6 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
         </aside>
       </div>
     </main>
-
-    <!-- ESTADO EN CURSO -->
 
     <script is:inline>
       function updateMatchStatuses() {
@@ -370,8 +572,12 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
           );
 
           if (finished) {
-            statusElement.textContent = "FINAL";
-            statusElement.classList.add("status-final");
+            statusElement.textContent =
+              "FINAL";
+
+            statusElement.classList.add(
+              "status-final"
+            );
 
             return;
           }
@@ -380,15 +586,23 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
             now >= kickoff &&
             now <= matchEnd
           ) {
-            statusElement.textContent = "EN CURSO";
-            statusElement.classList.add("status-live");
+            statusElement.textContent =
+              "EN CURSO";
+
+            statusElement.classList.add(
+              "status-live"
+            );
 
             return;
           }
 
           if (now > matchEnd) {
-            statusElement.textContent = "FINAL";
-            statusElement.classList.add("status-final");
+            statusElement.textContent =
+              "FINAL";
+
+            statusElement.classList.add(
+              "status-final"
+            );
 
             return;
           }
@@ -448,8 +662,6 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     font: inherit;
   }
 
-  /* GENERAL */
-
   .container {
     width: min(1100px, 94%);
     margin: 0 auto;
@@ -500,17 +712,16 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     margin: 3px 0 0;
 
     color: #6b7280;
-
     font-size: 13px;
   }
 
-  /* TABS */
+  /* LIGAS */
 
   .league-tabs {
     display: flex;
     gap: 8px;
 
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
   .league-tab {
@@ -523,7 +734,6 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     color: #6b7280;
 
     font-weight: 600;
-
     cursor: pointer;
   }
 
@@ -537,8 +747,74 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     color: #b0b4bb;
 
     cursor: not-allowed;
-
     opacity: 0.65;
+  }
+
+  /* EQUIPOS */
+
+  .team-chips {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    margin-bottom: 20px;
+    padding: 2px 0 6px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .team-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .team-chip {
+    flex: 0 0 auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 34px;
+
+    padding: 7px 13px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #6b7280;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .team-chip:hover {
+    background: #f3f4f6;
+    color: #111827;
+
+    border-color: #d1d5db;
+  }
+
+  .team-chip.active {
+    background: #111827;
+    color: #ffffff;
+
+    border-color: #111827;
   }
 
   /* LAYOUT */
@@ -562,7 +838,7 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     gap: 20px;
   }
 
-  /* PANEL */
+  /* PANELES */
 
   .panel {
     overflow: hidden;
@@ -641,11 +917,14 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
   }
 
   .match-row {
+    position: relative;
+
     display: grid;
 
     grid-template-columns:
       68px
-      minmax(0, 1fr);
+      minmax(0, 1fr)
+      20px;
 
     gap: 14px;
 
@@ -660,6 +939,40 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
   .match-row:last-child {
     border-bottom: none;
+  }
+
+  .match-link {
+    color: inherit;
+    text-decoration: none;
+
+    transition: background 0.15s ease;
+  }
+
+  .match-link:hover {
+    background: #fafafa;
+  }
+
+  .match-link:hover .match-arrow {
+    color: #6b7280;
+    transform: translateX(2px);
+  }
+
+  .match-disabled {
+    grid-template-columns:
+      68px
+      minmax(0, 1fr);
+
+    cursor: default;
+  }
+
+  .match-arrow {
+    color: #c4c7cc;
+
+    font-size: 15px;
+
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
   }
 
   .match-time {
@@ -686,12 +999,14 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
   .match-time span.status-live {
     color: #dc2626;
+
     font-size: 11px;
     font-weight: 800;
   }
 
   .match-time span.status-final {
     color: #6b7280;
+
     font-size: 11px;
     font-weight: 700;
   }
@@ -784,7 +1099,7 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
   .trend-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 
     gap: 14px;
 
@@ -795,6 +1110,17 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
   .trend-row:last-child {
     border-bottom: none;
+  }
+
+  .trend-link {
+    color: inherit;
+    text-decoration: none;
+
+    transition: background 0.15s ease;
+  }
+
+  .trend-link:hover {
+    background: #fafafa;
   }
 
   .trend-icon {
@@ -811,6 +1137,11 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     border-radius: 8px;
   }
 
+  .trend-content {
+    flex: 1;
+    min-width: 0;
+  }
+
   .trend-row strong {
     font-size: 14px;
   }
@@ -822,6 +1153,26 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
 
     font-size: 13px;
     line-height: 1.4;
+  }
+
+  .trend-arrow {
+    flex-shrink: 0;
+
+    margin-left: auto;
+
+    color: #c4c7cc;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    transition:
+      color 0.15s ease,
+      transform 0.15s ease;
+  }
+
+  .trend-link:hover .trend-arrow {
+    color: #6b7280;
+    transform: translateX(2px);
   }
 
   /* CLASIFICACIÓN */
@@ -900,6 +1251,15 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     min-width: 0;
   }
 
+  .standing-team-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .standing-team-link:hover span {
+    text-decoration: underline;
+  }
+
   .standing-team span {
     overflow: hidden;
 
@@ -910,8 +1270,24 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
   /* MOBILE */
 
   @media (max-width: 750px) {
+    .page {
+      padding-top: 18px;
+    }
+
     .content-grid {
       grid-template-columns: 1fr;
+    }
+
+    .team-chips {
+      margin-bottom: 18px;
+    }
+
+    .team-chip {
+      min-height: 32px;
+
+      padding: 6px 12px;
+
+      font-size: 12px;
     }
 
     .panel-header {
@@ -927,11 +1303,18 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
     .match-row {
       grid-template-columns:
         62px
-        minmax(0, 1fr);
+        minmax(0, 1fr)
+        18px;
 
       gap: 10px;
 
       padding: 14px 16px;
+    }
+
+    .match-disabled {
+      grid-template-columns:
+        62px
+        minmax(0, 1fr);
     }
 
     .trend-row {
