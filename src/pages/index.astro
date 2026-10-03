@@ -152,7 +152,7 @@ const isProviderFinished = (match) => {
 
                               <span>{match.home}</span>
 
-                              {
+                             {
   isProviderFinished(match) &&
   match.homeScore !== null &&
   match.homeScore !== ""
@@ -172,17 +172,17 @@ const isProviderFinished = (match) => {
 
                               <span>{match.away}</span>
 
-                              {
-                                isProviderFinished(match) &&
-                                match.awayScore !== null &&
-                                match.awayScore !== ""
-                                  ? (
-                                    <strong class="score">
-                                      {match.awayScore}
-                                    </strong>
-                                  )
-                                  : null
-                              }
+                            {
+  isProviderFinished(match) &&
+  match.awayScore !== null &&
+  match.awayScore !== ""
+    ? (
+      <strong class="score">
+        {match.awayScore}
+      </strong>
+    )
+    : null
+}
                             </div>
                           </div>
                         </div>

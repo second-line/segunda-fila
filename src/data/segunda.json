@@ -182,14 +182,14 @@
       "dateLabel": "Sábado 03/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-03T14:15:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Almería",
       "away": "Burgos",
       "homeSlug": "almeria",
       "awaySlug": "burgos",
       "matchSlug": "almeria-vs-burgos-2026-10-03",
       "homeScore": 0,
-      "awayScore": 0,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {

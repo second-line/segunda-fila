@@ -97,9 +97,6 @@ const estimatedEnd =
       )
     : null;
 
-const isFinished =
-  providerFinished;
-
 const providerFinished =
   status.includes("finished") ||
   status.includes("ft");
@@ -118,19 +115,6 @@ const isWaitingForFinal =
   !isFinished &&
   estimatedEnd &&
   now > estimatedEnd;
-
-const isLive =
-  !isFinished &&
-  kickoff &&
-  estimatedEnd &&
-  now >= kickoff &&
-  now <= estimatedEnd;
-
-const isWaitingForFinal =
-  !isFinished &&
-  estimatedEnd &&
-  now > estimatedEnd;
-
 
 const formatMatchDate = (date) => {
   if (!date) {
