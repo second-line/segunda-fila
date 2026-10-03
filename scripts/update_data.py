@@ -67,7 +67,17 @@ TEAM_NAMES = {
     "Real Sociedad B": "Real Sociedad B",
 
     "Celta B": "Celta B",
-    "Celta Fortuna": "Celta B"
+    "Celta Fortuna": "Celta B",
+
+    "Real Oviedo": "Oviedo",
+"Oviedo": "Oviedo",
+
+"Sporting de Gijón": "Real Sporting",
+"Sporting Gijon": "Real Sporting",
+"Sp Gijon": "Real Sporting",
+
+"Real Valladolid": "Valladolid",
+"Valladolid": "Valladolid",
 }
 
 

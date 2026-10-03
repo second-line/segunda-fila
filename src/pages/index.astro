@@ -19,41 +19,8 @@ const journeyByDay = journeyMatches.reduce((acc, match) => {
   return acc;
 }, {});
 
-const isMatchCurrentlyLive = (match) => {
-  if (!match.kickoffUtc) {
-    return false;
-  }
-
-  const kickoff = new Date(match.kickoffUtc);
-  const now = new Date();
-
-  const estimatedEnd = new Date(
-    kickoff.getTime() + 135 * 60 * 1000
-  );
-
-  const status = (
-    match.status ?? ""
-  ).toLowerCase();
-
-  const finished =
-    status.includes("finished") ||
-    status.includes("ft");
-
-  if (finished) {
-    return false;
-  }
-
-  return (
-    now >= kickoff &&
-    now <= estimatedEnd
-  );
-};
-
 const getMatchUrl = (match) => {
-  if (
-    !match.matchSlug ||
-    isMatchCurrentlyLive(match)
-  ) {
+  if (!match.matchSlug) {
     return null;
   }
 
@@ -152,7 +119,64 @@ const getMatchUrl = (match) => {
                   {todayMatches.map((match) => {
                     const matchUrl = getMatchUrl(match);
 
-                    return matchUrl ? (
+                    if (!matchUrl) {
+                      return (
+                        <div
+                          class="match-row match-disabled"
+                          data-match
+                          data-kickoff={match.kickoffUtc}
+                          data-status={match.status ?? ""}
+                        >
+                          <div class="match-time">
+                            <span data-match-status>
+                              {match.time}
+                            </span>
+                          </div>
+
+                          <div class="teams">
+                            <div class="team-row">
+                              <div class="team-logo">
+                                {match.home.charAt(0)}
+                              </div>
+
+                              <span>{match.home}</span>
+
+                              {
+                                match.homeScore !== null &&
+                                match.homeScore !== ""
+                                  ? (
+                                    <strong class="score">
+                                      {match.homeScore}
+                                    </strong>
+                                  )
+                                  : null
+                              }
+                            </div>
+
+                            <div class="team-row">
+                              <div class="team-logo">
+                                {match.away.charAt(0)}
+                              </div>
+
+                              <span>{match.away}</span>
+
+                              {
+                                match.awayScore !== null &&
+                                match.awayScore !== ""
+                                  ? (
+                                    <strong class="score">
+                                      {match.awayScore}
+                                    </strong>
+                                  )
+                                  : null
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    return (
                       <a
                         href={matchUrl}
                         class="match-row match-link"
@@ -207,68 +231,13 @@ const getMatchUrl = (match) => {
                           </div>
                         </div>
 
-                        <span class="match-arrow">
+                        <span
+                          class="match-arrow"
+                          data-match-arrow
+                        >
                           →
                         </span>
                       </a>
-                    ) : (
-                      <div
-                        class="match-row match-disabled"
-                        data-match
-                        data-kickoff={match.kickoffUtc}
-                        data-status={match.status ?? ""}
-                        data-match-url={
-                          match.matchSlug
-                            ? `/segunda/partidos/${match.matchSlug}`
-                            : ""
-                        }
-                      >
-                        <div class="match-time">
-                          <span data-match-status>
-                            {match.time}
-                          </span>
-                        </div>
-
-                        <div class="teams">
-                          <div class="team-row">
-                            <div class="team-logo">
-                              {match.home.charAt(0)}
-                            </div>
-
-                            <span>{match.home}</span>
-
-                            {
-                              match.homeScore !== null &&
-                              match.homeScore !== ""
-                                ? (
-                                  <strong class="score">
-                                    {match.homeScore}
-                                  </strong>
-                                )
-                                : null
-                            }
-                          </div>
-
-                          <div class="team-row">
-                            <div class="team-logo">
-                              {match.away.charAt(0)}
-                            </div>
-
-                            <span>{match.away}</span>
-
-                            {
-                              match.awayScore !== null &&
-                              match.awayScore !== ""
-                                ? (
-                                  <strong class="score">
-                                    {match.awayScore}
-                                  </strong>
-                                )
-                                : null
-                            }
-                          </div>
-                        </div>
-                      </div>
                     );
                   })}
 
@@ -308,7 +277,64 @@ const getMatchUrl = (match) => {
                           {matches.map((match) => {
                             const matchUrl = getMatchUrl(match);
 
-                            return matchUrl ? (
+                            if (!matchUrl) {
+                              return (
+                                <div
+                                  class="match-row match-disabled"
+                                  data-match
+                                  data-kickoff={match.kickoffUtc}
+                                  data-status={match.status ?? ""}
+                                >
+                                  <div class="match-time">
+                                    <span data-match-status>
+                                      {match.time}
+                                    </span>
+                                  </div>
+
+                                  <div class="teams">
+                                    <div class="team-row">
+                                      <div class="team-logo">
+                                        {match.home.charAt(0)}
+                                      </div>
+
+                                      <span>{match.home}</span>
+
+                                      {
+                                        match.homeScore !== null &&
+                                        match.homeScore !== ""
+                                          ? (
+                                            <strong class="score">
+                                              {match.homeScore}
+                                            </strong>
+                                          )
+                                          : null
+                                      }
+                                    </div>
+
+                                    <div class="team-row">
+                                      <div class="team-logo">
+                                        {match.away.charAt(0)}
+                                      </div>
+
+                                      <span>{match.away}</span>
+
+                                      {
+                                        match.awayScore !== null &&
+                                        match.awayScore !== ""
+                                          ? (
+                                            <strong class="score">
+                                              {match.awayScore}
+                                            </strong>
+                                          )
+                                          : null
+                                      }
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+
+                            return (
                               <a
                                 href={matchUrl}
                                 class="match-row match-link"
@@ -363,68 +389,13 @@ const getMatchUrl = (match) => {
                                   </div>
                                 </div>
 
-                                <span class="match-arrow">
+                                <span
+                                  class="match-arrow"
+                                  data-match-arrow
+                                >
                                   →
                                 </span>
                               </a>
-                            ) : (
-                              <div
-                                class="match-row match-disabled"
-                                data-match
-                                data-kickoff={match.kickoffUtc}
-                                data-status={match.status ?? ""}
-                                data-match-url={
-                                  match.matchSlug
-                                    ? `/segunda/partidos/${match.matchSlug}`
-                                    : ""
-                                }
-                              >
-                                <div class="match-time">
-                                  <span data-match-status>
-                                    {match.time}
-                                  </span>
-                                </div>
-
-                                <div class="teams">
-                                  <div class="team-row">
-                                    <div class="team-logo">
-                                      {match.home.charAt(0)}
-                                    </div>
-
-                                    <span>{match.home}</span>
-
-                                    {
-                                      match.homeScore !== null &&
-                                      match.homeScore !== ""
-                                        ? (
-                                          <strong class="score">
-                                            {match.homeScore}
-                                          </strong>
-                                        )
-                                        : null
-                                    }
-                                  </div>
-
-                                  <div class="team-row">
-                                    <div class="team-logo">
-                                      {match.away.charAt(0)}
-                                    </div>
-
-                                    <span>{match.away}</span>
-
-                                    {
-                                      match.awayScore !== null &&
-                                      match.awayScore !== ""
-                                        ? (
-                                          <strong class="score">
-                                            {match.awayScore}
-                                          </strong>
-                                        )
-                                        : null
-                                    }
-                                  </div>
-                                </div>
-                              </div>
                             );
                           })}
 
@@ -533,9 +504,77 @@ const getMatchUrl = (match) => {
     </main>
 
     <script is:inline>
+      function setMatchClickable(match, clickable) {
+        const matchUrl =
+          match.dataset.matchUrl;
+
+        if (
+          !matchUrl ||
+          match.tagName !== "A"
+        ) {
+          return;
+        }
+
+        const arrow =
+          match.querySelector(
+            "[data-match-arrow]"
+          );
+
+        if (clickable) {
+          match.setAttribute(
+            "href",
+            matchUrl
+          );
+
+          match.removeAttribute(
+            "aria-disabled"
+          );
+
+          match.removeAttribute(
+            "tabindex"
+          );
+
+          match.classList.remove(
+            "match-disabled"
+          );
+
+          match.classList.add(
+            "match-link"
+          );
+
+          if (arrow) {
+            arrow.hidden = false;
+          }
+
+          return;
+        }
+
+        match.removeAttribute("href");
+
+        match.setAttribute(
+          "aria-disabled",
+          "true"
+        );
+
+        match.setAttribute(
+          "tabindex",
+          "-1"
+        );
+
+        match.classList.add(
+          "match-disabled"
+        );
+
+        if (arrow) {
+          arrow.hidden = true;
+        }
+      }
+
       function updateMatchStatuses() {
         const matches =
-          document.querySelectorAll("[data-match]");
+          document.querySelectorAll(
+            "[data-match]"
+          );
 
         const now = new Date();
 
@@ -544,12 +583,19 @@ const getMatchUrl = (match) => {
             match.dataset.kickoff;
 
           const rawStatus =
-            (match.dataset.status || "").toLowerCase();
+            (
+              match.dataset.status || ""
+            ).toLowerCase();
 
           const statusElement =
-            match.querySelector("[data-match-status]");
+            match.querySelector(
+              "[data-match-status]"
+            );
 
-          if (!kickoffValue || !statusElement) {
+          if (
+            !kickoffValue ||
+            !statusElement
+          ) {
             return;
           }
 
@@ -571,6 +617,10 @@ const getMatchUrl = (match) => {
             "status-final"
           );
 
+          /*
+           * FINAL confirmado por la API
+           */
+
           if (finished) {
             statusElement.textContent =
               "FINAL";
@@ -579,8 +629,17 @@ const getMatchUrl = (match) => {
               "status-final"
             );
 
+            setMatchClickable(
+              match,
+              true
+            );
+
             return;
           }
+
+          /*
+           * EN CURSO
+           */
 
           if (
             now >= kickoff &&
@@ -593,8 +652,17 @@ const getMatchUrl = (match) => {
               "status-live"
             );
 
+            setMatchClickable(
+              match,
+              false
+            );
+
             return;
           }
+
+          /*
+           * FINAL estimado
+           */
 
           if (now > matchEnd) {
             statusElement.textContent =
@@ -604,8 +672,17 @@ const getMatchUrl = (match) => {
               "status-final"
             );
 
+            setMatchClickable(
+              match,
+              true
+            );
+
             return;
           }
+
+          /*
+           * TODAVÍA NO HA EMPEZADO
+           */
 
           const formatter =
             new Intl.DateTimeFormat(
@@ -619,6 +696,11 @@ const getMatchUrl = (match) => {
 
           statusElement.textContent =
             formatter.format(kickoff);
+
+          setMatchClickable(
+            match,
+            true
+          );
         });
       }
 
@@ -958,11 +1040,21 @@ const getMatchUrl = (match) => {
   }
 
   .match-disabled {
+    cursor: default;
+  }
+
+  a.match-disabled {
     grid-template-columns:
       68px
       minmax(0, 1fr);
 
-    cursor: default;
+    pointer-events: none;
+  }
+
+  div.match-disabled {
+    grid-template-columns:
+      68px
+      minmax(0, 1fr);
   }
 
   .match-arrow {
@@ -973,6 +1065,10 @@ const getMatchUrl = (match) => {
     transition:
       color 0.15s ease,
       transform 0.15s ease;
+  }
+
+  .match-arrow[hidden] {
+    display: none;
   }
 
   .match-time {
@@ -1311,7 +1407,8 @@ const getMatchUrl = (match) => {
       padding: 14px 16px;
     }
 
-    .match-disabled {
+    a.match-disabled,
+    div.match-disabled {
       grid-template-columns:
         62px
         minmax(0, 1fr);

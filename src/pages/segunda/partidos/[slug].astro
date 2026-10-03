@@ -45,18 +45,70 @@ const awayLast5 = awayStats?.last5;
 const homeHomeStats = homeStats?.home;
 const awayAwayStats = awayStats?.away;
 
+const homeForm = homeStats?.form ?? [];
+const awayForm = awayStats?.form ?? [];
+
 const formLabels = {
   W: "V",
   D: "E",
   L: "D"
 };
 
+const status = (
+  match.status ?? ""
+).toLowerCase();
+
+const hasScore =
+  match.homeScore !== null &&
+  match.homeScore !== "" &&
+  match.awayScore !== null &&
+  match.awayScore !== "";
+
+const kickoff = match.kickoffUtc
+  ? new Date(match.kickoffUtc)
+  : null;
+
+const now = new Date();
+
+const estimatedEnd = kickoff
+  ? new Date(
+      kickoff.getTime() +
+      135 * 60 * 1000
+    )
+  : null;
+
+const providerFinished =
+  status.includes("finished") ||
+  status.includes("ft");
+
+const isFinished =
+  providerFinished ||
+  (
+    hasScore &&
+    estimatedEnd &&
+    now > estimatedEnd
+  );
+
+const isLive =
+  !isFinished &&
+  kickoff &&
+  estimatedEnd &&
+  now >= kickoff &&
+  now <= estimatedEnd;
+
+const isWaitingForFinal =
+  !isFinished &&
+  estimatedEnd &&
+  now > estimatedEnd;
+
 const formatMatchDate = (date) => {
   if (!date) {
     return "";
   }
 
-  const value = new Date(`${date}T12:00:00`);
+  const value = new Date(
+    `${date}T12:00:00`
+  );
 
   return new Intl.DateTimeFormat(
     "es-ES",
@@ -68,14 +120,60 @@ const formatMatchDate = (date) => {
   ).format(value);
 };
 
+const historyContainsMatch = (
+  teamStats,
+  opponent,
+  date
+) => {
+  const matches =
+    teamStats?.recentMatches ?? [];
+
+  return matches.some(
+    (item) =>
+      item.date === date &&
+      item.opponent === opponent
+  );
+};
+
+const homeStatsUpdated =
+  historyContainsMatch(
+    homeStats,
+    match.away,
+    match.date
+  );
+
+const awayStatsUpdated =
+  historyContainsMatch(
+    awayStats,
+    match.home,
+    match.date
+  );
+
+const statsUpdated =
+  isFinished &&
+  homeStatsUpdated &&
+  awayStatsUpdated;
+
+/*
+ * PREVIA
+ */
+
 const previewReads = [];
 
-if (homeStats && awayStats) {
+if (
+  !isFinished &&
+  !isLive &&
+  !isWaitingForFinal &&
+  homeStats &&
+  awayStats
+) {
   if (homeStats.winStreak >= 3) {
     previewReads.push(
       `${match.home} llega con ${homeStats.winStreak} victorias consecutivas`
     );
-  } else if (homeStats.unbeatenStreak >= 4) {
+  } else if (
+    homeStats.unbeatenStreak >= 4
+  ) {
     previewReads.push(
       `${match.home} encadena ${homeStats.unbeatenStreak} partidos sin perder`
     );
@@ -89,7 +187,9 @@ if (homeStats && awayStats) {
     previewReads.push(
       `${match.away} llega con ${awayStats.winStreak} victorias consecutivas`
     );
-  } else if (awayStats.unbeatenStreak >= 4) {
+  } else if (
+    awayStats.unbeatenStreak >= 4
+  ) {
     previewReads.push(
       `${match.away} lleva ${awayStats.unbeatenStreak} partidos sin perder`
     );
@@ -100,14 +200,123 @@ if (homeStats && awayStats) {
   }
 
   if (
+    homeHomeStats &&
+    homeHomeStats.wins >= 3
+  ) {
+    previewReads.push(
+      `${match.home} ha ganado ${homeHomeStats.wins} de sus últimos ${homeHomeStats.played} partidos en casa`
+    );
+  } else if (
+    awayAwayStats &&
+    awayAwayStats.wins >= 3
+  ) {
+    previewReads.push(
+      `${match.away} ha ganado ${awayAwayStats.wins} de sus últimos ${awayAwayStats.played} partidos como visitante`
+    );
+  }
+
+  if (
     homeLast5 &&
     awayLast5
   ) {
     previewReads.push(
-      `En sus últimos cinco partidos promedian ${homeLast5.avgGoalsFor} y ${awayLast5.avgGoalsFor} goles por encuentro, respectivamente`
+      `En los últimos cinco partidos promedian ${homeLast5.avgGoalsFor} y ${awayLast5.avgGoalsFor} goles por encuentro, respectivamente`
     );
   }
 }
+
+/*
+ * POSTPARTIDO
+ */
+
+let resultSummary = "";
+
+if (isFinished && hasScore) {
+  if (
+    match.homeScore >
+    match.awayScore
+  ) {
+    resultSummary =
+      `${match.home} se impuso ${match.homeScore}-${match.awayScore} a ${match.away}.`;
+  } else if (
+    match.awayScore >
+    match.homeScore
+  ) {
+    resultSummary =
+      `${match.away} se llevó el partido por ${match.awayScore}-${match.homeScore} ante ${match.home}.`;
+  } else {
+    resultSummary =
+      `${match.home} y ${match.away} empataron ${match.homeScore}-${match.awayScore}.`;
+  }
+}
+
+const postMatchReads = [];
+
+if (statsUpdated) {
+  if (homeStats.winStreak >= 2) {
+    postMatchReads.push(
+      `${match.home} encadena ahora ${homeStats.winStreak} victorias consecutivas`
+    );
+  } else if (
+    homeStats.unbeatenStreak >= 3
+  ) {
+    postMatchReads.push(
+      `${match.home} amplía a ${homeStats.unbeatenStreak} su racha de partidos sin perder`
+    );
+  } else if (
+    homeStats.losingStreak >= 2
+  ) {
+    postMatchReads.push(
+      `${match.home} suma ${homeStats.losingStreak} derrotas consecutivas`
+    );
+  } else if (
+    homeStats.winlessStreak >= 3
+  ) {
+    postMatchReads.push(
+      `${match.home} lleva ya ${homeStats.winlessStreak} partidos sin ganar`
+    );
+  }
+
+  if (awayStats.winStreak >= 2) {
+    postMatchReads.push(
+      `${match.away} encadena ahora ${awayStats.winStreak} victorias consecutivas`
+    );
+  } else if (
+    awayStats.unbeatenStreak >= 3
+  ) {
+    postMatchReads.push(
+      `${match.away} amplía a ${awayStats.unbeatenStreak} su racha de partidos sin perder`
+    );
+  } else if (
+    awayStats.losingStreak >= 2
+  ) {
+    postMatchReads.push(
+      `${match.away} suma ${awayStats.losingStreak} derrotas consecutivas`
+    );
+  } else if (
+    awayStats.winlessStreak >= 3
+  ) {
+    postMatchReads.push(
+      `${match.away} lleva ya ${awayStats.winlessStreak} partidos sin ganar`
+    );
+  }
+
+  if (homeStats.scoringStreak >= 3) {
+    postMatchReads.push(
+      `${match.home} ha marcado en sus últimos ${homeStats.scoringStreak} partidos`
+    );
+  }
+
+  if (awayStats.scoringStreak >= 3) {
+    postMatchReads.push(
+      `${match.away} ha marcado en sus últimos ${awayStats.scoringStreak} partidos`
+    );
+  }
+}
+
+const pageTitle = isFinished
+  ? `${match.home} ${match.homeScore ?? ""} - ${match.awayScore ?? ""} ${match.away}`
+  : `${match.home} - ${match.away}`;
 ---
 
 <html lang="es">
@@ -121,11 +330,15 @@ if (homeStats && awayStats) {
 
     <meta
       name="description"
-      content={`Previa, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`}
+      content={
+        isFinished
+          ? `Resultado, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`
+          : `Previa, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`
+      }
     />
 
     <title>
-      {match.home} - {match.away} | Segunda Fila
+      {pageTitle} | Segunda Fila
     </title>
   </head>
 
@@ -149,9 +362,10 @@ if (homeStats && awayStats) {
         ← Segunda División
       </a>
 
-      <!-- CABECERA PARTIDO -->
+      <!-- CABECERA -->
 
       <section class="match-hero">
+
         <div class="match-meta">
           <span>Segunda División</span>
 
@@ -159,12 +373,17 @@ if (homeStats && awayStats) {
             {formatMatchDate(match.date)}
           </strong>
 
-          <span>
-            {match.time}
-          </span>
+          {
+            !isFinished &&
+            !isLive &&
+            !isWaitingForFinal && (
+              <span>{match.time}</span>
+            )
+          }
         </div>
 
         <div class="match-teams">
+
           <a
             href={`/segunda/equipos/${match.homeSlug}`}
             class="hero-team"
@@ -176,8 +395,27 @@ if (homeStats && awayStats) {
             <strong>{match.home}</strong>
           </a>
 
-          <div class="versus">
-            VS
+          <div class="match-center">
+            {
+              isFinished &&
+              hasScore ? (
+                <div class="final-score">
+                  <strong>
+                    {match.homeScore}
+                  </strong>
+
+                  <span>-</span>
+
+                  <strong>
+                    {match.awayScore}
+                  </strong>
+                </div>
+              ) : (
+                <div class="versus">
+                  VS
+                </div>
+              )
+            }
           </div>
 
           <a
@@ -190,237 +428,578 @@ if (homeStats && awayStats) {
 
             <strong>{match.away}</strong>
           </a>
+
         </div>
 
-        <div class="preview-label">
-          Previa del partido
-        </div>
+        {
+          isFinished ? (
+            <div class="state-label final">
+              Final
+            </div>
+          ) : isLive ? (
+            <div class="state-label live">
+              En curso
+            </div>
+          ) : isWaitingForFinal ? (
+            <div class="state-label waiting">
+              Pendiente de resultado final
+            </div>
+          ) : (
+            <div class="state-label preview">
+              Previa del partido
+            </div>
+          )
+        }
+
       </section>
 
-      <!-- CLAVES -->
+      <!-- EN CURSO -->
 
       {
-        previewReads.length > 0 && (
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Claves del partido</h2>
-                <span>Cómo llegan los dos equipos</span>
-              </div>
-            </div>
+        isLive && (
+          <section class="panel info-panel">
+            <strong>Partido en curso</strong>
 
-            <div class="quick-list">
-              {previewReads.map((item) => (
-                <div class="quick-item">
-                  <span class="quick-dot"></span>
-                  <p>{item}</p>
+            <p>
+              La página se actualizará con el resultado y las
+              nuevas rachas cuando termine el encuentro y los
+              datos estén disponibles.
+            </p>
+          </section>
+        )
+      }
+
+      <!-- ESPERANDO RESULTADO -->
+
+      {
+        isWaitingForFinal && (
+          <section class="panel info-panel">
+            <strong>
+              Esperando actualización del resultado
+            </strong>
+
+            <p>
+              El horario estimado del partido ya ha terminado,
+              pero todavía no tenemos un resultado final
+              confirmado.
+            </p>
+          </section>
+        )
+      }
+
+      <!-- PREVIA -->
+
+      {
+        !isFinished &&
+        !isLive &&
+        !isWaitingForFinal && (
+          <>
+            {
+              previewReads.length > 0 && (
+                <section class="panel">
+                  <div class="panel-header">
+                    <div>
+                      <h2>Claves del partido</h2>
+                      <span>
+                        Cómo llegan los dos equipos
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="quick-list">
+                    {previewReads.slice(0, 4).map(
+                      (item) => (
+                        <div class="quick-item">
+                          <span class="quick-dot"></span>
+                          <p>{item}</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </section>
+              )
+            }
+
+            {
+              homeStats &&
+              awayStats && (
+                <section class="panel">
+                  <div class="panel-header">
+                    <div>
+                      <h2>Cómo llegan</h2>
+                      <span>Últimos 5 partidos</span>
+                    </div>
+                  </div>
+
+                  <div class="comparison-head">
+                    <strong>
+                      {match.home}
+                    </strong>
+
+                    <span></span>
+
+                    <strong>
+                      {match.away}
+                    </strong>
+                  </div>
+
+                  <div class="form-comparison">
+                    <div class="form-list">
+                      {homeForm.map(
+                        (result) => (
+                          <span
+                            class:list={[
+                              "form-item",
+                              result === "W" && "win",
+                              result === "D" && "draw",
+                              result === "L" && "loss"
+                            ]}
+                          >
+                            {formLabels[result]}
+                          </span>
+                        )
+                      )}
+                    </div>
+
+                    <span class="comparison-label">
+                      Forma
+                    </span>
+
+                    <div class="form-list">
+                      {awayForm.map(
+                        (result) => (
+                          <span
+                            class:list={[
+                              "form-item",
+                              result === "W" && "win",
+                              result === "D" && "draw",
+                              result === "L" && "loss"
+                            ]}
+                          >
+                            {formLabels[result]}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.points ?? "-"}
+                    </strong>
+
+                    <span>Puntos</span>
+
+                    <strong>
+                      {awayLast5?.points ?? "-"}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.avgGoalsFor ?? "-"}
+                    </strong>
+
+                    <span>Goles / partido</span>
+
+                    <strong>
+                      {awayLast5?.avgGoalsFor ?? "-"}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.avgGoalsAgainst ?? "-"}
+                    </strong>
+
+                    <span>Encajados / partido</span>
+
+                    <strong>
+                      {awayLast5?.avgGoalsAgainst ?? "-"}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.unbeatenPercentage ?? "-"}%
+                    </strong>
+
+                    <span>Sin perder</span>
+
+                    <strong>
+                      {awayLast5?.unbeatenPercentage ?? "-"}%
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.over25Percentage ?? "-"}%
+                    </strong>
+
+                    <span>Más de 2,5</span>
+
+                    <strong>
+                      {awayLast5?.over25Percentage ?? "-"}%
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.bttsPercentage ?? "-"}%
+                    </strong>
+
+                    <span>Ambos marcan</span>
+
+                    <strong>
+                      {awayLast5?.bttsPercentage ?? "-"}%
+                    </strong>
+                  </div>
+                </section>
+              )
+            }
+
+            {
+              homeHomeStats &&
+              awayAwayStats && (
+                <section class="panel">
+                  <div class="panel-header">
+                    <div>
+                      <h2>Local vs visitante</h2>
+
+                      <span>
+                        Rendimiento en la condición
+                        de este partido
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="comparison-head">
+                    <strong>
+                      {match.home} en casa
+                    </strong>
+
+                    <span></span>
+
+                    <strong>
+                      {match.away} fuera
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeHomeStats.wins}
+                    </strong>
+
+                    <span>Victorias</span>
+
+                    <strong>
+                      {awayAwayStats.wins}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeHomeStats.avgGoalsFor}
+                    </strong>
+
+                    <span>Goles / partido</span>
+
+                    <strong>
+                      {awayAwayStats.avgGoalsFor}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeHomeStats.avgGoalsAgainst}
+                    </strong>
+
+                    <span>Encajados</span>
+
+                    <strong>
+                      {awayAwayStats.avgGoalsAgainst}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeHomeStats.unbeatenPercentage}%
+                    </strong>
+
+                    <span>Sin perder</span>
+
+                    <strong>
+                      {awayAwayStats.unbeatenPercentage}%
+                    </strong>
+                  </div>
+                </section>
+              )
+            }
+          </>
+        )
+      }
+
+      <!-- POSTPARTIDO -->
+
+      {
+        isFinished && (
+          <>
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Resumen del partido</h2>
+                  <span>Resultado final</span>
                 </div>
-              ))}
-            </div>
-          </section>
-        )
-      }
-
-      <!-- FORMA -->
-
-      {
-        homeStats && awayStats && (
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Cómo llegan</h2>
-                <span>Últimos 5 partidos</span>
               </div>
-            </div>
 
-            <div class="comparison-head">
-              <strong>{match.home}</strong>
+              <div class="match-summary">
+                {
+                  resultSummary ? (
+                    <p>{resultSummary}</p>
+                  ) : (
+                    <p>
+                      El partido ha finalizado.
+                    </p>
+                  )
+                }
 
-              <span></span>
+                {
+                  statsUpdated &&
+                  postMatchReads.length > 0 && (
+                    <p>
+                      {postMatchReads[0]}.
+                    </p>
+                  )
+                }
+              </div>
+            </section>
 
-              <strong>{match.away}</strong>
-            </div>
+            {
+              !statsUpdated && (
+                <section class="panel update-pending">
+                  <strong>
+                    Estadísticas en actualización
+                  </strong>
 
-            <div class="form-comparison">
-              <div class="form-list">
-                {homeStats.form.map((result) => (
-                  <span
-                    class:list={[
-                      "form-item",
-                      result === "W" && "win",
-                      result === "D" && "draw",
-                      result === "L" && "loss"
-                    ]}
-                  >
-                    {formLabels[result]}
+                  <p>
+                    Ya tenemos el resultado final,
+                    pero las nuevas rachas y estadísticas
+                    todavía no se han incorporado a los
+                    datos de la competición.
+                  </p>
+
+                  <span>
+                    Se actualizarán automáticamente
+                    cuando el proveedor incorpore
+                    el partido.
                   </span>
-                ))}
-              </div>
+                </section>
+              )
+            }
 
-              <span class="comparison-label">
-                Forma
-              </span>
+            {
+              statsUpdated &&
+              postMatchReads.length > 0 && (
+                <section class="panel">
+                  <div class="panel-header">
+                    <div>
+                      <h2>
+                        Después del partido
+                      </h2>
 
-              <div class="form-list away-form">
-                {awayStats.form.map((result) => (
-                  <span
-                    class:list={[
-                      "form-item",
-                      result === "W" && "win",
-                      result === "D" && "draw",
-                      result === "L" && "loss"
-                    ]}
-                  >
-                    {formLabels[result]}
-                  </span>
-                ))}
-              </div>
-            </div>
+                      <span>
+                        Cómo quedan las rachas
+                      </span>
+                    </div>
+                  </div>
 
-            <div class="comparison-row">
-              <strong>{homeLast5?.points ?? "-"}</strong>
-              <span>Puntos</span>
-              <strong>{awayLast5?.points ?? "-"}</strong>
-            </div>
+                  <div class="quick-list">
+                    {postMatchReads.slice(0, 4).map(
+                      (item) => (
+                        <div class="quick-item">
+                          <span class="quick-dot"></span>
+                          <p>{item}</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </section>
+              )
+            }
 
-            <div class="comparison-row">
-              <strong>{homeLast5?.avgGoalsFor ?? "-"}</strong>
-              <span>Goles / partido</span>
-              <strong>{awayLast5?.avgGoalsFor ?? "-"}</strong>
-            </div>
+            {
+              statsUpdated &&
+              homeStats &&
+              awayStats && (
+                <section class="panel">
+                  <div class="panel-header">
+                    <div>
+                      <h2>Forma actualizada</h2>
 
-            <div class="comparison-row">
-              <strong>{homeLast5?.avgGoalsAgainst ?? "-"}</strong>
-              <span>Encajados / partido</span>
-              <strong>{awayLast5?.avgGoalsAgainst ?? "-"}</strong>
-            </div>
+                      <span>
+                        Últimos 5 partidos incluyendo
+                        este resultado
+                      </span>
+                    </div>
+                  </div>
 
-            <div class="comparison-row">
-              <strong>
-                {homeLast5?.unbeatenPercentage ?? "-"}%
-              </strong>
+                  <div class="comparison-head">
+                    <strong>
+                      {match.home}
+                    </strong>
 
-              <span>Sin perder</span>
+                    <span></span>
 
-              <strong>
-                {awayLast5?.unbeatenPercentage ?? "-"}%
-              </strong>
-            </div>
+                    <strong>
+                      {match.away}
+                    </strong>
+                  </div>
 
-            <div class="comparison-row">
-              <strong>
-                {homeLast5?.over25Percentage ?? "-"}%
-              </strong>
+                  <div class="form-comparison">
+                    <div class="form-list">
+                      {homeForm.map(
+                        (result) => (
+                          <span
+                            class:list={[
+                              "form-item",
+                              result === "W" && "win",
+                              result === "D" && "draw",
+                              result === "L" && "loss"
+                            ]}
+                          >
+                            {formLabels[result]}
+                          </span>
+                        )
+                      )}
+                    </div>
 
-              <span>Más de 2,5</span>
+                    <span class="comparison-label">
+                      Forma
+                    </span>
 
-              <strong>
-                {awayLast5?.over25Percentage ?? "-"}%
-              </strong>
-            </div>
+                    <div class="form-list">
+                      {awayForm.map(
+                        (result) => (
+                          <span
+                            class:list={[
+                              "form-item",
+                              result === "W" && "win",
+                              result === "D" && "draw",
+                              result === "L" && "loss"
+                            ]}
+                          >
+                            {formLabels[result]}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  </div>
 
-            <div class="comparison-row">
-              <strong>
-                {homeLast5?.bttsPercentage ?? "-"}%
-              </strong>
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.points ?? "-"}
+                    </strong>
 
-              <span>Ambos marcan</span>
+                    <span>
+                      Puntos últimos 5
+                    </span>
 
-              <strong>
-                {awayLast5?.bttsPercentage ?? "-"}%
-              </strong>
-            </div>
-          </section>
+                    <strong>
+                      {awayLast5?.points ?? "-"}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeStats.winStreak}
+                    </strong>
+
+                    <span>
+                      Victorias seguidas
+                    </span>
+
+                    <strong>
+                      {awayStats.winStreak}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeStats.unbeatenStreak}
+                    </strong>
+
+                    <span>
+                      Sin perder
+                    </span>
+
+                    <strong>
+                      {awayStats.unbeatenStreak}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeStats.scoringStreak}
+                    </strong>
+
+                    <span>
+                      Marcando
+                    </span>
+
+                    <strong>
+                      {awayStats.scoringStreak}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.avgGoalsFor ?? "-"}
+                    </strong>
+
+                    <span>
+                      Goles / partido
+                    </span>
+
+                    <strong>
+                      {awayLast5?.avgGoalsFor ?? "-"}
+                    </strong>
+                  </div>
+
+                  <div class="comparison-row">
+                    <strong>
+                      {homeLast5?.avgGoalsAgainst ?? "-"}
+                    </strong>
+
+                    <span>
+                      Encajados / partido
+                    </span>
+
+                    <strong>
+                      {awayLast5?.avgGoalsAgainst ?? "-"}
+                    </strong>
+                  </div>
+                </section>
+              )
+            }
+          </>
         )
       }
 
-      <!-- LOCAL VS VISITANTE -->
-
-      {
-        homeHomeStats && awayAwayStats && (
-          <section class="panel">
-            <div class="panel-header">
-              <div>
-                <h2>Local vs visitante</h2>
-                <span>
-                  Rendimiento en la condición de este partido
-                </span>
-              </div>
-            </div>
-
-            <div class="comparison-head">
-              <strong>
-                {match.home} en casa
-              </strong>
-
-              <span></span>
-
-              <strong>
-                {match.away} fuera
-              </strong>
-            </div>
-
-            <div class="comparison-row">
-              <strong>
-                {homeHomeStats.wins}
-              </strong>
-
-              <span>Victorias</span>
-
-              <strong>
-                {awayAwayStats.wins}
-              </strong>
-            </div>
-
-            <div class="comparison-row">
-              <strong>
-                {homeHomeStats.avgGoalsFor}
-              </strong>
-
-              <span>Goles / partido</span>
-
-              <strong>
-                {awayAwayStats.avgGoalsFor}
-              </strong>
-            </div>
-
-            <div class="comparison-row">
-              <strong>
-                {homeHomeStats.avgGoalsAgainst}
-              </strong>
-
-              <span>Encajados</span>
-
-              <strong>
-                {awayAwayStats.avgGoalsAgainst}
-              </strong>
-            </div>
-
-            <div class="comparison-row">
-              <strong>
-                {homeHomeStats.unbeatenPercentage}%
-              </strong>
-
-              <span>Sin perder</span>
-
-              <strong>
-                {awayAwayStats.unbeatenPercentage}%
-              </strong>
-            </div>
-          </section>
-        )
-      }
-
-      <!-- FICHAS -->
+      <!-- FICHAS DE EQUIPO -->
 
       <section class="team-links">
+
         <a
           href={`/segunda/equipos/${match.homeSlug}`}
           class="team-link-card"
         >
           <span>Ver estadísticas</span>
+
           <strong>{match.home}</strong>
-          <span class="arrow">→</span>
+
+          <span class="arrow">
+            →
+          </span>
         </a>
 
         <a
@@ -428,9 +1007,14 @@ if (homeStats && awayStats) {
           class="team-link-card"
         >
           <span>Ver estadísticas</span>
+
           <strong>{match.away}</strong>
-          <span class="arrow">→</span>
+
+          <span class="arrow">
+            →
+          </span>
         </a>
+
       </section>
 
     </main>
@@ -468,9 +1052,13 @@ if (homeStats && awayStats) {
     margin: 0 auto;
   }
 
+  /* HEADER */
+
   .topbar {
     background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+
+    border-bottom:
+      1px solid #e5e7eb;
   }
 
   .header-content {
@@ -497,13 +1085,14 @@ if (homeStats && awayStats) {
     border-radius: 10px;
 
     background: #111827;
-    color: white;
+    color: #ffffff;
 
     font-weight: 800;
   }
 
   h1 {
     margin: 0;
+
     font-size: 20px;
   }
 
@@ -514,6 +1103,8 @@ if (homeStats && awayStats) {
 
     font-size: 13px;
   }
+
+  /* PAGE */
 
   .page {
     display: flex;
@@ -546,7 +1137,9 @@ if (homeStats && awayStats) {
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+      1px solid #e5e7eb;
+
     border-radius: 12px;
   }
 
@@ -555,11 +1148,14 @@ if (homeStats && awayStats) {
     align-items: center;
     justify-content: center;
 
+    flex-wrap: wrap;
+
     gap: 8px;
 
     padding: 13px 20px;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom:
+      1px solid #eeeeee;
 
     color: #9ca3af;
 
@@ -577,7 +1173,7 @@ if (homeStats && awayStats) {
 
     grid-template-columns:
       minmax(0, 1fr)
-      55px
+      90px
       minmax(0, 1fr);
 
     align-items: center;
@@ -612,36 +1208,78 @@ if (homeStats && awayStats) {
     border-radius: 50%;
 
     background: #111827;
-    color: white;
+    color: #ffffff;
 
     font-size: 21px;
     font-weight: 800;
   }
 
+  .match-center {
+    display: grid;
+    place-items: center;
+  }
+
   .versus {
     color: #9ca3af;
-
-    text-align: center;
 
     font-size: 12px;
     font-weight: 800;
   }
 
-  .preview-label {
+  .final-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+  }
+
+  .final-score strong {
+    color: #111827;
+
+    font-size: 32px;
+    font-weight: 800;
+  }
+
+  .final-score span {
+    color: #9ca3af;
+
+    font-size: 20px;
+  }
+
+  .state-label {
     padding: 11px 20px;
 
-    border-top: 1px solid #eeeeee;
-
-    background: #fafafa;
-    color: #6b7280;
+    border-top:
+      1px solid #eeeeee;
 
     text-align: center;
 
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
 
     text-transform: uppercase;
     letter-spacing: 0.04em;
+  }
+
+  .state-label.preview {
+    background: #fafafa;
+    color: #6b7280;
+  }
+
+  .state-label.final {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .state-label.live {
+    background: #fff7f7;
+    color: #dc2626;
+  }
+
+  .state-label.waiting {
+    background: #fafafa;
+    color: #6b7280;
   }
 
   /* PANEL */
@@ -651,14 +1289,17 @@ if (homeStats && awayStats) {
 
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border:
+      1px solid #e5e7eb;
+
     border-radius: 12px;
   }
 
   .panel-header {
     padding: 16px 20px;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom:
+      1px solid #eeeeee;
   }
 
   .panel-header h2 {
@@ -677,6 +1318,61 @@ if (homeStats && awayStats) {
     font-size: 12px;
   }
 
+  /* INFO */
+
+  .info-panel,
+  .update-pending {
+    padding: 20px;
+  }
+
+  .info-panel strong,
+  .update-pending strong {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+  }
+
+  .info-panel p,
+  .update-pending p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .update-pending span {
+    display: block;
+
+    margin-top: 8px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+  }
+
+  /* RESUMEN */
+
+  .match-summary {
+    padding: 20px;
+  }
+
+  .match-summary p {
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .match-summary p + p {
+    margin-top: 8px;
+  }
+
   /* CLAVES */
 
   .quick-list {
@@ -692,7 +1388,8 @@ if (homeStats && awayStats) {
 
     padding: 14px 20px;
 
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom:
+      1px solid #f0f0f0;
   }
 
   .quick-item:last-child {
@@ -737,7 +1434,8 @@ if (homeStats && awayStats) {
 
     background: #fafafa;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom:
+      1px solid #eeeeee;
 
     text-align: center;
 
@@ -759,7 +1457,8 @@ if (homeStats && awayStats) {
 
     padding: 10px 20px;
 
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom:
+      1px solid #f0f0f0;
 
     text-align: center;
   }
@@ -840,7 +1539,9 @@ if (homeStats && awayStats) {
     background: #ffffff;
     color: inherit;
 
-    border: 1px solid #e5e7eb;
+    border:
+      1px solid #e5e7eb;
+
     border-radius: 12px;
 
     text-decoration: none;
@@ -867,15 +1568,23 @@ if (homeStats && awayStats) {
 
     color: #9ca3af;
 
-    transform: translateY(-50%);
+    transform:
+      translateY(-50%);
   }
 
   .team-link-card:hover {
     border-color: #d1d5db;
   }
 
+  /* MOBILE */
+
   @media (max-width: 650px) {
     .match-teams {
+      grid-template-columns:
+        minmax(0, 1fr)
+        70px
+        minmax(0, 1fr);
+
       padding: 24px 12px;
     }
 
@@ -888,6 +1597,10 @@ if (homeStats && awayStats) {
       height: 50px;
 
       font-size: 18px;
+    }
+
+    .final-score strong {
+      font-size: 27px;
     }
 
     .comparison-head,
