@@ -158,6 +158,74 @@ const formLabels = {
   L: "D"
 };
 
+const matchInsights = [];
+
+if (homeStats?.last5?.played >= 3) {
+  if (homeStats.last5.wins >= 3) {
+    matchInsights.push(
+      `${match.home} llega con ${homeStats.last5.wins} victorias en sus últimos ${homeStats.last5.played} partidos.`
+    );
+  }
+
+  if (homeStats.last5.unbeatenPercentage >= 80) {
+    matchInsights.push(
+      `${match.home} no ha perdido en el ${homeStats.last5.unbeatenPercentage}% de sus últimos ${homeStats.last5.played} partidos.`
+    );
+  }
+  if (homeStats?.last5?.btts >= 3) {
+  matchInsights.push(
+    `Hubo goles de ambos equipos en ${homeStats.last5.btts} de los últimos ${homeStats.last5.played} partidos de ${match.home}.`
+  );
+}
+}
+
+if (awayStats?.last5?.played >= 3) {
+  if (awayStats.last5.wins >= 3) {
+    matchInsights.push(
+      `${match.away} suma ${awayStats.last5.wins} victorias en sus últimos ${awayStats.last5.played} partidos.`
+    );
+  }
+
+  if (awayStats.last5.unbeatenPercentage >= 80) {
+    matchInsights.push(
+      `${match.away} no ha perdido en el ${awayStats.last5.unbeatenPercentage}% de sus últimos ${awayStats.last5.played} partidos.`
+    );
+  }
+
+  if (awayStats.last5.cleanSheetPercentage >= 60) {
+    matchInsights.push(
+      `${match.away} dejó su portería a cero en el ${awayStats.last5.cleanSheetPercentage}% de sus últimos ${awayStats.last5.played} partidos.`
+    );
+  }
+}
+
+if (
+  homeStats?.home?.played >= 3 &&
+  homeStats.home.winPercentage >= 60
+) {
+  matchInsights.push(
+    `${match.home} ha ganado el ${homeStats.home.winPercentage}% de sus últimos ${homeStats.home.played} partidos como local.`
+  );
+}
+
+if (
+  awayStats?.away?.played >= 3 &&
+  awayStats.away.unbeatenPercentage >= 60
+) {
+  matchInsights.push(
+    `${match.away} ha puntuado en el ${awayStats.away.unbeatenPercentage}% de sus últimos ${awayStats.away.played} partidos como visitante.`
+  );
+}
+
+if (headToHead.length >= 2) {
+  matchInsights.push(
+    `En los últimos ${headToHead.length} enfrentamientos disponibles: ${match.home} ganó ${homeH2HWins}, ${match.away} ganó ${awayH2HWins} y hubo ${h2hDraws} empates.`
+  );
+}
+
+const visibleInsights =
+  matchInsights.slice(0, 5);
+
 const homeForm =
   homeStats?.form ?? [];
 
@@ -315,6 +383,28 @@ const formatHistoricalDate = (
       {
         !isFinished ? (
           <>
+          {
+  visibleInsights.length > 0 && (
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2>Lectura del partido</h2>
+          <span>Claves extraídas de los datos recientes</span>
+        </div>
+      </div>
+
+      <div class="insights-list">
+        {visibleInsights.map((insight) => (
+          <div class="insight-row">
+            <span class="insight-dot">•</span>
+
+            <p>{insight}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
             <section class="panel">
               <div class="panel-header">
                 <div>
@@ -1043,4 +1133,38 @@ const formatHistoricalDate = (
       grid-template-columns: 1fr 55px 1fr;
     }
   }
+  .insights-list {
+  padding: 6px 20px 12px;
+}
+
+.insight-row {
+  display: flex;
+  gap: 10px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.insight-row:last-child {
+  border-bottom: none;
+}
+
+.insight-dot {
+  flex-shrink: 0;
+
+  color: #111827;
+
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.insight-row p {
+  margin: 0;
+
+  color: #4b5563;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
 </style>
