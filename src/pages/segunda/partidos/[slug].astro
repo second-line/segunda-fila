@@ -7,18 +7,22 @@ export function getStaticPaths() {
     ...(data.journeyMatches ?? [])
   ];
 
-  const uniqueMatches = Array.from(
-    new Map(
-      matches
-        .filter((match) => match.matchSlug)
-        .map((match) => [
-          match.matchSlug,
-          match
-        ])
-    ).values()
-  );
+  const uniqueMatches = new Map();
 
-  return uniqueMatches.map((match) => ({
+  for (const match of matches) {
+    if (!match.matchSlug) {
+      continue;
+    }
+
+    uniqueMatches.set(
+      match.matchSlug,
+      match
+    );
+  }
+
+  return Array.from(
+    uniqueMatches.values()
+  ).map((match) => ({
     params: {
       slug: match.matchSlug
     },
@@ -30,51 +34,27 @@ export function getStaticPaths() {
 
 const { match } = Astro.props;
 
-const allTeamStats = Object.values(
+const teamStats = Object.values(
   data.teamStats ?? {}
 );
 
-const homeStats = allTeamStats.find(
-  (team) =>
-    team.slug === match.homeSlug
+const homeStats = teamStats.find(
+  (item) =>
+    item.slug === match.homeSlug
 );
 
-const awayStats = allTeamStats.find(
-  (team) =>
-    team.slug === match.awaySlug
+const awayStats = teamStats.find(
+  (item) =>
+    item.slug === match.awaySlug
 );
-
-const homeLast5 =
-  homeStats?.last5;
-
-const awayLast5 =
-  awayStats?.last5;
-
-const homeHomeStats =
-  homeStats?.home;
-
-const awayAwayStats =
-  awayStats?.away;
-
-const homeForm =
-  homeStats?.form ?? [];
-
-const awayForm =
-  awayStats?.form ?? [];
-
-const headToHead =
-  match.headToHead?.meetings ?? [];
-
-const formLabels = {
-  W: "V",
-  D: "E",
-  L: "D"
-};
-
 
 const status = (
   match.status ?? ""
 ).toLowerCase();
+
+const providerFinished =
+  status.includes("finished") ||
+  status.includes("ft");
 
 const hasScore =
   match.homeScore !== null &&
@@ -97,10 +77,6 @@ const estimatedEnd =
       )
     : null;
 
-const providerFinished =
-  status.includes("finished") ||
-  status.includes("ft");
-
 const isFinished =
   providerFinished;
 
@@ -116,332 +92,90 @@ const isWaitingForFinal =
   estimatedEnd &&
   now > estimatedEnd;
 
-const formatMatchDate = (date) => {
-  if (!date) {
-    return "";
-  }
+const headToHead =
+  match.headToHead?.meetings ?? [];
 
-  const value = new Date(
-    `${date}T12:00:00`
-  );
-
-  return new Intl.DateTimeFormat(
-    "es-ES",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long"
+const homeH2HWins =
+  headToHead.filter((previous) => {
+    if (
+      previous.homeSlug ===
+      match.homeSlug
+    ) {
+      return (
+        previous.homeScore >
+        previous.awayScore
+      );
     }
-  ).format(value);
+
+    if (
+      previous.awaySlug ===
+      match.homeSlug
+    ) {
+      return (
+        previous.awayScore >
+        previous.homeScore
+      );
+    }
+
+    return false;
+  }).length;
+
+const awayH2HWins =
+  headToHead.filter((previous) => {
+    if (
+      previous.homeSlug ===
+      match.awaySlug
+    ) {
+      return (
+        previous.homeScore >
+        previous.awayScore
+      );
+    }
+
+    if (
+      previous.awaySlug ===
+      match.awaySlug
+    ) {
+      return (
+        previous.awayScore >
+        previous.homeScore
+      );
+    }
+
+    return false;
+  }).length;
+
+const h2hDraws =
+  headToHead.filter(
+    (previous) =>
+      previous.homeScore ===
+      previous.awayScore
+  ).length;
+
+const formLabels = {
+  W: "V",
+  D: "E",
+  L: "D"
 };
 
+const homeForm =
+  homeStats?.form ?? [];
 
-const formatShortDate = (date) => {
-  if (!date) {
-    return "";
-  }
+const awayForm =
+  awayStats?.form ?? [];
 
-  const value = new Date(
-    `${date}T12:00:00`
-  );
-
-  return new Intl.DateTimeFormat(
-    "es-ES",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    }
-  ).format(value);
-};
-
-
-const historyContainsMatch = (
-  teamStats,
-  opponent,
-  date
+const formatHistoricalDate = (
+  dateValue
 ) => {
-  const matches =
-    teamStats?.recentMatches ?? [];
+  if (!dateValue) {
+    return "";
+  }
 
-  return matches.some((item) => {
-    const itemDate =
-      item.date?.slice(0, 10);
+  const [year, month, day] =
+    dateValue.split("-");
 
-    return (
-      itemDate === date &&
-      item.opponent === opponent
-    );
-  });
+  return `${day}/${month}/${year}`;
 };
-
-
-const homeStatsUpdated =
-  historyContainsMatch(
-    homeStats,
-    match.away,
-    match.date
-  );
-
-const awayStatsUpdated =
-  historyContainsMatch(
-    awayStats,
-    match.home,
-    match.date
-  );
-
-const statsUpdated =
-  isFinished &&
-  homeStatsUpdated &&
-  awayStatsUpdated;
-
-
-/* --------------------------------
-   RESUMEN H2H
--------------------------------- */
-
-let homeH2HWins = 0;
-let awayH2HWins = 0;
-let h2hDraws = 0;
-
-for (const previous of headToHead) {
-  const previousHomeSlug =
-    previous.homeSlug;
-
-  const previousAwaySlug =
-    previous.awaySlug;
-
-  if (
-    previous.homeScore ===
-    previous.awayScore
-  ) {
-    h2hDraws += 1;
-    continue;
-  }
-
-  const winnerSlug =
-    previous.homeScore >
-    previous.awayScore
-      ? previousHomeSlug
-      : previousAwaySlug;
-
-  if (
-    winnerSlug ===
-    match.homeSlug
-  ) {
-    homeH2HWins += 1;
-  }
-
-  if (
-    winnerSlug ===
-    match.awaySlug
-  ) {
-    awayH2HWins += 1;
-  }
-}
-
-
-/* --------------------------------
-   PREVIA
--------------------------------- */
-
-const previewReads = [];
-
-if (
-  !isFinished &&
-  !isLive &&
-  !isWaitingForFinal &&
-  homeStats &&
-  awayStats
-) {
-  if (
-    homeStats.winStreak >= 3
-  ) {
-    previewReads.push(
-      `${match.home} llega con ${homeStats.winStreak} victorias consecutivas`
-    );
-
-  } else if (
-    homeStats.unbeatenStreak >= 4
-  ) {
-    previewReads.push(
-      `${match.home} encadena ${homeStats.unbeatenStreak} partidos sin perder`
-    );
-
-  } else if (homeLast5) {
-    previewReads.push(
-      `${match.home} ha sumado ${homeLast5.points} de los últimos ${homeLast5.played * 3} puntos`
-    );
-  }
-
-
-  if (
-    awayStats.winStreak >= 3
-  ) {
-    previewReads.push(
-      `${match.away} llega con ${awayStats.winStreak} victorias consecutivas`
-    );
-
-  } else if (
-    awayStats.unbeatenStreak >= 4
-  ) {
-    previewReads.push(
-      `${match.away} lleva ${awayStats.unbeatenStreak} partidos sin perder`
-    );
-
-  } else if (awayLast5) {
-    previewReads.push(
-      `${match.away} ha sumado ${awayLast5.points} de los últimos ${awayLast5.played * 3} puntos`
-    );
-  }
-
-
-  if (
-    homeHomeStats &&
-    homeHomeStats.wins >= 3
-  ) {
-    previewReads.push(
-      `${match.home} ha ganado ${homeHomeStats.wins} de sus últimos ${homeHomeStats.played} partidos en casa`
-    );
-
-  } else if (
-    awayAwayStats &&
-    awayAwayStats.wins >= 3
-  ) {
-    previewReads.push(
-      `${match.away} ha ganado ${awayAwayStats.wins} de sus últimos ${awayAwayStats.played} partidos como visitante`
-    );
-  }
-
-
-  if (
-    homeLast5 &&
-    awayLast5
-  ) {
-    previewReads.push(
-      `En los últimos cinco partidos promedian ${homeLast5.avgGoalsFor} y ${awayLast5.avgGoalsFor} goles por encuentro, respectivamente`
-    );
-  }
-}
-
-
-/* --------------------------------
-   POSTPARTIDO
--------------------------------- */
-
-let resultSummary = "";
-
-if (
-  isFinished &&
-  hasScore
-) {
-  if (
-    match.homeScore >
-    match.awayScore
-  ) {
-    resultSummary =
-      `${match.home} se impuso ${match.homeScore}-${match.awayScore} a ${match.away}.`;
-
-  } else if (
-    match.awayScore >
-    match.homeScore
-  ) {
-    resultSummary =
-      `${match.away} se llevó el partido por ${match.awayScore}-${match.homeScore} ante ${match.home}.`;
-
-  } else {
-    resultSummary =
-      `${match.home} y ${match.away} empataron ${match.homeScore}-${match.awayScore}.`;
-  }
-}
-
-
-const postMatchReads = [];
-
-if (statsUpdated) {
-  if (
-    homeStats.winStreak >= 2
-  ) {
-    postMatchReads.push(
-      `${match.home} encadena ahora ${homeStats.winStreak} victorias consecutivas`
-    );
-
-  } else if (
-    homeStats.unbeatenStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.home} amplía a ${homeStats.unbeatenStreak} su racha de partidos sin perder`
-    );
-
-  } else if (
-    homeStats.losingStreak >= 2
-  ) {
-    postMatchReads.push(
-      `${match.home} suma ${homeStats.losingStreak} derrotas consecutivas`
-    );
-
-  } else if (
-    homeStats.winlessStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.home} lleva ya ${homeStats.winlessStreak} partidos sin ganar`
-    );
-  }
-
-
-  if (
-    awayStats.winStreak >= 2
-  ) {
-    postMatchReads.push(
-      `${match.away} encadena ahora ${awayStats.winStreak} victorias consecutivas`
-    );
-
-  } else if (
-    awayStats.unbeatenStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.away} amplía a ${awayStats.unbeatenStreak} su racha de partidos sin perder`
-    );
-
-  } else if (
-    awayStats.losingStreak >= 2
-  ) {
-    postMatchReads.push(
-      `${match.away} suma ${awayStats.losingStreak} derrotas consecutivas`
-    );
-
-  } else if (
-    awayStats.winlessStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.away} lleva ya ${awayStats.winlessStreak} partidos sin ganar`
-    );
-  }
-
-
-  if (
-    homeStats.scoringStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.home} ha marcado en sus últimos ${homeStats.scoringStreak} partidos`
-    );
-  }
-
-
-  if (
-    awayStats.scoringStreak >= 3
-  ) {
-    postMatchReads.push(
-      `${match.away} ha marcado en sus últimos ${awayStats.scoringStreak} partidos`
-    );
-  }
-}
-
-
-const pageTitle =
-  isFinished
-    ? `${match.home} ${match.homeScore ?? ""} - ${match.awayScore ?? ""} ${match.away}`
-    : `${match.home} - ${match.away}`;
 ---
 
 <html lang="es">
@@ -455,120 +189,97 @@ const pageTitle =
 
     <meta
       name="description"
-      content={
-        isFinished
-          ? `Resultado, forma y tendencias de ${match.home} - ${match.away} en Segunda División.`
-          : `Previa, forma, estadísticas y enfrentamientos entre ${match.home} y ${match.away}.`
-      }
+      content={`Previa, forma, tendencias y enfrentamientos directos de ${match.home} - ${match.away}.`}
     />
 
     <title>
-      {pageTitle} | Segunda Fila
+      {match.home} - {match.away} | Segunda Fila
     </title>
   </head>
 
   <body>
-
     <header class="topbar">
       <div class="container header-content">
-
-        <a
-          href="/"
-          class="brand"
-        >
-          <div class="logo">
-            SF
-          </div>
+        <a href="/" class="brand">
+          <div class="logo">SF</div>
 
           <div>
-            <h1>
-              Segunda Fila
-            </h1>
-
-            <p>
-              Fútbol más allá de Primera
-            </p>
+            <h1>Segunda Fila</h1>
+            <p>Fútbol más allá de Primera</p>
           </div>
         </a>
-
       </div>
     </header>
 
-
     <main class="container page">
-
-      <a
-        href="/"
-        class="back-link"
-      >
+      <a href="/" class="back-link">
         ← Segunda División
       </a>
 
-
-      <!-- CABECERA -->
-
-      <section class="match-hero">
-
-        <div class="match-meta">
-
+      <section class="match-hero panel">
+        <div class="hero-top">
           <span>
             Segunda División
           </span>
 
-          <strong>
-            {formatMatchDate(match.date)}
-          </strong>
-
-          {
-            !isFinished &&
-            !isLive &&
-            !isWaitingForFinal && (
-              <span>
-                {match.time}
-              </span>
-            )
-          }
-
+          <span>
+            {match.dateLabel} · {match.time}
+          </span>
         </div>
 
+        <div
+          class:list={[
+            "state-label",
+            isFinished && "final",
+            isLive && "live",
+            isWaitingForFinal && "waiting",
+            !isFinished &&
+              !isLive &&
+              !isWaitingForFinal &&
+              "preview"
+          ]}
+          data-match-page-status
+          data-kickoff={match.kickoffUtc}
+          data-status={match.status ?? ""}
+        >
+          {
+            isFinished
+              ? "Final"
+              : isLive
+                ? "En curso"
+                : isWaitingForFinal
+                  ? "Pendiente de resultado final"
+                  : "Previa del partido"
+          }
+        </div>
 
-        <div class="match-teams">
-
+        <div class="scoreboard">
           <a
             href={`/segunda/equipos/${match.homeSlug}`}
-            class="hero-team"
+            class="club"
           >
-
-            <div class="team-avatar">
+            <div class="club-logo">
               {match.home.charAt(0)}
             </div>
 
             <strong>
               {match.home}
             </strong>
-
           </a>
 
-
-          <div class="match-center">
-
+          <div class="score-center">
             {
-              isFinished &&
-              hasScore ? (
+              isFinished && hasScore ? (
                 <div class="final-score">
-
                   <strong>
                     {match.homeScore}
                   </strong>
 
-                  <span>
-                    -
-                  </span>
+                  <span>-</span>
 
                   <strong>
                     {match.awayScore}
                   </strong>
-
                 </div>
               ) : (
                 <div class="versus">
@@ -577,1134 +288,353 @@ const pageTitle =
               )
             }
 
+            {
+              !isFinished ? (
+                <span class="score-note">
+                  El marcador se mostrará cuando el resultado final esté confirmado
+                </span>
+              ) : null
+            }
           </div>
-
 
           <a
             href={`/segunda/equipos/${match.awaySlug}`}
-            class="hero-team"
+            class="club"
           >
-
-            <div class="team-avatar">
+            <div class="club-logo">
               {match.away.charAt(0)}
             </div>
 
             <strong>
               {match.away}
             </strong>
-
           </a>
-
         </div>
-        <div
-  class:list={[
-    "state-label",
-    isFinished && "final",
-    isLive && "live",
-    isWaitingForFinal && "waiting",
-    !isFinished &&
-      !isLive &&
-      !isWaitingForFinal &&
-      "preview"
-  ]}
-  data-match-page-status
-  data-kickoff={match.kickoffUtc}
-  data-status={match.status ?? ""}
->
-  {
-    isFinished
-      ? "Final"
-      : isLive
-        ? "En curso"
-        : isWaitingForFinal
-          ? "Pendiente de resultado final"
-          : "Previa del partido"
-  }
-</div>
       </section>
 
-
-      <!-- EN CURSO -->
-
       {
-        isLive && (
-          <section class="panel info-panel">
-
-            <strong>
-              Partido en curso
-            </strong>
-
-            <p>
-              La página se actualizará con el
-              resultado y las nuevas rachas cuando
-              termine el encuentro y los datos
-              estén disponibles.
-            </p>
-
-          </section>
-        )
-      }
-
-
-      <!-- ESPERANDO RESULTADO -->
-
-      {
-        isWaitingForFinal && (
-          <section class="panel info-panel">
-
-            <strong>
-              Esperando actualización del resultado
-            </strong>
-
-            <p>
-              El horario estimado del partido ya ha
-              terminado, pero todavía no tenemos un
-              resultado final confirmado.
-            </p>
-
-          </section>
-        )
-      }
-
-
-      <!-- PREVIA -->
-
-      {
-        !isFinished &&
-        !isLive &&
-        !isWaitingForFinal && (
+        !isFinished ? (
           <>
-
-            {
-              previewReads.length > 0 && (
-                <section class="panel">
-
-                  <div class="panel-header">
-                    <div>
-
-                      <h2>
-                        Claves del partido
-                      </h2>
-
-                      <span>
-                        Cómo llegan los dos equipos
-                      </span>
-
-                    </div>
-                  </div>
-
-
-                  <div class="quick-list">
-
-                    {
-                      previewReads
-                        .slice(0, 4)
-                        .map((item) => (
-                          <div class="quick-item">
-
-                            <span
-                              class="quick-dot"
-                            ></span>
-
-                            <p>
-                              {item}
-                            </p>
-
-                          </div>
-                        ))
-                    }
-
-                  </div>
-
-                </section>
-              )
-            }
-
-
-            {
-              homeStats &&
-              awayStats && (
-                <section class="panel">
-
-                  <div class="panel-header">
-                    <div>
-
-                      <h2>
-                        Cómo llegan
-                      </h2>
-
-                      <span>
-                        Últimos 5 partidos
-                      </span>
-
-                    </div>
-                  </div>
-
-
-                  <div class="comparison-head">
-
-                    <strong>
-                      {match.home}
-                    </strong>
-
-                    <span></span>
-
-                    <strong>
-                      {match.away}
-                    </strong>
-
-                  </div>
-
-
-                  <div class="form-comparison">
-
-                    <div class="form-list">
-
-                      {
-                        homeForm.map(
-                          (result) => (
-                            <span
-                              class:list={[
-                                "form-item",
-                                result === "W" &&
-                                  "win",
-                                result === "D" &&
-                                  "draw",
-                                result === "L" &&
-                                  "loss"
-                              ]}
-                            >
-                              {
-                                formLabels[
-                                  result
-                                ]
-                              }
-                            </span>
-                          )
-                        )
-                      }
-
-                    </div>
-
-
-                    <span class="comparison-label">
-                      Forma
-                    </span>
-
-
-                    <div class="form-list">
-
-                      {
-                        awayForm.map(
-                          (result) => (
-                            <span
-                              class:list={[
-                                "form-item",
-                                result === "W" &&
-                                  "win",
-                                result === "D" &&
-                                  "draw",
-                                result === "L" &&
-                                  "loss"
-                              ]}
-                            >
-                              {
-                                formLabels[
-                                  result
-                                ]
-                              }
-                            </span>
-                          )
-                        )
-                      }
-
-                    </div>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.points ??
-                        "-"
-                      }
-                    </strong>
-
-                    <span>
-                      Puntos
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.points ??
-                        "-"
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.avgGoalsFor ??
-                        "-"
-                      }
-                    </strong>
-
-                    <span>
-                      Goles / partido
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.avgGoalsFor ??
-                        "-"
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.avgGoalsAgainst ??
-                        "-"
-                      }
-                    </strong>
-
-                    <span>
-                      Encajados / partido
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.avgGoalsAgainst ??
-                        "-"
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.unbeatenPercentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                    <span>
-                      Sin perder
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.unbeatenPercentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.over25Percentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                    <span>
-                      Más de 2,5
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.over25Percentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.bttsPercentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                    <span>
-                      Ambos marcan
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.bttsPercentage ??
-                        "-"
-                      }%
-                    </strong>
-
-                  </div>
-
-                </section>
-              )
-            }
-
-
-            {
-              homeHomeStats &&
-              awayAwayStats && (
-                <section class="panel">
-
-                  <div class="panel-header">
-                    <div>
-
-                      <h2>
-                        Local vs visitante
-                      </h2>
-
-                      <span>
-                        Rendimiento en la condición
-                        de este partido
-                      </span>
-
-                    </div>
-                  </div>
-
-
-                  <div class="comparison-head">
-
-                    <strong>
-                      {match.home} en casa
-                    </strong>
-
-                    <span></span>
-
-                    <strong>
-                      {match.away} fuera
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {homeHomeStats.wins}
-                    </strong>
-
-                    <span>
-                      Victorias
-                    </span>
-
-                    <strong>
-                      {awayAwayStats.wins}
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeHomeStats
-                          .avgGoalsFor
-                      }
-                    </strong>
-
-                    <span>
-                      Goles / partido
-                    </span>
-
-                    <strong>
-                      {
-                        awayAwayStats
-                          .avgGoalsFor
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeHomeStats
-                          .avgGoalsAgainst
-                      }
-                    </strong>
-
-                    <span>
-                      Encajados
-                    </span>
-
-                    <strong>
-                      {
-                        awayAwayStats
-                          .avgGoalsAgainst
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeHomeStats
-                          .unbeatenPercentage
-                      }%
-                    </strong>
-
-                    <span>
-                      Sin perder
-                    </span>
-
-                    <strong>
-                      {
-                        awayAwayStats
-                          .unbeatenPercentage
-                      }%
-                    </strong>
-
-                  </div>
-
-                </section>
-              )
-            }
-
-          </>
-        )
-      }
-
-
-      <!-- POSTPARTIDO -->
-
-      {
-        isFinished && (
-          <>
-
             <section class="panel">
-
               <div class="panel-header">
                 <div>
-
-                  <h2>
-                    Resumen del partido
-                  </h2>
-
-                  <span>
-                    Resultado final
-                  </span>
-
+                  <h2>Cómo llegan</h2>
+                  <span>Forma reciente de ambos equipos</span>
                 </div>
               </div>
 
+              <div class="form-comparison">
+                <div class="form-team">
+                  <div class="form-title">
+                    <strong>{match.home}</strong>
+                    <span>Últimos partidos</span>
+                  </div>
 
-              <div class="match-summary">
+                  <div class="form-badges">
+                    {homeForm.length > 0 ? (
+                      homeForm.map((result) => (
+                        <span
+                          class:list={[
+                            "form-badge",
+                            result === "W" && "win",
+                            result === "D" && "draw",
+                            result === "L" && "loss"
+                          ]}
+                        >
+                          {formLabels[result] ?? result}
+                        </span>
+                      ))
+                    ) : (
+                      <span class="muted">
+                        Sin datos
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-                {
-                  resultSummary ? (
-                    <p>
-                      {resultSummary}
-                    </p>
-                  ) : (
-                    <p>
-                      El partido ha finalizado.
-                    </p>
-                  )
-                }
+                <div class="form-team">
+                  <div class="form-title">
+                    <strong>{match.away}</strong>
+                    <span>Últimos partidos</span>
+                  </div>
 
-                {
-                  statsUpdated &&
-                  postMatchReads.length > 0 && (
-                    <p>
-                      {
-                        postMatchReads[0]
-                      }.
-                    </p>
-                  )
-                }
-
+                  <div class="form-badges">
+                    {awayForm.length > 0 ? (
+                      awayForm.map((result) => (
+                        <span
+                          class:list={[
+                            "form-badge",
+                            result === "W" && "win",
+                            result === "D" && "draw",
+                            result === "L" && "loss"
+                          ]}
+                        >
+                          {formLabels[result] ?? result}
+                        </span>
+                      ))
+                    ) : (
+                      <span class="muted">
+                        Sin datos
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-
             </section>
 
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <h2>Local vs visitante</h2>
+                  <span>Rendimiento reciente según condición</span>
+                </div>
+              </div>
 
-            {
-              !statsUpdated && (
-                <section class="panel update-pending">
+              <div class="metric-grid two-teams">
+                <div class="team-metrics">
+                  <h3>{match.home}</h3>
 
-                  <strong>
-                    Estadísticas en actualización
-                  </strong>
-
-                  <p>
-                    Ya tenemos el resultado final,
-                    pero las nuevas rachas y
-                    estadísticas todavía no se han
-                    incorporado a los datos de la
-                    competición.
-                  </p>
-
-                  <span>
-                    Se actualizarán automáticamente
-                    cuando el proveedor incorpore
-                    el partido.
-                  </span>
-
-                </section>
-              )
-            }
-
-
-            {
-              statsUpdated &&
-              postMatchReads.length > 0 && (
-                <section class="panel">
-
-                  <div class="panel-header">
-                    <div>
-
-                      <h2>
-                        Después del partido
-                      </h2>
-
-                      <span>
-                        Cómo quedan las rachas
-                      </span>
-
-                    </div>
+                  <div class="metric">
+                    <span>Partidos analizados</span>
+                    <strong>
+                      {homeStats?.home?.played ?? 0}
+                    </strong>
                   </div>
 
-
-                  <div class="quick-list">
-
-                    {
-                      postMatchReads
-                        .slice(0, 4)
-                        .map((item) => (
-                          <div class="quick-item">
-
-                            <span
-                              class="quick-dot"
-                            ></span>
-
-                            <p>
-                              {item}
-                            </p>
-
-                          </div>
-                        ))
-                    }
-
+                  <div class="metric">
+                    <span>% victorias en casa</span>
+                    <strong>
+                      {homeStats?.home?.winPercentage ?? 0}%
+                    </strong>
                   </div>
 
-                </section>
-              )
-            }
-
-
-            {
-              statsUpdated &&
-              homeStats &&
-              awayStats && (
-                <section class="panel">
-
-                  <div class="panel-header">
-                    <div>
-
-                      <h2>
-                        Forma actualizada
-                      </h2>
-
-                      <span>
-                        Últimos 5 partidos incluyendo
-                        este resultado
-                      </span>
-
-                    </div>
+                  <div class="metric">
+                    <span>Goles / partido</span>
+                    <strong>
+                      {homeStats?.home?.avgGoalsFor ?? 0}
+                    </strong>
                   </div>
 
-
-                  <div class="comparison-head">
-
+                  <div class="metric">
+                    <span>% sin perder</span>
                     <strong>
-                      {match.home}
+                      {homeStats?.home?.unbeatenPercentage ?? 0}%
                     </strong>
+                  </div>
+                </div>
 
-                    <span></span>
+                <div class="team-metrics">
+                  <h3>{match.away}</h3>
 
+                  <div class="metric">
+                    <span>Partidos analizados</span>
                     <strong>
-                      {match.away}
+                      {awayStats?.away?.played ?? 0}
                     </strong>
-
                   </div>
 
-
-                  <div class="form-comparison">
-
-                    <div class="form-list">
-
-                      {
-                        homeForm.map(
-                          (result) => (
-                            <span
-                              class:list={[
-                                "form-item",
-                                result === "W" &&
-                                  "win",
-                                result === "D" &&
-                                  "draw",
-                                result === "L" &&
-                                  "loss"
-                              ]}
-                            >
-                              {
-                                formLabels[
-                                  result
-                                ]
-                              }
-                            </span>
-                          )
-                        )
-                      }
-
-                    </div>
-
-                    <span class="comparison-label">
-                      Forma
-                    </span>
-
-                    <div class="form-list">
-
-                      {
-                        awayForm.map(
-                          (result) => (
-                            <span
-                              class:list={[
-                                "form-item",
-                                result === "W" &&
-                                  "win",
-                                result === "D" &&
-                                  "draw",
-                                result === "L" &&
-                                  "loss"
-                              ]}
-                            >
-                              {
-                                formLabels[
-                                  result
-                                ]
-                              }
-                            </span>
-                          )
-                        )
-                      }
-
-                    </div>
-
+                  <div class="metric">
+                    <span>% victorias fuera</span>
+                    <strong>
+                      {awayStats?.away?.winPercentage ?? 0}%
+                    </strong>
                   </div>
 
-
-                  <div class="comparison-row">
-
+                  <div class="metric">
+                    <span>Goles / partido</span>
                     <strong>
-                      {
-                        homeLast5?.points ??
-                        "-"
-                      }
+                      {awayStats?.away?.avgGoalsFor ?? 0}
                     </strong>
-
-                    <span>
-                      Puntos últimos 5
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.points ??
-                        "-"
-                      }
-                    </strong>
-
                   </div>
 
-
-                  <div class="comparison-row">
-
+                  <div class="metric">
+                    <span>% sin perder</span>
                     <strong>
-                      {homeStats.winStreak}
+                      {awayStats?.away?.unbeatenPercentage ?? 0}%
                     </strong>
-
-                    <span>
-                      Victorias seguidas
-                    </span>
-
-                    <strong>
-                      {awayStats.winStreak}
-                    </strong>
-
                   </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeStats.unbeatenStreak
-                      }
-                    </strong>
-
-                    <span>
-                      Sin perder
-                    </span>
-
-                    <strong>
-                      {
-                        awayStats.unbeatenStreak
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeStats.scoringStreak
-                      }
-                    </strong>
-
-                    <span>
-                      Marcando
-                    </span>
-
-                    <strong>
-                      {
-                        awayStats.scoringStreak
-                      }
-                    </strong>
-
-                  </div>
-
-
-                  <div class="comparison-row">
-
-                    <strong>
-                      {
-                        homeLast5?.avgGoalsFor ??
-                        "-"
-                      }
-                    </strong>
-
-                    <span>
-                      Goles / partido
-                    </span>
-
-                    <strong>
-                      {
-                        awayLast5?.avgGoalsFor ??
-                        "-"
-                      }
-                    </strong>
-
-                  </div>
-
-                </section>
-              )
-            }
-
+                </div>
+              </div>
+            </section>
           </>
-        )
-      }
-
-
-      <!-- H2H -->
-
-      {
-        headToHead.length > 0 && (
+        ) : (
           <section class="panel">
-
             <div class="panel-header">
               <div>
-
-                <h2>
-                  Enfrentamientos directos
-                </h2>
-
-                <span>
-                  Últimos partidos entre ambos
-                </span>
-
+                <h2>Resultado final</h2>
+                <span>Marcador confirmado por el proveedor</span>
               </div>
             </div>
 
-
-            <div class="h2h-summary">
-
-              <div>
-                <strong>
-                  {homeH2HWins}
-                </strong>
-
-                <span>
-                  Victorias {match.home}
-                </span>
-              </div>
-
-
-              <div>
-                <strong>
-                  {h2hDraws}
-                </strong>
-
-                <span>
-                  Empates
-                </span>
-              </div>
-
-
-              <div>
-                <strong>
-                  {awayH2HWins}
-                </strong>
-
-                <span>
-                  Victorias {match.away}
-                </span>
-              </div>
-
-            </div>
-
-
-            <div class="h2h-list">
-
+            <div class="result-message">
               {
-                headToHead.map(
-                  (previous) => (
-                    <div class="h2h-row">
-
-                      <div class="h2h-date">
-                        {
-                          formatShortDate(
-                            previous.date
-                          )
-                        }
-                      </div>
-
-
-                      <div class="h2h-match">
-
-                        <div class="h2h-team">
-
-                          <span>
-                            {
-                              previous.home
-                            }
-                          </span>
-
-                          <strong>
-                            {
-                              previous.homeScore
-                            }
-                          </strong>
-
-                        </div>
-
-
-                        <div class="h2h-team">
-
-                          <span>
-                            {
-                              previous.away
-                            }
-                          </span>
-
-                          <strong>
-                            {
-                              previous.awayScore
-                            }
-                          </strong>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-                  )
-                )
+                hasScore
+                  ? `${match.home} ${match.homeScore} - ${match.awayScore} ${match.away}`
+                  : "El partido figura como finalizado, pero el marcador aún no está disponible."
               }
-
             </div>
-
           </section>
         )
       }
 
+      {
+        headToHead.length > 0 ? (
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Enfrentamientos directos</h2>
+                <span>
+                  Últimos {headToHead.length} partidos disponibles
+                </span>
+              </div>
+            </div>
 
-      <!-- EQUIPOS -->
+            <div class="h2h-summary">
+              <div>
+                <span>{match.home}</span>
+                <strong>{homeH2HWins}</strong>
+                <small>victorias</small>
+              </div>
 
-      <section class="team-links">
+              <div>
+                <span>Empates</span>
+                <strong>{h2hDraws}</strong>
+                <small>partidos</small>
+              </div>
 
-        <a
-          href={`/segunda/equipos/${match.homeSlug}`}
-          class="team-link-card"
-        >
+              <div>
+                <span>{match.away}</span>
+                <strong>{awayH2HWins}</strong>
+                <small>victorias</small>
+              </div>
+            </div>
 
-          <span>
-            Ver estadísticas
-          </span>
+            <div class="h2h-list">
+              {headToHead.map((previous) => (
+                <div class="h2h-row">
+                  <span class="h2h-date">
+                    {formatHistoricalDate(previous.date)}
+                  </span>
 
-          <strong>
-            {match.home}
-          </strong>
+                  <div class="h2h-match">
+                    <span>{previous.home}</span>
 
-          <span class="arrow">
-            →
-          </span>
+                    <strong>
+                      {previous.homeScore}
+                      {" - "}
+                      {previous.awayScore}
+                    </strong>
 
-        </a>
-
-
-        <a
-          href={`/segunda/equipos/${match.awaySlug}`}
-          class="team-link-card"
-        >
-
-          <span>
-            Ver estadísticas
-          </span>
-
-          <strong>
-            {match.away}
-          </strong>
-
-          <span class="arrow">
-            →
-          </span>
-
-        </a>
-
-      </section>
-
+                    <span>{previous.away}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ) : null
+      }
     </main>
-<script is:inline>
-  function updateMatchPageStatus() {
-    const element =
-      document.querySelector(
-        "[data-match-page-status]"
+
+    <script is:inline>
+      function updateMatchPageStatus() {
+        const element =
+          document.querySelector(
+            "[data-match-page-status]"
+          );
+
+        if (!element) {
+          return;
+        }
+
+        const kickoffValue =
+          element.dataset.kickoff;
+
+        const rawStatus =
+          (
+            element.dataset.status || ""
+          ).toLowerCase();
+
+        if (!kickoffValue) {
+          return;
+        }
+
+        const kickoff =
+          new Date(kickoffValue);
+
+        const estimatedEnd =
+          new Date(
+            kickoff.getTime() +
+            135 * 60 * 1000
+          );
+
+        const now = new Date();
+
+        const finished =
+          rawStatus.includes(
+            "finished"
+          ) ||
+          rawStatus.includes("ft");
+
+        element.classList.remove(
+          "preview",
+          "live",
+          "waiting",
+          "final"
+        );
+
+        if (finished) {
+          element.textContent =
+            "Final";
+
+          element.classList.add(
+            "final"
+          );
+
+          return;
+        }
+
+        if (
+          now >= kickoff &&
+          now <= estimatedEnd
+        ) {
+          element.textContent =
+            "En curso";
+
+          element.classList.add(
+            "live"
+          );
+
+          return;
+        }
+
+        if (now > estimatedEnd) {
+          element.textContent =
+            "Pendiente de resultado final";
+
+          element.classList.add(
+            "waiting"
+          );
+
+          return;
+        }
+
+        element.textContent =
+          "Previa del partido";
+
+        element.classList.add(
+          "preview"
+        );
+      }
+
+      updateMatchPageStatus();
+
+      setInterval(
+        updateMatchPageStatus,
+        30000
       );
-
-    if (!element) {
-      return;
-    }
-
-    const kickoffValue =
-      element.dataset.kickoff;
-
-    const rawStatus =
-      (
-        element.dataset.status || ""
-      ).toLowerCase();
-
-    if (!kickoffValue) {
-      return;
-    }
-
-    const kickoff =
-      new Date(kickoffValue);
-
-    const estimatedEnd =
-      new Date(
-        kickoff.getTime() +
-        135 * 60 * 1000
-      );
-
-    const now = new Date();
-
-    const finished =
-      rawStatus.includes("finished") ||
-      rawStatus.includes("ft");
-
-    element.classList.remove(
-      "preview",
-      "live",
-      "waiting",
-      "final"
-    );
-
-    if (finished) {
-      element.textContent =
-        "Final";
-
-      element.classList.add(
-        "final"
-      );
-
-      return;
-    }
-
-    if (
-      now >= kickoff &&
-      now <= estimatedEnd
-    ) {
-      element.textContent =
-        "En curso";
-
-      element.classList.add(
-        "live"
-      );
-
-      return;
-    }
-
-    if (now > estimatedEnd) {
-      element.textContent =
-        "Pendiente de resultado final";
-
-      element.classList.add(
-        "waiting"
-      );
-
-      return;
-    }
-
-    element.textContent =
-      "Previa del partido";
-
-    element.classList.add(
-      "preview"
-    );
-  }
-
-  updateMatchPageStatus();
-
-  setInterval(
-    updateMatchPageStatus,
-    30000
-  );
-</script>
+    </script>
   </body>
 </html>
-
 
 <style>
   :global(*) {
@@ -1718,12 +648,9 @@ const pageTitle =
 
   :global(body) {
     margin: 0;
-
     min-height: 100vh;
-
     background: #f3f4f6;
     color: #202124;
-
     font-family:
       Inter,
       system-ui,
@@ -1738,11 +665,13 @@ const pageTitle =
     margin: 0 auto;
   }
 
+  .page {
+    padding: 24px 0 60px;
+  }
+
   .topbar {
     background: #ffffff;
-
-    border-bottom:
-      1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
   }
 
   .header-content {
@@ -1752,9 +681,7 @@ const pageTitle =
   .brand {
     display: flex;
     align-items: center;
-
     gap: 12px;
-
     color: inherit;
     text-decoration: none;
   }
@@ -1762,48 +689,30 @@ const pageTitle =
   .logo {
     width: 42px;
     height: 42px;
-
     display: grid;
     place-items: center;
-
     border-radius: 10px;
-
     background: #111827;
     color: #ffffff;
-
     font-weight: 800;
   }
 
   h1 {
     margin: 0;
-
     font-size: 20px;
   }
 
   .brand p {
     margin: 3px 0 0;
-
     color: #6b7280;
-
     font-size: 13px;
   }
 
-  .page {
-    display: flex;
-    flex-direction: column;
-
-    gap: 20px;
-
-    padding: 24px 0 60px;
-  }
-
   .back-link {
-    width: fit-content;
-
+    display: inline-flex;
+    margin-bottom: 16px;
     color: #6b7280;
-
     text-decoration: none;
-
     font-size: 13px;
     font-weight: 600;
   }
@@ -1812,637 +721,326 @@ const pageTitle =
     color: #111827;
   }
 
-
-  /* HERO */
-
-  .match-hero {
-    overflow: hidden;
-
-    background: #ffffff;
-
-    border:
-      1px solid #e5e7eb;
-
-    border-radius: 12px;
-  }
-
-  .match-meta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    padding: 13px 20px;
-
-    border-bottom:
-      1px solid #eeeeee;
-
-    color: #9ca3af;
-
-    font-size: 11px;
-  }
-
-  .match-meta strong {
-    color: #4b5563;
-
-    text-transform: capitalize;
-  }
-
-  .match-teams {
-    display: grid;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      90px
-      minmax(0, 1fr);
-
-    align-items: center;
-
-    padding: 30px 24px;
-  }
-
-  .hero-team {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 10px;
-
-    color: inherit;
-
-    text-decoration: none;
-    text-align: center;
-  }
-
-  .hero-team strong {
-    font-size: 18px;
-  }
-
-  .team-avatar {
-    width: 58px;
-    height: 58px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 50%;
-
-    background: #111827;
-    color: #ffffff;
-
-    font-size: 21px;
-    font-weight: 800;
-  }
-
-  .match-center {
-    display: grid;
-    place-items: center;
-  }
-
-  .versus {
-    color: #9ca3af;
-
-    font-size: 12px;
-    font-weight: 800;
-  }
-
-  .final-score {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 9px;
-  }
-
-  .final-score strong {
-    font-size: 32px;
-    font-weight: 800;
-  }
-
-  .final-score span {
-    color: #9ca3af;
-
-    font-size: 20px;
-  }
-
-  .state-label {
-    padding: 11px 20px;
-
-    border-top:
-      1px solid #eeeeee;
-
-    text-align: center;
-
-    font-size: 11px;
-    font-weight: 800;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.04em;
-  }
-
-  .state-label.preview,
-  .state-label.waiting {
-    background: #fafafa;
-    color: #6b7280;
-  }
-
-  .state-label.final {
-    background: #f3f4f6;
-    color: #374151;
-  }
-
-  .state-label.live {
-    background: #fff7f7;
-    color: #dc2626;
-  }
-
-
-  /* PANEL */
-
   .panel {
+    margin-bottom: 20px;
     overflow: hidden;
-
     background: #ffffff;
-
-    border:
-      1px solid #e5e7eb;
-
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
   }
 
   .panel-header {
-    padding: 16px 20px;
-
-    border-bottom:
-      1px solid #eeeeee;
+    padding: 18px 20px;
+    border-bottom: 1px solid #eeeeee;
   }
 
   .panel-header h2 {
     margin: 0;
-
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .panel-header span {
     display: block;
-
-    margin-top: 3px;
-
+    margin-top: 4px;
     color: #9ca3af;
-
     font-size: 12px;
   }
 
-
-  /* INFO */
-
-  .info-panel,
-  .update-pending {
+  .match-hero {
     padding: 20px;
   }
 
-  .info-panel strong,
-  .update-pending strong {
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-size: 14px;
-  }
-
-  .info-panel p,
-  .update-pending p {
-    margin: 0;
-
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
     color: #6b7280;
-
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 12px;
   }
 
-  .update-pending span {
-    display: block;
-
-    margin-top: 8px;
-
-    color: #9ca3af;
-
+  .state-label {
+    width: fit-content;
+    margin: 18px auto 0;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #6b7280;
     font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
-
-  /* RESUMEN */
-
-  .match-summary {
-    padding: 20px;
+  .state-label.live {
+    background: #fef2f2;
+    color: #dc2626;
   }
 
-  .match-summary p {
-    margin: 0;
-
-    color: #374151;
-
-    font-size: 14px;
-    line-height: 1.6;
+  .state-label.final {
+    background: #f3f4f6;
+    color: #4b5563;
   }
 
-  .match-summary p + p {
-    margin-top: 8px;
+  .state-label.waiting {
+    background: #fffbeb;
+    color: #9a6700;
   }
 
+  .scoreboard {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)
+      180px
+      minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+    padding: 30px 0 12px;
+  }
 
-  /* CLAVES */
-
-  .quick-list {
+  .club {
     display: flex;
     flex-direction: column;
-  }
-
-  .quick-item {
-    display: flex;
-    align-items: flex-start;
-
+    align-items: center;
     gap: 10px;
-
-    padding: 14px 20px;
-
-    border-bottom:
-      1px solid #f0f0f0;
-  }
-
-  .quick-item:last-child {
-    border-bottom: none;
-  }
-
-  .quick-item p {
-    margin: 0;
-
-    color: #374151;
-
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .quick-dot {
-    flex-shrink: 0;
-
-    width: 7px;
-    height: 7px;
-
-    margin-top: 6px;
-
-    border-radius: 50%;
-
-    background: #111827;
-  }
-
-
-  /* COMPARACIONES */
-
-  .comparison-head {
-    display: grid;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      150px
-      minmax(0, 1fr);
-
-    align-items: center;
-
-    padding: 14px 20px;
-
-    background: #fafafa;
-
-    border-bottom:
-      1px solid #eeeeee;
-
+    color: inherit;
     text-align: center;
-
-    font-size: 12px;
+    text-decoration: none;
   }
 
-  .form-comparison,
-  .comparison-row {
-    display: grid;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      150px
-      minmax(0, 1fr);
-
-    align-items: center;
-
-    min-height: 54px;
-
-    padding: 10px 20px;
-
-    border-bottom:
-      1px solid #f0f0f0;
-
-    text-align: center;
-  }
-
-  .comparison-row:last-child {
-    border-bottom: none;
-  }
-
-  .comparison-row strong {
-    font-size: 14px;
-  }
-
-  .comparison-row span,
-  .comparison-label {
-    color: #9ca3af;
-
-    font-size: 11px;
-    font-weight: 600;
-  }
-
-
-  /* FORMA */
-
-  .form-list {
-    display: flex;
-    justify-content: center;
-
-    gap: 5px;
-  }
-
-  .form-item {
-    width: 27px;
-    height: 27px;
-
+  .club-logo {
+    width: 58px;
+    height: 58px;
     display: grid;
     place-items: center;
-
     border-radius: 50%;
-
-    color: #ffffff;
-
-    font-size: 10px;
+    background: #f3f4f6;
+    color: #4b5563;
+    font-size: 20px;
     font-weight: 800;
   }
 
-  .form-item.win {
-    background: #16a34a;
+  .club strong {
+    font-size: 16px;
   }
 
-  .form-item.draw {
-    background: #9ca3af;
-  }
-
-  .form-item.loss {
-    background: #dc2626;
-  }
-
-
-  /* H2H */
-
-  .h2h-summary {
-    display: grid;
-
-    grid-template-columns:
-      repeat(3, minmax(0, 1fr));
-
-    border-bottom:
-      1px solid #eeeeee;
-
-    background: #fafafa;
-  }
-
-  .h2h-summary div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 3px;
-
-    padding: 16px 10px;
-
+  .score-center {
     text-align: center;
   }
 
-  .h2h-summary div + div {
-    border-left:
-      1px solid #eeeeee;
+  .final-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    color: #111827;
   }
 
-  .h2h-summary strong {
-    color: #111827;
+  .final-score strong {
+    font-size: 34px;
+  }
 
+  .final-score span {
+    color: #9ca3af;
     font-size: 20px;
   }
 
-  .h2h-summary span {
+  .versus {
     color: #9ca3af;
-
-    font-size: 10px;
-    line-height: 1.3;
+    font-size: 15px;
+    font-weight: 800;
   }
 
-  .h2h-list {
+  .score-note {
+    display: block;
+    max-width: 170px;
+    margin: 8px auto 0;
+    color: #9ca3af;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .form-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #eeeeee;
+  }
+
+  .form-team {
+    padding: 20px;
+    background: #ffffff;
+  }
+
+  .form-title {
     display: flex;
     flex-direction: column;
+    gap: 3px;
+    margin-bottom: 14px;
+  }
+
+  .form-title span {
+    color: #9ca3af;
+    font-size: 11px;
+  }
+
+  .form-badges {
+    display: flex;
+    gap: 7px;
+  }
+
+  .form-badge {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 7px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .form-badge.win {
+    background: #16a34a;
+  }
+
+  .form-badge.draw {
+    background: #9ca3af;
+  }
+
+  .form-badge.loss {
+    background: #dc2626;
+  }
+
+  .muted {
+    color: #9ca3af;
+    font-size: 12px;
+  }
+
+  .metric-grid.two-teams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #eeeeee;
+  }
+
+  .team-metrics {
+    padding: 20px;
+    background: #ffffff;
+  }
+
+  .team-metrics h3 {
+    margin: 0 0 14px;
+    font-size: 14px;
+  }
+
+  .metric {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-top: 1px solid #f0f0f0;
+    font-size: 12px;
+  }
+
+  .metric span {
+    color: #6b7280;
+  }
+
+  .result-message {
+    padding: 24px 20px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .h2h-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #eeeeee;
+  }
+
+  .h2h-summary > div {
+    padding: 18px;
+    background: #ffffff;
+    text-align: center;
+  }
+
+  .h2h-summary span,
+  .h2h-summary small {
+    display: block;
+    color: #6b7280;
+    font-size: 11px;
+  }
+
+  .h2h-summary strong {
+    display: block;
+    margin: 6px 0 3px;
+    font-size: 24px;
   }
 
   .h2h-row {
     display: grid;
-
-    grid-template-columns:
-      100px
-      minmax(0, 1fr);
-
-    gap: 16px;
-
+    grid-template-columns: 90px 1fr;
+    gap: 14px;
     align-items: center;
-
     padding: 14px 20px;
-
-    border-bottom:
-      1px solid #f0f0f0;
-  }
-
-  .h2h-row:last-child {
-    border-bottom: none;
+    border-top: 1px solid #f0f0f0;
   }
 
   .h2h-date {
     color: #9ca3af;
-
     font-size: 11px;
-    font-weight: 600;
   }
 
   .h2h-match {
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-  }
-
-  .h2h-team {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    font-size: 13px;
-  }
-
-  .h2h-team span {
-    flex: 1;
-
-    min-width: 0;
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .h2h-team strong {
-    min-width: 20px;
-
-    text-align: right;
-
-    font-size: 14px;
-  }
-
-
-  /* LINKS EQUIPOS */
-
-  .team-links {
     display: grid;
-
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
-
-    gap: 20px;
+    grid-template-columns: 1fr 70px 1fr;
+    gap: 10px;
+    align-items: center;
+    font-size: 12px;
   }
 
-  .team-link-card {
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
-
-    padding: 18px 20px;
-
-    background: #ffffff;
-    color: inherit;
-
-    border:
-      1px solid #e5e7eb;
-
-    border-radius: 12px;
-
-    text-decoration: none;
+  .h2h-match span:first-child {
+    text-align: right;
   }
 
-  .team-link-card > span:first-child {
-    color: #9ca3af;
-
-    font-size: 10px;
-    font-weight: 600;
+  .h2h-match strong {
+    text-align: center;
   }
-
-  .team-link-card strong {
-    padding-right: 30px;
-
-    font-size: 14px;
-  }
-
-  .team-link-card .arrow {
-    position: absolute;
-
-    right: 20px;
-    top: 50%;
-
-    color: #9ca3af;
-
-    transform:
-      translateY(-50%);
-  }
-
-  .team-link-card:hover {
-    border-color: #d1d5db;
-  }
-
-
-  /* MOBILE */
 
   @media (max-width: 650px) {
-    .match-teams {
+    .scoreboard {
       grid-template-columns:
         minmax(0, 1fr)
-        70px
+        100px
         minmax(0, 1fr);
-
-      padding: 24px 12px;
+      gap: 10px;
     }
 
-    .hero-team strong {
-      font-size: 15px;
+    .club-logo {
+      width: 48px;
+      height: 48px;
     }
 
-    .team-avatar {
-      width: 50px;
-      height: 50px;
-
-      font-size: 18px;
+    .club strong {
+      font-size: 13px;
     }
 
     .final-score strong {
-      font-size: 27px;
+      font-size: 28px;
     }
 
-    .comparison-head,
     .form-comparison,
-    .comparison-row {
-      grid-template-columns:
-        minmax(0, 1fr)
-        95px
-        minmax(0, 1fr);
-
-      padding-left: 12px;
-      padding-right: 12px;
-    }
-
-    .form-list {
-      gap: 3px;
-    }
-
-    .form-item {
-      width: 23px;
-      height: 23px;
-
-      font-size: 9px;
-    }
-
-    .h2h-summary span {
-      font-size: 9px;
+    .metric-grid.two-teams {
+      grid-template-columns: 1fr;
     }
 
     .h2h-row {
-      grid-template-columns:
-        78px
-        1fr;
-
-      gap: 10px;
-
-      padding:
-        14px
-        16px;
+      grid-template-columns: 1fr;
+      gap: 6px;
     }
 
-    .team-links {
-      grid-template-columns:
-        1fr;
+    .h2h-match {
+      grid-template-columns: 1fr 55px 1fr;
     }
   }
 </style>
