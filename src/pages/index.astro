@@ -361,8 +361,15 @@ const getMatchUrl = (match) => {
         <aside class="panel standings-panel">
           <div class="panel-header">
             <div>
-              <h2>Clasificación</h2>
-              <span>Segunda División</span>
+              <h2>
+  Clasificación · J{data.classificationMatchday}
+</h2>
+
+<span>
+  {data.standingsProvisional
+    ? "Segunda División · jornada en curso"
+    : "Segunda División"}
+</span>
             </div>
           </div>
 

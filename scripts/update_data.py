@@ -1099,7 +1099,15 @@ def enrich_match_with_h2h(
 # THESPORTSDB
 # --------------------------------------------------
 
+sportsdb_day_cache = {}
+
+
 def get_events_for_date(day):
+
+    cache_key = day.isoformat()
+
+    if cache_key in sportsdb_day_cache:
+        return sportsdb_day_cache[cache_key]
     response = requests.get(
         (
             f"{SPORTSDB_BASE_URL}"
@@ -1119,10 +1127,14 @@ def get_events_for_date(day):
 
     payload = response.json()
 
-    return (
+    events = (
         payload.get("events")
         or []
     )
+
+    sportsdb_day_cache[cache_key] = events
+
+    return events
 
 
 def format_sportsdb_event(event):
@@ -1249,6 +1261,305 @@ def format_sportsdb_event(event):
         "awayScore":
             away_score
     }
+
+
+
+# --------------------------------------------------
+# PARCHE DE RESULTADOS RECIENTES
+# --------------------------------------------------
+
+
+def is_sportsdb_finished(event):
+
+    status = str(
+        event.get("strStatus")
+        or ""
+    ).strip().lower()
+
+    return status in {
+        "ft",
+        "finished",
+        "match finished"
+    }
+
+
+def openfoot_match_key(match):
+
+    kickoff_at = (
+        match.get("kickoffAt")
+        or ""
+    )
+
+    match_date = kickoff_at[:10]
+
+    home = (
+        match.get("homeTeam")
+        or {}
+    )
+
+    away = (
+        match.get("awayTeam")
+        or {}
+    )
+
+    return (
+        match_date,
+        slugify(
+            normalize_team_name(
+                home.get("name")
+            )
+        ),
+        slugify(
+            normalize_team_name(
+                away.get("name")
+            )
+        )
+    )
+
+
+def sportsdb_match_key(match):
+
+    return (
+        match.get("date") or "",
+        match.get("homeSlug") or "",
+        match.get("awaySlug") or ""
+    )
+
+
+def get_recent_sportsdb_finished_matches(
+    start_date,
+    end_date
+):
+
+    matches = []
+    day = start_date
+
+    while day <= end_date:
+
+        for event in get_events_for_date(day):
+
+            if not is_sportsdb_finished(event):
+                continue
+
+            formatted = format_sportsdb_event(
+                event
+            )
+
+            if (
+                formatted.get("homeScore")
+                is None
+                or
+                formatted.get("awayScore")
+                is None
+            ):
+                continue
+
+            matches.append(
+                formatted
+            )
+
+        day += timedelta(days=1)
+
+    return matches
+
+
+def sportsdb_to_openfoot_match(
+    match,
+    team_ids_by_slug
+):
+
+    home_id = (
+        team_ids_by_slug.get(
+            match.get("homeSlug")
+        )
+    )
+
+    away_id = (
+        team_ids_by_slug.get(
+            match.get("awaySlug")
+        )
+    )
+
+    if not home_id or not away_id:
+        return None
+
+    return {
+        "id":
+            "sportsdb_"
+            + str(
+                match.get("id")
+                or ""
+            ),
+
+        "competitionId":
+            OPENFOOT_COMPETITION,
+
+        "season":
+            SEASON,
+
+        "kickoffAt":
+            (
+                match.get("kickoffUtc")
+                or
+                f"{match.get('date')}T00:00:00+00:00"
+            ),
+
+        "status":
+            "finished",
+
+        "homeTeam": {
+            "id":
+                home_id,
+
+            "name":
+                match.get("home")
+        },
+
+        "awayTeam": {
+            "id":
+                away_id,
+
+            "name":
+                match.get("away")
+        },
+
+        "score": {
+            "home":
+                match.get("homeScore"),
+
+            "away":
+                match.get("awayScore")
+        },
+
+        "source":
+            "thesportsdb"
+    }
+
+
+def apply_supplemental_matches_to_standings(
+    standings,
+    matches
+):
+
+    rows_by_slug = {
+        row.get("slug"):
+            row
+
+        for row in standings
+    }
+
+    for match in matches:
+
+        home = rows_by_slug.get(
+            match.get("homeSlug")
+        )
+
+        away = rows_by_slug.get(
+            match.get("awaySlug")
+        )
+
+        if not home or not away:
+
+            print(
+                "Aviso: no se pudo aplicar "
+                "a la clasificacion:",
+                match.get("home"),
+                "-",
+                match.get("away")
+            )
+
+            continue
+
+        home_score = match.get(
+            "homeScore"
+        )
+
+        away_score = match.get(
+            "awayScore"
+        )
+
+        home["played"] += 1
+        away["played"] += 1
+
+        home["goalsFor"] += (
+            home_score
+        )
+
+        home["goalsAgainst"] += (
+            away_score
+        )
+
+        away["goalsFor"] += (
+            away_score
+        )
+
+        away["goalsAgainst"] += (
+            home_score
+        )
+
+        if home_score > away_score:
+
+            home["won"] += 1
+            home["points"] += 3
+
+            away["lost"] += 1
+
+        elif home_score < away_score:
+
+            away["won"] += 1
+            away["points"] += 3
+
+            home["lost"] += 1
+
+        else:
+
+            home["drawn"] += 1
+            away["drawn"] += 1
+
+            home["points"] += 1
+            away["points"] += 1
+
+        home["goalDifference"] = (
+            home["goalsFor"]
+            -
+            home["goalsAgainst"]
+        )
+
+        away["goalDifference"] = (
+            away["goalsFor"]
+            -
+            away["goalsAgainst"]
+        )
+
+    standings.sort(
+        key=lambda row: (
+            -row.get(
+                "points",
+                0
+            ),
+
+            -row.get(
+                "goalDifference",
+                0
+            ),
+
+            -row.get(
+                "goalsFor",
+                0
+            ),
+
+            row.get(
+                "team",
+                ""
+            )
+        )
+    )
+
+    for index, row in enumerate(
+        standings,
+        start=1
+    ):
+        row["pos"] = index
 
 
 # --------------------------------------------------
@@ -1390,25 +1701,536 @@ team_ids_by_slug = {
 
 
 # --------------------------------------------------
-# HISTORICO TEMPORADA ACTUAL
+# HISTORICO TEMPORADA ACTUAL + PARCHE THESPORTSDB
 # --------------------------------------------------
 
 all_matches = (
     get_all_openfoot_matches()
 )
 
-finished_matches = [
+
+finished_openfoot_matches = [
     match
+
     for match in all_matches
+
     if (
-        match.get("status") ==
-        "finished"
+        match.get("status")
+        == "finished"
     )
 ]
 
+
+openfoot_finished_keys = {
+    openfoot_match_key(match)
+
+    for match
+    in finished_openfoot_matches
+}
+
+
+openfoot_finished_dates = [
+    (
+        match.get("kickoffAt")
+        or ""
+    )[:10]
+
+    for match
+    in finished_openfoot_matches
+
+    if match.get("kickoffAt")
+]
+
+
+latest_openfoot_date = (
+    max(
+        openfoot_finished_dates
+    )
+
+    if openfoot_finished_dates
+
+    else None
+)
+
+
+now_madrid = datetime.now(
+    MADRID_TZ
+)
+
+today = now_madrid.date()
+
+
+recent_sportsdb_matches = []
+
+
+if latest_openfoot_date:
+
+    recent_start_date = (
+        datetime.fromisoformat(
+            latest_openfoot_date
+        ).date()
+    )
+
+    recent_sportsdb_matches = (
+        get_recent_sportsdb_finished_matches(
+            recent_start_date,
+            today
+        )
+    )
+
+
+# --------------------------------------------------
+# PROTECCION CONTRA STANDINGS ADELANTADO
+# --------------------------------------------------
+
+# Puede ocurrir que OpenFoot actualice /standings
+# antes que /matches.
+#
+# Ejemplo:
+#   standings -> Eibar PJ 8
+#   matches   -> Eibar solo tiene 7 finished
+#
+# En ese caso NO debemos sumar otra vez el
+# resultado reciente de TheSportsDB.
+
+
+openfoot_played_by_slug = {}
+
+
+for match in finished_openfoot_matches:
+
+    home = (
+        match.get("homeTeam")
+        or {}
+    )
+
+    away = (
+        match.get("awayTeam")
+        or {}
+    )
+
+
+    home_slug = slugify(
+        normalize_team_name(
+            home.get("name")
+        )
+    )
+
+    away_slug = slugify(
+        normalize_team_name(
+            away.get("name")
+        )
+    )
+
+
+    if home_slug:
+
+        openfoot_played_by_slug[
+            home_slug
+        ] = (
+            openfoot_played_by_slug.get(
+                home_slug,
+                0
+            )
+            + 1
+        )
+
+
+    if away_slug:
+
+        openfoot_played_by_slug[
+            away_slug
+        ] = (
+            openfoot_played_by_slug.get(
+                away_slug,
+                0
+            )
+            + 1
+        )
+
+
+standings_played_by_slug = {
+    row.get("slug"):
+        row.get(
+            "played",
+            0
+        )
+
+    for row in standings
+
+    if row.get("slug")
+}
+
+
+# Numero de partidos que standings conoce
+# pero /matches todavia no contiene.
+#
+# Lo tratamos como una especie de credito:
+#
+#   standings PJ 8
+#   matches   PJ 7
+#   credito      1
+
+
+standings_ahead_slots = {}
+
+
+for slug, played in (
+    standings_played_by_slug.items()
+):
+
+    matches_played = (
+        openfoot_played_by_slug.get(
+            slug,
+            0
+        )
+    )
+
+    standings_ahead_slots[
+        slug
+    ] = max(
+        played - matches_played,
+        0
+    )
+
+
+sportsdb_candidates = [
+    match
+
+    for match
+    in recent_sportsdb_matches
+
+    if (
+        sportsdb_match_key(match)
+        not in openfoot_finished_keys
+    )
+]
+
+
+# Los procesamos cronologicamente.
+#
+# Si ambos equipos tienen un "slot" adelantado
+# en standings, asumimos que ese partido ya esta
+# reflejado en la tabla aunque aun no aparezca
+# en /matches.
+
+
+sportsdb_candidates.sort(
+    key=lambda match: (
+        match.get("date")
+        or "",
+        match.get("kickoffUtc")
+        or ""
+    )
+)
+
+
+supplemental_sportsdb_matches = []
+
+
+for match in sportsdb_candidates:
+
+    home_slug = match.get(
+        "homeSlug"
+    )
+
+    away_slug = match.get(
+        "awaySlug"
+    )
+
+
+    home_ahead = (
+        standings_ahead_slots.get(
+            home_slug,
+            0
+        )
+    )
+
+    away_ahead = (
+        standings_ahead_slots.get(
+            away_slug,
+            0
+        )
+    )
+
+
+    if (
+        home_ahead > 0
+        and
+        away_ahead > 0
+    ):
+
+        standings_ahead_slots[
+            home_slug
+        ] -= 1
+
+        standings_ahead_slots[
+            away_slug
+        ] -= 1
+
+
+        print(
+            "Resultado ya reflejado "
+            "en standings, no se suma:",
+            match.get("home"),
+            match.get("homeScore"),
+            "-",
+            match.get("awayScore"),
+            match.get("away")
+        )
+
+
+        continue
+
+
+    supplemental_sportsdb_matches.append(
+        match
+    )
+
+
+apply_supplemental_matches_to_standings(
+    standings,
+    supplemental_sportsdb_matches
+)
+
+
+supplemental_openfoot_matches = []
+
+
+for match in (
+    supplemental_sportsdb_matches
+):
+
+    converted = (
+        sportsdb_to_openfoot_match(
+            match,
+            team_ids_by_slug
+        )
+    )
+
+    if converted:
+
+        supplemental_openfoot_matches.append(
+            converted
+        )
+
+    else:
+
+        print(
+            "Aviso: partido reciente "
+            "sin IDs compatibles:",
+            match.get("home"),
+            "-",
+            match.get("away")
+        )
+
+
+finished_matches = [
+    *finished_openfoot_matches,
+    *supplemental_openfoot_matches
+]
+
+
+# --------------------------------------------------
+# JORNADA DE LA CLASIFICACION
+# --------------------------------------------------
+
+base_matchday = max(
+    (
+        row.get(
+            "played",
+            0
+        )
+
+        -
+
+        sum(
+            1
+
+            for match
+            in supplemental_sportsdb_matches
+
+            if (
+                row.get("slug")
+                in {
+                    match.get(
+                        "homeSlug"
+                    ),
+
+                    match.get(
+                        "awaySlug"
+                    )
+                }
+            )
+        )
+
+        for row in standings
+    ),
+
+    default=0
+)
+
+
+classification_matchday = max(
+    (
+        row.get(
+            "played",
+            0
+        )
+
+        for row in standings
+    ),
+
+    default=base_matchday
+)
+
+
+# La tabla solo se considera provisional
+# durante la jornada real: viernes-lunes.
+#
+# Cuando todos los partidos terminan,
+# pasa a estable aunque OpenFoot siga
+# unos dias por detras.
+
+standings_provisional = False
+
+
+if today.weekday() in {
+    0,
+    4,
+    5,
+    6
+}:
+
+    current_matchday_events = []
+
+
+    for matchday_date in (
+        get_matchday_dates(
+            today
+        )
+    ):
+
+        current_matchday_events.extend(
+            get_events_for_date(
+                matchday_date
+            )
+        )
+
+
+    if current_matchday_events:
+
+        finished_flags = [
+            is_sportsdb_finished(
+                event
+            )
+
+            for event
+            in current_matchday_events
+        ]
+
+
+        has_started_matchday = any(
+            finished_flags
+        )
+
+
+        # Puede haber un partido en juego
+        # antes de que exista ningun FT.
+
+        if not has_started_matchday:
+
+            for event in (
+                current_matchday_events
+            ):
+
+                status = str(
+                    event.get(
+                        "strStatus"
+                    )
+                    or ""
+                ).strip().lower()
+
+
+                if status not in {
+                    "",
+                    "ns",
+                    "not started",
+                    "scheduled"
+                }:
+
+                    has_started_matchday = True
+
+                    break
+
+
+        matchday_complete = all(
+            finished_flags
+        )
+
+
+        standings_provisional = (
+            has_started_matchday
+            and
+            not matchday_complete
+        )
+
+
+        if has_started_matchday:
+
+            classification_matchday = max(
+                classification_matchday,
+                base_matchday + 1
+            )
+
+
+print(
+    "OpenFoot actualizado hasta:",
+    latest_openfoot_date
+)
+
+
+print(
+    "Resultados recientes añadidos "
+    "desde TheSportsDB:",
+    len(
+        supplemental_sportsdb_matches
+    )
+)
+
+
+for match in (
+    supplemental_sportsdb_matches
+):
+
+    print(
+        "  +",
+        match.get("date"),
+        match.get("home"),
+        match.get("homeScore"),
+        "-",
+        match.get("awayScore"),
+        match.get("away")
+    )
+
+
 print(
     "Partidos terminados analizados:",
-    len(finished_matches)
+    len(
+        finished_matches
+    )
+)
+
+
+print(
+    f"Clasificacion mostrada: "
+    f"J{classification_matchday}",
+
+    (
+        "(provisional)"
+        if standings_provisional
+        else "(estable)"
+    )
 )
 
 
@@ -1757,12 +2579,6 @@ for category in category_order:
 # --------------------------------------------------
 # PARTIDOS DE HOY
 # --------------------------------------------------
-
-now_madrid = datetime.now(
-    MADRID_TZ
-)
-
-today = now_madrid.date()
 
 today_events = get_events_for_date(
     today
@@ -2136,6 +2952,15 @@ output = {
 
     "standings":
         standings,
+
+    "classificationMatchday":
+        classification_matchday,
+
+    "standingsProvisional":
+        standings_provisional,
+
+    "standingsBaseUpdatedThrough":
+        latest_openfoot_date,
 
     "teamStats":
         team_stats
