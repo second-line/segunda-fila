@@ -113,202 +113,65 @@
   ],
   "todayMatches": [
     {
-      "id": "2505790",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "16:15",
-      "kickoffUtc": "2026-10-04T14:15:00+00:00",
-      "status": "FT",
-      "home": "Real Sporting",
-      "away": "Celta B",
-      "homeSlug": "real-sporting",
-      "awaySlug": "celta-b",
-      "matchSlug": "real-sporting-vs-celta-b-2026-10-04",
-      "homeScore": 3,
-      "awayScore": 2,
-      "headToHead": {
-        "meetings": []
-      }
-    },
-    {
-      "id": "2505784",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "18:30",
-      "kickoffUtc": "2026-10-04T16:30:00+00:00",
-      "status": "FT",
-      "home": "Las Palmas",
-      "away": "Valladolid",
-      "homeSlug": "las-palmas",
-      "awaySlug": "valladolid",
-      "matchSlug": "las-palmas-vs-valladolid-2026-10-04",
-      "homeScore": 2,
-      "awayScore": 2,
+      "id": "2505786",
+      "date": "2026-10-05",
+      "dateLabel": "Lunes 05/10",
+      "time": "20:30",
+      "kickoffUtc": "2026-10-05T18:30:00+00:00",
+      "status": "NS",
+      "home": "Córdoba",
+      "away": "Tenerife",
+      "homeSlug": "cordoba",
+      "awaySlug": "tenerife",
+      "matchSlug": "cordoba-vs-tenerife-2026-10-05",
+      "homeScore": null,
+      "awayScore": null,
       "headToHead": {
         "meetings": [
           {
-            "date": "2026-05-03",
-            "home": "Las Palmas",
-            "away": "Valladolid",
-            "homeSlug": "las-palmas",
-            "awaySlug": "valladolid",
+            "date": "2025-02-15",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
             "homeScore": 2,
-            "awayScore": 1
+            "awayScore": 3
           },
           {
-            "date": "2025-11-14",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
-            "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-02-28",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-12-07",
-            "home": "Las Palmas",
-            "away": "Valladolid",
-            "homeSlug": "las-palmas",
-            "awaySlug": "valladolid",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2022-03-19",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
-            "homeScore": 0,
-            "awayScore": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505791",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "18:30",
-      "kickoffUtc": "2026-10-04T16:30:00+00:00",
-      "status": "FT",
-      "home": "Castellón",
-      "away": "Ceuta",
-      "homeSlug": "castellon",
-      "awaySlug": "ceuta",
-      "matchSlug": "castellon-vs-ceuta-2026-10-04",
-      "homeScore": 1,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-09",
-            "home": "AD Ceuta FC",
-            "away": "Castellón",
-            "homeSlug": "ad-ceuta-fc",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-09-14",
-            "home": "Castellón",
-            "away": "AD Ceuta FC",
-            "homeSlug": "castellon",
-            "awaySlug": "ad-ceuta-fc",
+            "date": "2024-12-08",
+            "home": "Córdoba",
+            "away": "Tenerife",
+            "homeSlug": "cordoba",
+            "awaySlug": "tenerife",
             "homeScore": 3,
-            "awayScore": 3
+            "awayScore": 0
           },
           {
-            "date": "2024-02-11",
-            "home": "Castellón",
-            "away": "AD Ceuta FC",
-            "homeSlug": "castellon",
-            "awaySlug": "ad-ceuta-fc",
-            "homeScore": 2,
-            "awayScore": 2
-          },
-          {
-            "date": "2023-10-15",
-            "home": "AD Ceuta FC",
-            "away": "Castellón",
-            "homeSlug": "ad-ceuta-fc",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 3
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505785",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "21:00",
-      "kickoffUtc": "2026-10-04T19:00:00+00:00",
-      "status": "FT",
-      "home": "Girona",
-      "away": "Mallorca",
-      "homeSlug": "girona",
-      "awaySlug": "mallorca",
-      "matchSlug": "girona-vs-mallorca-2026-10-04",
-      "homeScore": 0,
-      "awayScore": 0,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-01",
-            "home": "Girona",
-            "away": "Mallorca",
-            "homeSlug": "girona",
-            "awaySlug": "mallorca",
+            "date": "2019-02-09",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
             "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2026-01-04",
-            "home": "Mallorca",
-            "away": "Girona",
-            "homeSlug": "mallorca",
-            "awaySlug": "girona",
-            "homeScore": 1,
             "awayScore": 2
           },
           {
-            "date": "2025-05-05",
-            "home": "Girona",
-            "away": "Mallorca",
-            "homeSlug": "girona",
-            "awaySlug": "mallorca",
+            "date": "2018-09-22",
+            "home": "Córdoba",
+            "away": "Tenerife",
+            "homeSlug": "cordoba",
+            "awaySlug": "tenerife",
             "homeScore": 1,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-12-14",
-            "home": "Mallorca",
-            "away": "Girona",
-            "homeSlug": "mallorca",
-            "awaySlug": "girona",
-            "homeScore": 2,
             "awayScore": 1
           },
           {
-            "date": "2024-03-03",
-            "home": "Mallorca",
-            "away": "Girona",
-            "homeSlug": "mallorca",
-            "awaySlug": "girona",
-            "homeScore": 1,
-            "awayScore": 0
+            "date": "2018-02-11",
+            "home": "Tenerife",
+            "away": "Córdoba",
+            "homeSlug": "tenerife",
+            "awaySlug": "cordoba",
+            "homeScore": 5,
+            "awayScore": 1
           }
         ]
       }
@@ -536,65 +399,202 @@
       }
     },
     {
-      "id": "2505786",
-      "date": "2026-10-05",
-      "dateLabel": "Lunes 05/10",
-      "time": "20:30",
-      "kickoffUtc": "2026-10-05T18:30:00+00:00",
-      "status": "NS",
-      "home": "Córdoba",
-      "away": "Tenerife",
-      "homeSlug": "cordoba",
-      "awaySlug": "tenerife",
-      "matchSlug": "cordoba-vs-tenerife-2026-10-05",
-      "homeScore": null,
-      "awayScore": null,
+      "id": "2505790",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-04T14:15:00+00:00",
+      "status": "FT",
+      "home": "Real Sporting",
+      "away": "Celta B",
+      "homeSlug": "real-sporting",
+      "awaySlug": "celta-b",
+      "matchSlug": "real-sporting-vs-celta-b-2026-10-04",
+      "homeScore": 3,
+      "awayScore": 2,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505784",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-04T16:30:00+00:00",
+      "status": "FT",
+      "home": "Las Palmas",
+      "away": "Valladolid",
+      "homeSlug": "las-palmas",
+      "awaySlug": "valladolid",
+      "matchSlug": "las-palmas-vs-valladolid-2026-10-04",
+      "homeScore": 2,
+      "awayScore": 2,
       "headToHead": {
         "meetings": [
           {
-            "date": "2025-02-15",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
+            "date": "2026-05-03",
+            "home": "Las Palmas",
+            "away": "Valladolid",
+            "homeSlug": "las-palmas",
+            "awaySlug": "valladolid",
             "homeScore": 2,
-            "awayScore": 3
+            "awayScore": 1
           },
           {
-            "date": "2024-12-08",
-            "home": "Córdoba",
-            "away": "Tenerife",
-            "homeSlug": "cordoba",
-            "awaySlug": "tenerife",
-            "homeScore": 3,
-            "awayScore": 0
-          },
-          {
-            "date": "2019-02-09",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
+            "date": "2025-11-14",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
             "homeScore": 0,
-            "awayScore": 2
+            "awayScore": 1
           },
           {
-            "date": "2018-09-22",
-            "home": "Córdoba",
-            "away": "Tenerife",
-            "homeSlug": "cordoba",
-            "awaySlug": "tenerife",
+            "date": "2025-02-28",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
             "homeScore": 1,
             "awayScore": 1
           },
           {
-            "date": "2018-02-11",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
-            "homeScore": 5,
+            "date": "2024-12-07",
+            "home": "Las Palmas",
+            "away": "Valladolid",
+            "homeSlug": "las-palmas",
+            "awaySlug": "valladolid",
+            "homeScore": 2,
             "awayScore": 1
+          },
+          {
+            "date": "2022-03-19",
+            "home": "Valladolid",
+            "away": "Las Palmas",
+            "homeSlug": "valladolid",
+            "awaySlug": "las-palmas",
+            "homeScore": 0,
+            "awayScore": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505791",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-04T16:30:00+00:00",
+      "status": "FT",
+      "home": "Castellón",
+      "away": "Ceuta",
+      "homeSlug": "castellon",
+      "awaySlug": "ceuta",
+      "matchSlug": "castellon-vs-ceuta-2026-10-04",
+      "homeScore": 1,
+      "awayScore": 1,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-09",
+            "home": "AD Ceuta FC",
+            "away": "Castellón",
+            "homeSlug": "ad-ceuta-fc",
+            "awaySlug": "castellon",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-09-14",
+            "home": "Castellón",
+            "away": "AD Ceuta FC",
+            "homeSlug": "castellon",
+            "awaySlug": "ad-ceuta-fc",
+            "homeScore": 3,
+            "awayScore": 3
+          },
+          {
+            "date": "2024-02-11",
+            "home": "Castellón",
+            "away": "AD Ceuta FC",
+            "homeSlug": "castellon",
+            "awaySlug": "ad-ceuta-fc",
+            "homeScore": 2,
+            "awayScore": 2
+          },
+          {
+            "date": "2023-10-15",
+            "home": "AD Ceuta FC",
+            "away": "Castellón",
+            "homeSlug": "ad-ceuta-fc",
+            "awaySlug": "castellon",
+            "homeScore": 1,
+            "awayScore": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505785",
+      "date": "2026-10-04",
+      "dateLabel": "Domingo 04/10",
+      "time": "21:00",
+      "kickoffUtc": "2026-10-04T19:00:00+00:00",
+      "status": "FT",
+      "home": "Girona",
+      "away": "Mallorca",
+      "homeSlug": "girona",
+      "awaySlug": "mallorca",
+      "matchSlug": "girona-vs-mallorca-2026-10-04",
+      "homeScore": 0,
+      "awayScore": 0,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-01",
+            "home": "Girona",
+            "away": "Mallorca",
+            "homeSlug": "girona",
+            "awaySlug": "mallorca",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2026-01-04",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2025-05-05",
+            "home": "Girona",
+            "away": "Mallorca",
+            "homeSlug": "girona",
+            "awaySlug": "mallorca",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-12-14",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-03-03",
+            "home": "Mallorca",
+            "away": "Girona",
+            "homeSlug": "mallorca",
+            "awaySlug": "girona",
+            "homeScore": 1,
+            "awayScore": 0
           }
         ]
       }
