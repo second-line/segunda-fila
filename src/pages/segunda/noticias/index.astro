@@ -123,7 +123,7 @@ function formatNewsDate(date) {
         href="/"
         class="back-home"
       >
-        ← Segunda División
+        ←
       </a>
 
       <header class="news-header">
@@ -142,10 +142,22 @@ function formatNewsDate(date) {
       </header>
 
       <nav class="categories">
+        <button
+          type="button"
+          class="category-chip active"
+          data-filter=""
+        >
+          Todas
+        </button>
+
         {categories.map((category) => (
-          <span class="category-chip">
+          <button
+            type="button"
+            class="category-chip"
+            data-filter={category.slug}
+          >
             {category.label}
-          </span>
+          </button>
         ))}
       </nav>
 
@@ -156,7 +168,7 @@ function formatNewsDate(date) {
             {articles.map((article) => (
               <a
                 href={`/segunda/noticias/${article.slug}`}
-                class="article-card"
+                class="article-card" data-category={article.category}
               >
                 {
                   article.image && (
@@ -221,10 +233,52 @@ function formatNewsDate(date) {
       }
 
     </main>
-  </body>
+  
+<script>
+  const chips = document.querySelectorAll(
+    ".category-chip"
+  );
+
+  const cards = document.querySelectorAll(
+    "[data-category]"
+  );
+
+  chips.forEach((chip) => {
+    chip.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const filter =
+        chip.dataset.filter ?? "";
+
+      chips.forEach((item) => {
+        item.classList.remove("active");
+      });
+
+      chip.classList.add("active");
+
+      cards.forEach((card) => {
+        const category =
+          card.dataset.category ?? "";
+
+        card.style.display =
+          !filter || category === filter
+            ? ""
+            : "none";
+      });
+    });
+  });
+</script>
+
+</body>
 </html>
 
 <style>
+
+  .category-chip {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+  }
 
   .back-home {
     display: inline-block;

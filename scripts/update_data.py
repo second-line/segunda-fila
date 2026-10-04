@@ -900,6 +900,26 @@ def get_h2h_from_openfoot(
         timeout=30
     )
 
+    if response.status_code == 429:
+        print(
+            "Aviso: limite temporal de TheSportsDB para",
+            day.isoformat()
+        )
+
+        sportsdb_day_cache[cache_key] = []
+
+        return []
+
+    if response.status_code == 429:
+        print(
+            "Aviso: limite temporal de TheSportsDB para",
+            day.isoformat()
+        )
+
+        sportsdb_day_cache[cache_key] = []
+
+        return []
+
     response.raise_for_status()
 
     payload = response.json()
@@ -2807,6 +2827,101 @@ journey_events.sort(
     key=lambda match: (
         match["date"] or "",
         match["time"] or ""
+    )
+)
+
+
+# --------------------------------------------------
+# CONSERVAR PARTIDOS PREVIOS SI LA API VIENE INCOMPLETA
+# --------------------------------------------------
+
+def fixture_key(match):
+    return (
+        match.get("date") or "",
+        match.get("homeSlug") or "",
+        match.get("awaySlug") or ""
+    )
+
+
+current_today_keys = {
+    fixture_key(match)
+    for match in today_matches
+}
+
+current_journey_keys = {
+    fixture_key(match)
+    for match in journey_events
+}
+
+
+for old_match in existing_matches:
+
+    match_date = old_match.get("date")
+
+    if not match_date:
+        continue
+
+    key = fixture_key(old_match)
+
+    # Partido de hoy que la API ya no devuelve.
+    if (
+        match_date == today.isoformat()
+        and
+        key not in current_today_keys
+    ):
+        print(
+            "Recuperando partido previo de hoy:",
+            old_match.get("home"),
+            "-",
+            old_match.get("away")
+        )
+
+        today_matches.append(
+            old_match
+        )
+
+        current_today_keys.add(
+            key
+        )
+
+        continue
+
+    # Partido del resto de la jornada.
+    if (
+        match_date in {
+            day.isoformat()
+            for day in matchday_dates
+        }
+        and
+        match_date != today.isoformat()
+        and
+        key not in current_journey_keys
+    ):
+        print(
+            "Recuperando partido previo de jornada:",
+            old_match.get("home"),
+            "-",
+            old_match.get("away")
+        )
+
+        journey_events.append(
+            old_match
+        )
+
+        current_journey_keys.add(
+            key
+        )
+
+
+today_matches.sort(
+    key=lambda match:
+        match.get("time") or ""
+)
+
+journey_events.sort(
+    key=lambda match: (
+        match.get("date") or "",
+        match.get("time") or ""
     )
 )
 
