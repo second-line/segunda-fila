@@ -1108,6 +1108,13 @@ def get_events_for_date(day):
 
     if cache_key in sportsdb_day_cache:
         return sportsdb_day_cache[cache_key]
+
+
+    events_by_id = {}
+
+
+    # 1. Endpoint principal por fecha
+
     response = requests.get(
         (
             f"{SPORTSDB_BASE_URL}"
@@ -1127,14 +1134,168 @@ def get_events_for_date(day):
 
     payload = response.json()
 
-    events = (
+    for event in (
         payload.get("events")
         or []
+    ):
+
+        event_id = event.get(
+            "idEvent"
+        )
+
+        key = (
+            event_id
+            or
+            (
+                event.get("dateEvent"),
+                event.get("strHomeTeam"),
+                event.get("strAwayTeam")
+            )
+        )
+
+        events_by_id[key] = event
+
+
+    # 2. Refuerzo con proximos partidos
+    #
+    # eventsday puede devolver una lista
+    # incompleta en algunos momentos.
+
+    try:
+
+        response = requests.get(
+            (
+                f"{SPORTSDB_BASE_URL}"
+                "/eventsnextleague.php"
+            ),
+            params={
+                "id":
+                    SPORTSDB_LEAGUE_ID
+            },
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        payload = response.json()
+
+        for event in (
+            payload.get("events")
+            or []
+        ):
+
+            if (
+                event.get("dateEvent")
+                != day.isoformat()
+            ):
+                continue
+
+            event_id = event.get(
+                "idEvent"
+            )
+
+            key = (
+                event_id
+                or
+                (
+                    event.get("dateEvent"),
+                    event.get("strHomeTeam"),
+                    event.get("strAwayTeam")
+                )
+            )
+
+            events_by_id[key] = event
+
+    except requests.RequestException as error:
+
+        print(
+            "Aviso: no se pudieron consultar "
+            "los proximos partidos:",
+            error
+        )
+
+
+    # 3. Refuerzo con ultimos partidos
+    #
+    # Sirve para partidos que hayan acabado
+    # recientemente y no aparezcan bien
+    # en eventsday.
+
+    try:
+
+        response = requests.get(
+            (
+                f"{SPORTSDB_BASE_URL}"
+                "/eventspastleague.php"
+            ),
+            params={
+                "id":
+                    SPORTSDB_LEAGUE_ID
+            },
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        payload = response.json()
+
+        for event in (
+            payload.get("events")
+            or []
+        ):
+
+            if (
+                event.get("dateEvent")
+                != day.isoformat()
+            ):
+                continue
+
+            event_id = event.get(
+                "idEvent"
+            )
+
+            key = (
+                event_id
+                or
+                (
+                    event.get("dateEvent"),
+                    event.get("strHomeTeam"),
+                    event.get("strAwayTeam")
+                )
+            )
+
+            events_by_id[key] = event
+
+    except requests.RequestException as error:
+
+        print(
+            "Aviso: no se pudieron consultar "
+            "los ultimos partidos:",
+            error
+        )
+
+
+    events = list(
+        events_by_id.values()
     )
 
-    sportsdb_day_cache[cache_key] = events
+
+    events.sort(
+        key=lambda event: (
+            event.get("dateEvent")
+            or "",
+            event.get("strTime")
+            or ""
+        )
+    )
+
+
+    sportsdb_day_cache[
+        cache_key
+    ] = events
 
     return events
+
 
 
 def format_sportsdb_event(event):

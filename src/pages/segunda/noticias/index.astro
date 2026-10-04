@@ -1,0 +1,499 @@
+---
+const modules = import.meta.glob(
+  "../../../content/noticias/*.md",
+  {
+    eager: true
+  }
+);
+
+const articles = Object.entries(modules)
+  .map(([path, module]) => {
+    const slug = path
+      .split("/")
+      .pop()
+      ?.replace(".md", "");
+
+    return {
+      slug,
+      ...(module.frontmatter ?? {})
+    };
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.date).getTime() -
+      new Date(a.date).getTime()
+  );
+
+const categories = [
+  {
+    slug: "actualidad",
+    label: "Actualidad"
+  },
+  {
+    slug: "en-el-foco",
+    label: "En el foco"
+  },
+  {
+    slug: "que-fue-de",
+    label: "Qué fue de…"
+  }
+];
+
+function categoryLabel(category) {
+  return (
+    categories.find(
+      (item) => item.slug === category
+    )?.label ?? category
+  );
+}
+
+function formatDate(date) {
+  return new Intl.DateTimeFormat(
+    "es-ES",
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }
+  ).format(new Date(date));
+}
+
+const newsModules = import.meta.glob(
+  "../content/noticias/*.md",
+  {
+    eager: true
+  }
+);
+
+const latestNews = Object.entries(newsModules)
+  .map(([path, module]) => {
+    const slug = path
+      .split("/")
+      .pop()
+      ?.replace(".md", "");
+
+    return {
+      slug,
+      ...(module.frontmatter ?? {})
+    };
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.date).getTime() -
+      new Date(a.date).getTime()
+  )
+  .slice(0, 3);
+
+function formatNewsDate(date) {
+  return new Intl.DateTimeFormat(
+    "es-ES",
+    {
+      day: "numeric",
+      month: "short"
+    }
+  ).format(
+    new Date(date)
+  );
+}
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width"
+    />
+
+    <title>
+      Actualidad de Segunda División | Segunda Fila
+    </title>
+
+    <meta
+      name="description"
+      content="Noticias, historias y protagonistas de Segunda División."
+    />
+  </head>
+
+  <body>
+    <main class="page">
+
+      <a
+        href="/"
+        class="back-home"
+      >
+        ← Segunda División
+      </a>
+
+      <header class="news-header">
+        <div>
+          <span class="eyebrow">
+            Segunda División
+          </span>
+
+          <h1>Actualidad</h1>
+
+          <p>
+            Noticias, protagonistas e historias
+            alrededor de Segunda.
+          </p>
+        </div>
+      </header>
+
+      <nav class="categories">
+        {categories.map((category) => (
+          <span class="category-chip">
+            {category.label}
+          </span>
+        ))}
+      </nav>
+
+      {
+        articles.length > 0 ? (
+          <section class="articles">
+
+            {articles.map((article) => (
+              <a
+                href={`/segunda/noticias/${article.slug}`}
+                class="article-card"
+              >
+                {
+                  article.image && (
+                    <div class="article-image">
+                      <img
+                        src={article.image}
+                        alt={
+                          article.imageAlt ??
+                          article.title
+                        }
+                      />
+                    </div>
+                  )
+                }
+
+                <div class="article-content">
+
+                  <div class="article-meta">
+                    <span class="category">
+                      {
+                        categoryLabel(
+                          article.category
+                        )
+                      }
+                    </span>
+
+                    <span>
+                      {formatDate(article.date)}
+                    </span>
+                  </div>
+
+                  <h2>
+                    {article.title}
+                  </h2>
+
+                  {
+                    article.description && (
+                      <p>
+                        {article.description}
+                      </p>
+                    )
+                  }
+
+                  {
+                    article.team && (
+                      <span class="team">
+                        {article.team}
+                      </span>
+                    )
+                  }
+
+                </div>
+              </a>
+            ))}
+
+          </section>
+        ) : (
+          <div class="empty">
+            Todavía no hay noticias publicadas.
+          </div>
+        )
+      }
+
+    </main>
+  </body>
+</html>
+
+<style>
+
+  .back-home {
+    display: inline-block;
+
+    margin-bottom: 22px;
+
+    color: #6b7280;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .back-home:hover {
+    color: #111827;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+
+    background: #f7f7f8;
+    color: #111827;
+
+    font-family:
+      Arial,
+      sans-serif;
+  }
+
+  .page {
+    width: min(
+      1100px,
+      calc(100% - 32px)
+    );
+
+    margin: 0 auto;
+
+    padding:
+      48px 0
+      80px;
+  }
+
+  .news-header {
+    margin-bottom: 24px;
+  }
+
+  .eyebrow {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #6b7280;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+
+    font-size: 36px;
+    line-height: 1.1;
+  }
+
+  .news-header p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+  }
+
+  .categories {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 28px;
+
+    overflow-x: auto;
+  }
+
+  .category-chip {
+    flex-shrink: 0;
+
+    padding:
+      7px 12px;
+
+    border:
+      1px solid #e5e7eb;
+
+    border-radius: 999px;
+
+    background: #fff;
+
+    color: #4b5563;
+
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .articles {
+    display: grid;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+
+    gap: 20px;
+  }
+
+  .article-card {
+    overflow: hidden;
+
+    border:
+      1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: #fff;
+    color: inherit;
+
+    text-decoration: none;
+
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .article-card:hover {
+    transform:
+      translateY(-2px);
+
+    box-shadow:
+      0 8px 24px
+      rgba(
+        0,
+        0,
+        0,
+        0.06
+      );
+  }
+
+  .article-image {
+    aspect-ratio: 16 / 9;
+
+    overflow: hidden;
+
+    background: #e5e7eb;
+  }
+
+  .article-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+  }
+
+  .article-content {
+    padding: 18px;
+  }
+
+  .article-meta {
+    display: flex;
+
+    justify-content:
+      space-between;
+
+    gap: 12px;
+
+    margin-bottom: 10px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .category {
+    color: #4b5563;
+
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+
+    font-size: 19px;
+    line-height: 1.3;
+  }
+
+  .article-content p {
+    margin: 0 0 14px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .team {
+    display: inline-flex;
+
+    padding:
+      5px 9px;
+
+    border-radius: 999px;
+
+    background: #f3f4f6;
+
+    color: #4b5563;
+
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .empty {
+    padding: 40px;
+
+    border:
+      1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: #fff;
+
+    color: #6b7280;
+
+    text-align: center;
+  }
+
+  @media (
+    max-width: 850px
+  ) {
+    .articles {
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+    }
+  }
+
+  @media (
+    max-width: 600px
+  ) {
+    .page {
+      width:
+        calc(100% - 24px);
+
+      padding-top: 28px;
+    }
+
+    h1 {
+      font-size: 30px;
+    }
+
+    .articles {
+      grid-template-columns:
+        1fr;
+    }
+  }
+</style>
