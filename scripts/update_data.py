@@ -1121,7 +1121,9 @@ def get_events_for_date(day):
             "/eventsday.php"
         ),
         params={
-       z
+            "d":
+                day.isoformat(),
+
             "l":
                 SPORTSDB_LEAGUE_ID
         },
