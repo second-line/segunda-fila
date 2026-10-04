@@ -246,14 +246,14 @@
       "dateLabel": "Domingo 04/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-04T14:15:00+00:00",
-      "status": "NS",
+      "status": "HT",
       "home": "Real Sporting",
       "away": "Celta B",
       "homeSlug": "real-sporting",
       "awaySlug": "celta-b",
       "matchSlug": "real-sporting-vs-celta-b-2026-10-04",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 2,
+      "awayScore": 1,
       "headToHead": {
         "meetings": []
       }
