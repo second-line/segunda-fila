@@ -111,488 +111,413 @@
       "slug": "albacete"
     }
   ],
-  "todayMatches": [
-    {
-      "id": "2505786",
-      "date": "2026-10-05",
-      "dateLabel": "Lunes 05/10",
-      "time": "20:30",
-      "kickoffUtc": "2026-10-05T18:30:00+00:00",
-      "status": "NS",
-      "home": "Córdoba",
-      "away": "Tenerife",
-      "homeSlug": "cordoba",
-      "awaySlug": "tenerife",
-      "matchSlug": "cordoba-vs-tenerife-2026-10-05",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2025-02-15",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
-            "homeScore": 2,
-            "awayScore": 3
-          },
-          {
-            "date": "2024-12-08",
-            "home": "Córdoba",
-            "away": "Tenerife",
-            "homeSlug": "cordoba",
-            "awaySlug": "tenerife",
-            "homeScore": 3,
-            "awayScore": 0
-          },
-          {
-            "date": "2019-02-09",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
-            "homeScore": 0,
-            "awayScore": 2
-          },
-          {
-            "date": "2018-09-22",
-            "home": "Córdoba",
-            "away": "Tenerife",
-            "homeSlug": "cordoba",
-            "awaySlug": "tenerife",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2018-02-11",
-            "home": "Tenerife",
-            "away": "Córdoba",
-            "homeSlug": "tenerife",
-            "awaySlug": "cordoba",
-            "homeScore": 5,
-            "awayScore": 1
-          }
-        ]
-      }
-    }
-  ],
+  "todayMatches": [],
   "journeyMatches": [
     {
-      "id": "2505794",
-      "date": "2026-10-02",
-      "dateLabel": "Viernes 02/10",
-      "time": "20:30",
-      "kickoffUtc": "2026-10-02T18:30:00+00:00",
-      "status": "FT",
-      "home": "Eldense",
-      "away": "Oviedo",
-      "homeSlug": "eldense",
-      "awaySlug": "oviedo",
-      "matchSlug": "eldense-vs-oviedo-2026-10-02",
-      "homeScore": 4,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2025-02-10",
-            "home": "Oviedo",
-            "away": "Eldense",
-            "homeSlug": "oviedo",
-            "awaySlug": "eldense",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-09-21",
-            "home": "Eldense",
-            "away": "Oviedo",
-            "homeSlug": "eldense",
-            "awaySlug": "oviedo",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-02-04",
-            "home": "Oviedo",
-            "away": "Eldense",
-            "homeSlug": "oviedo",
-            "awaySlug": "eldense",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2023-10-01",
-            "home": "Eldense",
-            "away": "Oviedo",
-            "homeSlug": "eldense",
-            "awaySlug": "oviedo",
-            "homeScore": 1,
-            "awayScore": 3
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505787",
-      "date": "2026-10-03",
-      "dateLabel": "Sábado 03/10",
-      "time": "14:00",
-      "kickoffUtc": "2026-10-03T12:00:00+00:00",
-      "status": "FT",
-      "home": "Albacete",
-      "away": "Eibar",
-      "homeSlug": "albacete",
-      "awaySlug": "eibar",
-      "matchSlug": "albacete-vs-eibar-2026-10-03",
-      "homeScore": 1,
-      "awayScore": 3,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-04-24",
-            "home": "Albacete",
-            "away": "Eibar",
-            "homeSlug": "albacete",
-            "awaySlug": "eibar",
-            "homeScore": 0,
-            "awayScore": 3
-          },
-          {
-            "date": "2025-11-08",
-            "home": "Eibar",
-            "away": "Albacete",
-            "homeSlug": "eibar",
-            "awaySlug": "albacete",
-            "homeScore": 3,
-            "awayScore": 2
-          },
-          {
-            "date": "2025-01-18",
-            "home": "Eibar",
-            "away": "Albacete",
-            "homeSlug": "eibar",
-            "awaySlug": "albacete",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-09-09",
-            "home": "Albacete",
-            "away": "Eibar",
-            "homeSlug": "albacete",
-            "awaySlug": "eibar",
-            "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-04-28",
-            "home": "Albacete",
-            "away": "Eibar",
-            "homeSlug": "albacete",
-            "awaySlug": "eibar",
-            "homeScore": 2,
-            "awayScore": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505788",
-      "date": "2026-10-03",
-      "dateLabel": "Sábado 03/10",
+      "id": "2505805",
+      "date": "2026-10-10",
+      "dateLabel": "Sábado 10/10",
       "time": "16:15",
-      "kickoffUtc": "2026-10-03T14:15:00+00:00",
-      "status": "FT",
-      "home": "Almería",
-      "away": "Burgos",
-      "homeSlug": "almeria",
-      "awaySlug": "burgos",
-      "matchSlug": "almeria-vs-burgos-2026-10-03",
-      "homeScore": 2,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-09",
-            "home": "Burgos CF",
-            "away": "Almería",
-            "homeSlug": "burgos-cf",
-            "awaySlug": "almeria",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-12-14",
-            "home": "Almería",
-            "away": "Burgos CF",
-            "homeSlug": "almeria",
-            "awaySlug": "burgos-cf",
-            "homeScore": 1,
-            "awayScore": 2
-          },
-          {
-            "date": "2025-03-21",
-            "home": "Burgos CF",
-            "away": "Almería",
-            "homeSlug": "burgos-cf",
-            "awaySlug": "almeria",
-            "homeScore": 3,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-10-05",
-            "home": "Almería",
-            "away": "Burgos CF",
-            "homeSlug": "almeria",
-            "awaySlug": "burgos-cf",
-            "homeScore": 2,
-            "awayScore": 0
-          },
-          {
-            "date": "2022-04-30",
-            "home": "Burgos CF",
-            "away": "Almería",
-            "homeSlug": "burgos-cf",
-            "awaySlug": "almeria",
-            "homeScore": 0,
-            "awayScore": 2
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505789",
-      "date": "2026-10-03",
-      "dateLabel": "Sábado 03/10",
-      "time": "18:30",
-      "kickoffUtc": "2026-10-03T16:30:00+00:00",
-      "status": "FT",
-      "home": "Cádiz",
-      "away": "Leganés",
-      "homeSlug": "cadiz",
-      "awaySlug": "leganes",
-      "matchSlug": "cadiz-vs-leganes-2026-10-03",
-      "homeScore": 4,
-      "awayScore": 0,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-24",
-            "home": "Cádiz",
-            "away": "Leganés",
-            "homeSlug": "cadiz",
-            "awaySlug": "leganes",
-            "homeScore": 3,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-08-22",
-            "home": "Leganés",
-            "away": "Cádiz",
-            "homeSlug": "leganes",
-            "awaySlug": "cadiz",
-            "homeScore": 1,
-            "awayScore": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505790",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "16:15",
-      "kickoffUtc": "2026-10-04T14:15:00+00:00",
-      "status": "FT",
-      "home": "Real Sporting",
-      "away": "Celta B",
-      "homeSlug": "real-sporting",
-      "awaySlug": "celta-b",
-      "matchSlug": "real-sporting-vs-celta-b-2026-10-04",
-      "homeScore": 3,
-      "awayScore": 2,
+      "kickoffUtc": "2026-10-10T14:15:00+00:00",
+      "status": "NS",
+      "home": "Ceuta",
+      "away": "Sabadell",
+      "homeSlug": "ceuta",
+      "awaySlug": "sabadell",
+      "matchSlug": "ceuta-vs-sabadell-2026-10-10",
+      "homeScore": null,
+      "awayScore": null,
       "headToHead": {
         "meetings": []
       }
     },
     {
-      "id": "2505784",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
+      "id": "2505804",
+      "date": "2026-10-10",
+      "dateLabel": "Sábado 10/10",
       "time": "18:30",
-      "kickoffUtc": "2026-10-04T16:30:00+00:00",
-      "status": "FT",
-      "home": "Las Palmas",
-      "away": "Valladolid",
-      "homeSlug": "las-palmas",
-      "awaySlug": "valladolid",
-      "matchSlug": "las-palmas-vs-valladolid-2026-10-04",
-      "homeScore": 2,
-      "awayScore": 2,
+      "kickoffUtc": "2026-10-10T16:30:00+00:00",
+      "status": "NS",
+      "home": "Eldense",
+      "away": "Córdoba",
+      "homeSlug": "eldense",
+      "awaySlug": "cordoba",
+      "matchSlug": "eldense-vs-cordoba-2026-10-10",
+      "homeScore": null,
+      "awayScore": null,
       "headToHead": {
         "meetings": [
           {
-            "date": "2026-05-03",
-            "home": "Las Palmas",
-            "away": "Valladolid",
-            "homeSlug": "las-palmas",
-            "awaySlug": "valladolid",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-11-14",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
-            "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-02-28",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
+            "date": "2025-04-26",
+            "home": "Eldense",
+            "away": "Córdoba",
+            "homeSlug": "eldense",
+            "awaySlug": "cordoba",
             "homeScore": 1,
             "awayScore": 1
           },
           {
-            "date": "2024-12-07",
-            "home": "Las Palmas",
-            "away": "Valladolid",
-            "homeSlug": "las-palmas",
-            "awaySlug": "valladolid",
+            "date": "2024-10-26",
+            "home": "Córdoba",
+            "away": "Eldense",
+            "homeSlug": "cordoba",
+            "awaySlug": "eldense",
             "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2022-03-19",
-            "home": "Valladolid",
-            "away": "Las Palmas",
-            "homeSlug": "valladolid",
-            "awaySlug": "las-palmas",
-            "homeScore": 0,
-            "awayScore": 1
+            "awayScore": 0
           }
         ]
       }
     },
     {
-      "id": "2505791",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
-      "time": "18:30",
-      "kickoffUtc": "2026-10-04T16:30:00+00:00",
-      "status": "FT",
-      "home": "Castellón",
-      "away": "Ceuta",
-      "homeSlug": "castellon",
-      "awaySlug": "ceuta",
-      "matchSlug": "castellon-vs-ceuta-2026-10-04",
-      "homeScore": 1,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-09",
-            "home": "AD Ceuta FC",
-            "away": "Castellón",
-            "homeSlug": "ad-ceuta-fc",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-09-14",
-            "home": "Castellón",
-            "away": "AD Ceuta FC",
-            "homeSlug": "castellon",
-            "awaySlug": "ad-ceuta-fc",
-            "homeScore": 3,
-            "awayScore": 3
-          },
-          {
-            "date": "2024-02-11",
-            "home": "Castellón",
-            "away": "AD Ceuta FC",
-            "homeSlug": "castellon",
-            "awaySlug": "ad-ceuta-fc",
-            "homeScore": 2,
-            "awayScore": 2
-          },
-          {
-            "date": "2023-10-15",
-            "home": "AD Ceuta FC",
-            "away": "Castellón",
-            "homeSlug": "ad-ceuta-fc",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 3
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505785",
-      "date": "2026-10-04",
-      "dateLabel": "Domingo 04/10",
+      "id": "2505802",
+      "date": "2026-10-10",
+      "dateLabel": "Sábado 10/10",
       "time": "21:00",
-      "kickoffUtc": "2026-10-04T19:00:00+00:00",
-      "status": "FT",
-      "home": "Girona",
-      "away": "Mallorca",
-      "homeSlug": "girona",
-      "awaySlug": "mallorca",
-      "matchSlug": "girona-vs-mallorca-2026-10-04",
-      "homeScore": 0,
-      "awayScore": 0,
+      "kickoffUtc": "2026-10-10T19:00:00+00:00",
+      "status": "NS",
+      "home": "Celta B",
+      "away": "Real Sociedad B",
+      "homeSlug": "celta-b",
+      "awaySlug": "real-sociedad-b",
+      "matchSlug": "celta-b-vs-real-sociedad-b-2026-10-10",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505798",
+      "date": "2026-10-11",
+      "dateLabel": "Domingo 11/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-11T14:15:00+00:00",
+      "status": "NS",
+      "home": "Almería",
+      "away": "Leganés",
+      "homeSlug": "almeria",
+      "awaySlug": "leganes",
+      "matchSlug": "almeria-vs-leganes-2026-10-11",
+      "homeScore": null,
+      "awayScore": null,
       "headToHead": {
         "meetings": [
           {
-            "date": "2026-05-01",
-            "home": "Girona",
-            "away": "Mallorca",
-            "homeSlug": "girona",
-            "awaySlug": "mallorca",
-            "homeScore": 0,
+            "date": "2026-04-05",
+            "home": "Almería",
+            "away": "Leganés",
+            "homeSlug": "almeria",
+            "awaySlug": "leganes",
+            "homeScore": 2,
             "awayScore": 1
           },
           {
-            "date": "2026-01-04",
-            "home": "Mallorca",
-            "away": "Girona",
-            "homeSlug": "mallorca",
-            "awaySlug": "girona",
-            "homeScore": 1,
+            "date": "2025-11-22",
+            "home": "Leganés",
+            "away": "Almería",
+            "homeSlug": "leganes",
+            "awaySlug": "almeria",
+            "homeScore": 0,
+            "awayScore": 3
+          },
+          {
+            "date": "2025-01-15",
+            "home": "Almería",
+            "away": "Leganés",
+            "homeSlug": "almeria",
+            "awaySlug": "leganes",
+            "homeScore": 2,
+            "awayScore": 3
+          },
+          {
+            "date": "2022-05-29",
+            "home": "Leganés",
+            "away": "Almería",
+            "homeSlug": "leganes",
+            "awaySlug": "almeria",
+            "homeScore": 2,
             "awayScore": 2
           },
           {
-            "date": "2025-05-05",
-            "home": "Girona",
+            "date": "2021-10-29",
+            "home": "Almería",
+            "away": "Leganés",
+            "homeSlug": "almeria",
+            "awaySlug": "leganes",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505800",
+      "date": "2026-10-11",
+      "dateLabel": "Domingo 11/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-11T16:30:00+00:00",
+      "status": "NS",
+      "home": "Mallorca",
+      "away": "Las Palmas",
+      "homeSlug": "mallorca",
+      "awaySlug": "las-palmas",
+      "matchSlug": "mallorca-vs-las-palmas-2026-10-11",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-02-16",
+            "home": "Mallorca",
+            "away": "Las Palmas",
+            "homeSlug": "mallorca",
+            "awaySlug": "las-palmas",
+            "homeScore": 3,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-11-23",
+            "home": "Las Palmas",
             "away": "Mallorca",
-            "homeSlug": "girona",
+            "homeSlug": "las-palmas",
             "awaySlug": "mallorca",
+            "homeScore": 2,
+            "awayScore": 3
+          },
+          {
+            "date": "2024-05-11",
+            "home": "Mallorca",
+            "away": "Las Palmas",
+            "homeSlug": "mallorca",
+            "awaySlug": "las-palmas",
             "homeScore": 1,
             "awayScore": 0
           },
           {
-            "date": "2024-12-14",
-            "home": "Mallorca",
+            "date": "2023-08-12",
+            "home": "Las Palmas",
+            "away": "Mallorca",
+            "homeSlug": "las-palmas",
+            "awaySlug": "mallorca",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2021-04-04",
+            "home": "Las Palmas",
+            "away": "Mallorca",
+            "homeSlug": "las-palmas",
+            "awaySlug": "mallorca",
+            "homeScore": 1,
+            "awayScore": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505799",
+      "date": "2026-10-11",
+      "dateLabel": "Domingo 11/10",
+      "time": "21:00",
+      "kickoffUtc": "2026-10-11T19:00:00+00:00",
+      "status": "NS",
+      "home": "Cádiz",
+      "away": "Real Sporting",
+      "homeSlug": "cadiz",
+      "awaySlug": "real-sporting",
+      "matchSlug": "cadiz-vs-real-sporting-2026-10-11",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505797",
+      "date": "2026-10-12",
+      "dateLabel": "Lunes 12/10",
+      "time": "14:00",
+      "kickoffUtc": "2026-10-12T12:00:00+00:00",
+      "status": "NS",
+      "home": "Valladolid",
+      "away": "Albacete",
+      "homeSlug": "valladolid",
+      "awaySlug": "albacete",
+      "matchSlug": "valladolid-vs-albacete-2026-10-12",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-01-24",
+            "home": "Valladolid",
+            "away": "Albacete",
+            "homeSlug": "valladolid",
+            "awaySlug": "albacete",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-09-21",
+            "home": "Albacete",
+            "away": "Valladolid",
+            "homeSlug": "albacete",
+            "awaySlug": "valladolid",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-02-12",
+            "home": "Valladolid",
+            "away": "Albacete",
+            "homeSlug": "valladolid",
+            "awaySlug": "albacete",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2023-09-01",
+            "home": "Albacete",
+            "away": "Valladolid",
+            "homeSlug": "albacete",
+            "awaySlug": "valladolid",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2018-05-12",
+            "home": "Valladolid",
+            "away": "Albacete",
+            "homeSlug": "valladolid",
+            "awaySlug": "albacete",
+            "homeScore": 3,
+            "awayScore": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505795",
+      "date": "2026-10-12",
+      "dateLabel": "Lunes 12/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-12T16:30:00+00:00",
+      "status": "NS",
+      "home": "Oviedo",
+      "away": "Eibar",
+      "homeSlug": "oviedo",
+      "awaySlug": "eibar",
+      "matchSlug": "oviedo-vs-eibar-2026-10-12",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-04-05",
+            "home": "Eibar",
+            "away": "Oviedo",
+            "homeSlug": "eibar",
+            "awaySlug": "oviedo",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-09-29",
+            "home": "Oviedo",
+            "away": "Eibar",
+            "homeSlug": "oviedo",
+            "awaySlug": "eibar",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-06-12",
+            "home": "Eibar",
+            "away": "Oviedo",
+            "homeSlug": "eibar",
+            "awaySlug": "oviedo",
+            "homeScore": 0,
+            "awayScore": 2
+          },
+          {
+            "date": "2024-06-08",
+            "home": "Oviedo",
+            "away": "Eibar",
+            "homeSlug": "oviedo",
+            "awaySlug": "eibar",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-06-02",
+            "home": "Eibar",
+            "away": "Oviedo",
+            "homeSlug": "eibar",
+            "awaySlug": "oviedo",
+            "homeScore": 4,
+            "awayScore": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505796",
+      "date": "2026-10-12",
+      "dateLabel": "Lunes 12/10",
+      "time": "21:00",
+      "kickoffUtc": "2026-10-12T19:00:00+00:00",
+      "status": "NS",
+      "home": "Tenerife",
+      "away": "Girona",
+      "homeSlug": "tenerife",
+      "awaySlug": "girona",
+      "matchSlug": "tenerife-vs-girona-2026-10-12",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2022-06-19",
+            "home": "Tenerife",
             "away": "Girona",
-            "homeSlug": "mallorca",
+            "homeSlug": "tenerife",
+            "awaySlug": "girona",
+            "homeScore": 1,
+            "awayScore": 3
+          },
+          {
+            "date": "2022-06-11",
+            "home": "Girona",
+            "away": "Tenerife",
+            "homeSlug": "girona",
+            "awaySlug": "tenerife",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2022-05-09",
+            "home": "Girona",
+            "away": "Tenerife",
+            "homeSlug": "girona",
+            "awaySlug": "tenerife",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2021-11-08",
+            "home": "Tenerife",
+            "away": "Girona",
+            "homeSlug": "tenerife",
             "awaySlug": "girona",
             "homeScore": 2,
             "awayScore": 1
           },
           {
-            "date": "2024-03-03",
-            "home": "Mallorca",
-            "away": "Girona",
-            "homeSlug": "mallorca",
-            "awaySlug": "girona",
+            "date": "2021-05-01",
+            "home": "Girona",
+            "away": "Tenerife",
+            "homeSlug": "girona",
+            "awaySlug": "tenerife",
             "homeScore": 1,
             "awayScore": 0
           }
@@ -863,14 +788,14 @@
       "pos": 12,
       "team": "Tenerife",
       "slug": "tenerife",
-      "played": 7,
+      "played": 8,
       "points": 11,
       "won": 3,
       "drawn": 2,
-      "lost": 2,
-      "goalsFor": 8,
-      "goalsAgainst": 9,
-      "goalDifference": -1,
+      "lost": 3,
+      "goalsFor": 10,
+      "goalsAgainst": 12,
+      "goalDifference": -2,
       "form": [
         "D",
         "L",
@@ -921,6 +846,26 @@
     },
     {
       "pos": 15,
+      "team": "Córdoba",
+      "slug": "cordoba",
+      "played": 8,
+      "points": 9,
+      "won": 3,
+      "drawn": 0,
+      "lost": 5,
+      "goalsFor": 13,
+      "goalsAgainst": 18,
+      "goalDifference": -5,
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ]
+    },
+    {
+      "pos": 16,
       "team": "Real Sociedad B",
       "slug": "real-sociedad-b",
       "played": 8,
@@ -940,7 +885,7 @@
       ]
     },
     {
-      "pos": 16,
+      "pos": 17,
       "team": "Eldense",
       "slug": "eldense",
       "played": 8,
@@ -960,7 +905,7 @@
       ]
     },
     {
-      "pos": 17,
+      "pos": 18,
       "team": "Celta B",
       "slug": "celta-b",
       "played": 8,
@@ -980,7 +925,7 @@
       ]
     },
     {
-      "pos": 18,
+      "pos": 19,
       "team": "Cádiz",
       "slug": "cadiz",
       "played": 8,
@@ -1000,7 +945,7 @@
       ]
     },
     {
-      "pos": 19,
+      "pos": 20,
       "team": "Andorra",
       "slug": "andorra",
       "played": 8,
@@ -1013,26 +958,6 @@
       "goalDifference": -3,
       "form": [
         "D",
-        "W",
-        "L",
-        "L",
-        "L"
-      ]
-    },
-    {
-      "pos": 20,
-      "team": "Córdoba",
-      "slug": "cordoba",
-      "played": 7,
-      "points": 6,
-      "won": 2,
-      "drawn": 0,
-      "lost": 5,
-      "goalsFor": 10,
-      "goalsAgainst": 16,
-      "goalDifference": -6,
-      "form": [
-        "L",
         "W",
         "L",
         "L",
@@ -1080,8 +1005,8 @@
       ]
     }
   ],
-  "classificationMatchday": 9,
-  "standingsProvisional": true,
+  "classificationMatchday": 8,
+  "standingsProvisional": false,
   "standingsBaseUpdatedThrough": "2026-10-04",
   "teamStats": {
     "team_eibar_es": {
@@ -3377,18 +3302,18 @@
       "name": "Tenerife",
       "slug": "tenerife",
       "form": [
-        "L",
         "D",
         "W",
         "L",
-        "D"
+        "D",
+        "L"
       ],
       "winStreak": 0,
-      "unbeatenStreak": 1,
-      "losingStreak": 0,
-      "winlessStreak": 2,
-      "scoringStreak": 1,
-      "concedingStreak": 2,
+      "unbeatenStreak": 0,
+      "losingStreak": 1,
+      "winlessStreak": 3,
+      "scoringStreak": 2,
+      "concedingStreak": 3,
       "cleanSheetStreak": 0,
       "noScoreStreak": 0,
       "homeWinStreak": 0,
@@ -3402,54 +3327,54 @@
         "losses": 2,
         "points": 5,
         "pointsPerGame": 1.0,
-        "goalsFor": 4,
-        "goalsAgainst": 8,
+        "goalsFor": 6,
+        "goalsAgainst": 10,
         "goalDifference": -4,
-        "avgGoalsFor": 0.8,
-        "avgGoalsAgainst": 1.6,
-        "avgTotalGoals": 2.4,
-        "btts": 2,
-        "bttsPercentage": 40.0,
+        "avgGoalsFor": 1.2,
+        "avgGoalsAgainst": 2.0,
+        "avgTotalGoals": 3.2,
+        "btts": 3,
+        "bttsPercentage": 60.0,
         "cleanSheets": 1,
         "cleanSheetPercentage": 20.0,
-        "failedToScore": 2,
-        "failedToScorePercentage": 40.0,
-        "over15": 4,
-        "over15Percentage": 80.0,
-        "over25": 1,
-        "over25Percentage": 20.0,
-        "over35": 1,
-        "over35Percentage": 20.0,
+        "failedToScore": 1,
+        "failedToScorePercentage": 20.0,
+        "over15": 5,
+        "over15Percentage": 100.0,
+        "over25": 2,
+        "over25Percentage": 40.0,
+        "over35": 2,
+        "over35Percentage": 40.0,
         "winPercentage": 20.0,
         "unbeatenPercentage": 60.0
       },
       "last10": {
-        "played": 7,
+        "played": 8,
         "wins": 3,
         "draws": 2,
-        "losses": 2,
+        "losses": 3,
         "points": 11,
-        "pointsPerGame": 1.57,
-        "goalsFor": 8,
-        "goalsAgainst": 9,
-        "goalDifference": -1,
-        "avgGoalsFor": 1.14,
-        "avgGoalsAgainst": 1.29,
-        "avgTotalGoals": 2.43,
-        "btts": 3,
-        "bttsPercentage": 42.9,
+        "pointsPerGame": 1.38,
+        "goalsFor": 10,
+        "goalsAgainst": 12,
+        "goalDifference": -2,
+        "avgGoalsFor": 1.25,
+        "avgGoalsAgainst": 1.5,
+        "avgTotalGoals": 2.75,
+        "btts": 4,
+        "bttsPercentage": 50.0,
         "cleanSheets": 2,
-        "cleanSheetPercentage": 28.6,
+        "cleanSheetPercentage": 25.0,
         "failedToScore": 2,
-        "failedToScorePercentage": 28.6,
-        "over15": 5,
-        "over15Percentage": 71.4,
-        "over25": 2,
-        "over25Percentage": 28.6,
-        "over35": 2,
-        "over35Percentage": 28.6,
-        "winPercentage": 42.9,
-        "unbeatenPercentage": 71.4
+        "failedToScorePercentage": 25.0,
+        "over15": 6,
+        "over15Percentage": 75.0,
+        "over25": 3,
+        "over25Percentage": 37.5,
+        "over35": 3,
+        "over35Percentage": 37.5,
+        "winPercentage": 37.5,
+        "unbeatenPercentage": 62.5
       },
       "home": {
         "played": 4,
@@ -3480,48 +3405,34 @@
         "unbeatenPercentage": 75.0
       },
       "away": {
-        "played": 3,
+        "played": 4,
         "wins": 1,
         "draws": 1,
-        "losses": 1,
+        "losses": 2,
         "points": 4,
-        "pointsPerGame": 1.33,
-        "goalsFor": 4,
-        "goalsAgainst": 7,
-        "goalDifference": -3,
-        "avgGoalsFor": 1.33,
-        "avgGoalsAgainst": 2.33,
-        "avgTotalGoals": 3.67,
-        "btts": 2,
-        "bttsPercentage": 66.7,
+        "pointsPerGame": 1.0,
+        "goalsFor": 6,
+        "goalsAgainst": 10,
+        "goalDifference": -4,
+        "avgGoalsFor": 1.5,
+        "avgGoalsAgainst": 2.5,
+        "avgTotalGoals": 4.0,
+        "btts": 3,
+        "bttsPercentage": 75.0,
         "cleanSheets": 0,
         "cleanSheetPercentage": 0.0,
         "failedToScore": 1,
-        "failedToScorePercentage": 33.3,
-        "over15": 3,
+        "failedToScorePercentage": 25.0,
+        "over15": 4,
         "over15Percentage": 100.0,
-        "over25": 2,
-        "over25Percentage": 66.7,
-        "over35": 2,
-        "over35Percentage": 66.7,
-        "winPercentage": 33.3,
-        "unbeatenPercentage": 66.7
+        "over25": 3,
+        "over25Percentage": 75.0,
+        "over35": 3,
+        "over35Percentage": 75.0,
+        "winPercentage": 25.0,
+        "unbeatenPercentage": 50.0
       },
       "recentMatches": [
-        {
-          "date": "2026-08-28T20:00:00.000Z",
-          "result": "L",
-          "goalsFor": 0,
-          "goalsAgainst": 1,
-          "isHome": true,
-          "opponent": "Real Sporting",
-          "btts": false,
-          "cleanSheet": false,
-          "failedToScore": true,
-          "over15": false,
-          "over25": false,
-          "over35": false
-        },
         {
           "date": "2026-09-05T13:00:00.000Z",
           "result": "D",
@@ -3577,6 +3488,20 @@
           "over15": true,
           "over25": false,
           "over35": false
+        },
+        {
+          "date": "2026-10-05T18:30:00+00:00",
+          "result": "L",
+          "goalsFor": 2,
+          "goalsAgainst": 3,
+          "isHome": false,
+          "opponent": "Córdoba",
+          "btts": true,
+          "cleanSheet": false,
+          "failedToScore": false,
+          "over15": true,
+          "over25": true,
+          "over35": true
         }
       ]
     },
@@ -5043,35 +4968,35 @@
       "form": [
         "L",
         "L",
-        "L",
         "W",
-        "L"
+        "L",
+        "W"
       ],
-      "winStreak": 0,
-      "unbeatenStreak": 0,
-      "losingStreak": 1,
-      "winlessStreak": 1,
-      "scoringStreak": 2,
-      "concedingStreak": 7,
+      "winStreak": 1,
+      "unbeatenStreak": 1,
+      "losingStreak": 0,
+      "winlessStreak": 0,
+      "scoringStreak": 3,
+      "concedingStreak": 8,
       "cleanSheetStreak": 0,
       "noScoreStreak": 0,
-      "homeWinStreak": 0,
-      "homeUnbeatenStreak": 0,
+      "homeWinStreak": 1,
+      "homeUnbeatenStreak": 1,
       "awayWinStreak": 0,
       "awayUnbeatenStreak": 0,
       "last5": {
         "played": 5,
-        "wins": 1,
+        "wins": 2,
         "draws": 0,
-        "losses": 4,
-        "points": 3,
-        "pointsPerGame": 0.6,
-        "goalsFor": 6,
-        "goalsAgainst": 12,
-        "goalDifference": -6,
-        "avgGoalsFor": 1.2,
-        "avgGoalsAgainst": 2.4,
-        "avgTotalGoals": 3.6,
+        "losses": 3,
+        "points": 6,
+        "pointsPerGame": 1.2,
+        "goalsFor": 8,
+        "goalsAgainst": 11,
+        "goalDifference": -3,
+        "avgGoalsFor": 1.6,
+        "avgGoalsAgainst": 2.2,
+        "avgTotalGoals": 3.8,
         "btts": 4,
         "bttsPercentage": 80.0,
         "cleanSheets": 0,
@@ -5084,64 +5009,64 @@
         "over25Percentage": 80.0,
         "over35": 3,
         "over35Percentage": 60.0,
-        "winPercentage": 20.0,
-        "unbeatenPercentage": 20.0
+        "winPercentage": 40.0,
+        "unbeatenPercentage": 40.0
       },
       "last10": {
-        "played": 7,
-        "wins": 2,
+        "played": 8,
+        "wins": 3,
         "draws": 0,
         "losses": 5,
-        "points": 6,
-        "pointsPerGame": 0.86,
-        "goalsFor": 10,
-        "goalsAgainst": 16,
-        "goalDifference": -6,
-        "avgGoalsFor": 1.43,
-        "avgGoalsAgainst": 2.29,
-        "avgTotalGoals": 3.71,
-        "btts": 6,
-        "bttsPercentage": 85.7,
+        "points": 9,
+        "pointsPerGame": 1.12,
+        "goalsFor": 13,
+        "goalsAgainst": 18,
+        "goalDifference": -5,
+        "avgGoalsFor": 1.62,
+        "avgGoalsAgainst": 2.25,
+        "avgTotalGoals": 3.88,
+        "btts": 7,
+        "bttsPercentage": 87.5,
         "cleanSheets": 0,
         "cleanSheetPercentage": 0.0,
         "failedToScore": 1,
-        "failedToScorePercentage": 14.3,
-        "over15": 7,
+        "failedToScorePercentage": 12.5,
+        "over15": 8,
         "over15Percentage": 100.0,
-        "over25": 6,
-        "over25Percentage": 85.7,
-        "over35": 4,
-        "over35Percentage": 57.1,
-        "winPercentage": 28.6,
-        "unbeatenPercentage": 28.6
+        "over25": 7,
+        "over25Percentage": 87.5,
+        "over35": 5,
+        "over35Percentage": 62.5,
+        "winPercentage": 37.5,
+        "unbeatenPercentage": 37.5
       },
       "home": {
-        "played": 3,
-        "wins": 1,
+        "played": 4,
+        "wins": 2,
         "draws": 0,
         "losses": 2,
-        "points": 3,
-        "pointsPerGame": 1.0,
-        "goalsFor": 3,
-        "goalsAgainst": 6,
-        "goalDifference": -3,
-        "avgGoalsFor": 1.0,
+        "points": 6,
+        "pointsPerGame": 1.5,
+        "goalsFor": 6,
+        "goalsAgainst": 8,
+        "goalDifference": -2,
+        "avgGoalsFor": 1.5,
         "avgGoalsAgainst": 2.0,
-        "avgTotalGoals": 3.0,
-        "btts": 2,
-        "bttsPercentage": 66.7,
+        "avgTotalGoals": 3.5,
+        "btts": 3,
+        "bttsPercentage": 75.0,
         "cleanSheets": 0,
         "cleanSheetPercentage": 0.0,
         "failedToScore": 1,
-        "failedToScorePercentage": 33.3,
-        "over15": 3,
+        "failedToScorePercentage": 25.0,
+        "over15": 4,
         "over15Percentage": 100.0,
-        "over25": 2,
-        "over25Percentage": 66.7,
-        "over35": 1,
-        "over35Percentage": 33.3,
-        "winPercentage": 33.3,
-        "unbeatenPercentage": 33.3
+        "over25": 3,
+        "over25Percentage": 75.0,
+        "over35": 2,
+        "over35Percentage": 50.0,
+        "winPercentage": 50.0,
+        "unbeatenPercentage": 50.0
       },
       "away": {
         "played": 4,
@@ -5172,20 +5097,6 @@
         "unbeatenPercentage": 25.0
       },
       "recentMatches": [
-        {
-          "date": "2026-08-30T20:30:00.000Z",
-          "result": "L",
-          "goalsFor": 1,
-          "goalsAgainst": 3,
-          "isHome": true,
-          "opponent": "Granada",
-          "btts": true,
-          "cleanSheet": false,
-          "failedToScore": false,
-          "over15": true,
-          "over25": true,
-          "over35": true
-        },
         {
           "date": "2026-09-07T19:30:00.000Z",
           "result": "L",
@@ -5235,6 +5146,20 @@
           "goalsAgainst": 3,
           "isHome": false,
           "opponent": "Valladolid",
+          "btts": true,
+          "cleanSheet": false,
+          "failedToScore": false,
+          "over15": true,
+          "over25": true,
+          "over35": true
+        },
+        {
+          "date": "2026-10-05T18:30:00+00:00",
+          "result": "W",
+          "goalsFor": 3,
+          "goalsAgainst": 2,
+          "isHome": true,
+          "opponent": "Tenerife",
           "btts": true,
           "cleanSheet": false,
           "failedToScore": false,
