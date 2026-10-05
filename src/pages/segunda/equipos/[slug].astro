@@ -145,6 +145,11 @@ const formLabels = {
     />
 
     <title>{team.name} | Segunda Fila</title>
+      <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
   </head>
 
   <body>
@@ -632,6 +637,34 @@ const formLabels = {
         </div>
       </section>
     </main>
+  
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="site-footer-main">
+          <a href="/" class="site-footer-brand">
+            <span class="site-footer-logo">SF</span>
+
+            <div class="site-footer-identity">
+              <strong>Segunda Fila</strong>
+              <span>Fútbol más allá de Primera</span>
+            </div>
+          </a>
+
+          <p class="site-footer-description">
+            Estadísticas, tendencias, partidos e historias
+            del fútbol más allá de Primera División.
+          </p>
+        </div>
+
+        <div class="site-footer-bottom">
+          <span>© 2026 Segunda Fila</span>
+          <span class="site-footer-tagline">
+            El fútbol también se juega en segunda fila.
+          </span>
+        </div>
+      </div>
+    </footer>
+
   </body>
 </html>
 
@@ -1347,4 +1380,125 @@ const formLabels = {
       flex-direction: column;
     }
   }
+
+
+  .site-footer {
+    width: 100%;
+    margin-top: 72px;
+    background: #080b12;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .site-footer-inner {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 28px;
+    box-sizing: border-box;
+  }
+
+  .site-footer-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 64px;
+    padding-bottom: 38px;
+  }
+
+  .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: inherit;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .site-footer-logo {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .site-footer-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .site-footer-identity strong {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .site-footer-identity span {
+    color: #9ca3af;
+    font-size: 14px;
+  }
+
+  .site-footer-description {
+    max-width: 390px;
+    margin: 0;
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: right;
+  }
+
+  .site-footer-bottom {
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    color: #6b7280;
+    font-size: 12px;
+  }
+
+  .site-footer-tagline {
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .site-footer {
+      margin-top: 48px;
+    }
+
+    .site-footer-inner {
+      padding: 36px 20px 24px;
+    }
+
+    .site-footer-main {
+      flex-direction: column;
+      gap: 28px;
+      padding-bottom: 30px;
+    }
+
+    .site-footer-description {
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .site-footer-tagline {
+      text-align: left;
+    }
+  }
+
 </style>

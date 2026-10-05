@@ -116,6 +116,11 @@ const getMatchUrl = (match) => {
 />
 
     <title> Segunda Fila | Segunda División, estadísticas y actualidad </title>
+      <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
   </head>
 
   <body>
@@ -848,6 +853,34 @@ const getMatchUrl = (match) => {
         30000
       );
     </script>
+  
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="site-footer-main">
+          <a href="/" class="site-footer-brand">
+            <span class="site-footer-logo">SF</span>
+
+            <div class="site-footer-identity">
+              <strong>Segunda Fila</strong>
+              <span>Fútbol más allá de Primera</span>
+            </div>
+          </a>
+
+          <p class="site-footer-description">
+            Estadísticas, tendencias, partidos e historias
+            del fútbol más allá de Primera División.
+          </p>
+        </div>
+
+        <div class="site-footer-bottom">
+          <span>© 2026 Segunda Fila</span>
+          <span class="site-footer-tagline">
+            El fútbol también se juega en segunda fila.
+          </span>
+        </div>
+      </div>
+    </footer>
+
   </body>
 </html>
 
@@ -1718,6 +1751,205 @@ const getMatchUrl = (match) => {
 
     .trend-row {
       padding: 16px;
+    }
+  }
+
+
+  .site-footer {
+    width: 100%;
+    margin-top: 72px;
+    background: #080b12;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .site-footer-inner {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 28px;
+    box-sizing: border-box;
+  }
+
+  .site-footer-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 64px;
+    padding-bottom: 38px;
+  }
+
+  .site-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: inherit;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .site-footer-logo {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .site-footer-identity {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .site-footer-identity strong {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .site-footer-identity span {
+    color: #9ca3af;
+    font-size: 14px;
+  }
+
+  .site-footer-description {
+    max-width: 390px;
+    margin: 0;
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.7;
+    text-align: right;
+  }
+
+  .site-footer-bottom {
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    color: #6b7280;
+    font-size: 12px;
+  }
+
+  .site-footer-tagline {
+    text-align: right;
+  }
+
+  @media (max-width: 700px) {
+    .site-footer {
+      margin-top: 48px;
+    }
+
+    .site-footer-inner {
+      padding: 36px 20px 24px;
+    }
+
+    .site-footer-main {
+      flex-direction: column;
+      gap: 28px;
+      padding-bottom: 30px;
+    }
+
+    .site-footer-description {
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .site-footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .site-footer-tagline {
+      text-align: left;
+    }
+  }
+
+</style>
+
+<style>
+  /* Ajuste específico del footer de la home */
+  .site-footer {
+    width: 100vw;
+    max-width: none;
+    margin-top: 80px;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    background: #07090d;
+    color: #ffffff;
+  }
+
+  .site-footer-inner {
+    width: min(1180px, calc(100% - 48px));
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 0 30px;
+  }
+
+  .site-footer-main {
+    min-height: 110px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 80px;
+  }
+
+  .site-footer-brand {
+    gap: 18px;
+  }
+
+  .site-footer-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .site-footer-identity strong {
+    font-size: 22px;
+  }
+
+  .site-footer-identity span {
+    margin-top: 2px;
+    font-size: 14px;
+    color: #a1a1aa;
+  }
+
+  .site-footer-description {
+    max-width: 430px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #a1a1aa;
+  }
+
+  .site-footer-bottom {
+    margin-top: 10px;
+    padding-top: 24px;
+    padding-bottom: 2px;
+  }
+
+  @media (max-width: 700px) {
+    .site-footer {
+      margin-top: 56px;
+    }
+
+    .site-footer-inner {
+      width: calc(100% - 40px);
+      padding: 40px 0 26px;
+    }
+
+    .site-footer-main {
+      min-height: auto;
+      gap: 30px;
     }
   }
 </style>
