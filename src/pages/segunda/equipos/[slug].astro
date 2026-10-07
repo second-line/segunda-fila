@@ -1,6 +1,13 @@
 ---
 import data from "../../../data/segunda.json";
 
+const newsModules = import.meta.glob(
+  "../../../content/noticias/*.md",
+  {
+    eager: true
+  }
+);
+
 export function getStaticPaths() {
   return data.teams.map((team) => ({
     params: {
@@ -13,6 +20,40 @@ export function getStaticPaths() {
 }
 
 const { team } = Astro.props;
+
+const relatedNews = Object.entries(newsModules)
+  .map(([path, module]) => {
+    const slug = path
+      .split("/")
+      .pop()
+      ?.replace(".md", "");
+
+    return {
+      slug,
+      ...(module.frontmatter ?? {})
+    };
+  })
+  .filter(
+    (article) =>
+      article.teamSlug === team.slug
+  )
+  .sort(
+    (a, b) =>
+      new Date(b.date).getTime() -
+      new Date(a.date).getTime()
+  )
+  .slice(0, 3);
+
+function formatNewsDate(date) {
+  return new Intl.DateTimeFormat(
+    "es-ES",
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    }
+  ).format(new Date(date));
+}
 
 const statsEntry = Object.values(data.teamStats).find(
   (item) => item.slug === team.slug
@@ -636,6 +677,80 @@ const formLabels = {
           </div>
         </div>
       </section>
+    
+      {
+        relatedNews.length > 0 && (
+          <section class="panel team-news">
+            <div class="panel-header">
+              <div>
+                <h3>Actualidad sobre {team.name}</h3>
+                <span>
+                  Noticias y análisis relacionados
+                </span>
+              </div>
+
+              <a
+                href="/segunda/noticias"
+                class="team-news-all"
+              >
+                Ver actualidad →
+              </a>
+            </div>
+
+            <div class="team-news-list">
+              {relatedNews.map((article) => (
+                <a
+                  href={`/segunda/noticias/${article.slug}`}
+                  class="team-news-item"
+                >
+                  {
+                    article.image && (
+                      <div class="team-news-image">
+                        <img
+                          src={article.image}
+                          alt={
+                            article.imageAlt ??
+                            article.title
+                          }
+                        />
+                      </div>
+                    )
+                  }
+
+                  <div class="team-news-content">
+                    <div class="team-news-meta">
+                      <span>
+                        {article.category}
+                      </span>
+
+                      <span>
+                        {formatNewsDate(article.date)}
+                      </span>
+                    </div>
+
+                    <strong>
+                      {article.title}
+                    </strong>
+
+                    {
+                      article.description && (
+                        <p>
+                          {article.description}
+                        </p>
+                      )
+                    }
+                  </div>
+
+                  <span class="team-news-arrow">
+                    →
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
     </main>
   
     <footer class="site-footer">
@@ -1498,6 +1613,114 @@ const formLabels = {
 
     .site-footer-tagline {
       text-align: left;
+    }
+  }
+
+
+  .team-news {
+    margin-top: 28px;
+  }
+
+  .team-news-all {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .team-news-all:hover {
+    color: #111827;
+  }
+
+  .team-news-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .team-news-item {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    padding: 18px;
+    border-top: 1px solid #eeeeee;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .team-news-item:first-child {
+    border-top: none;
+  }
+
+  .team-news-item:hover {
+    background: #fafafa;
+  }
+
+  .team-news-image {
+    width: 92px;
+    height: 68px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #f3f4f6;
+  }
+
+  .team-news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .team-news-content {
+    min-width: 0;
+  }
+
+  .team-news-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+    color: #9ca3af;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .team-news-content strong {
+    display: block;
+    color: #111827;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .team-news-content p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .team-news-arrow {
+    color: #9ca3af;
+    font-size: 18px;
+  }
+
+  @media (max-width: 650px) {
+    .team-news-item {
+      grid-template-columns: 74px minmax(0, 1fr);
+      gap: 14px;
+      padding: 16px;
+    }
+
+    .team-news-image {
+      width: 74px;
+      height: 58px;
+    }
+
+    .team-news-arrow {
+      display: none;
+    }
+
+    .team-news-content p {
+      display: none;
     }
   }
 

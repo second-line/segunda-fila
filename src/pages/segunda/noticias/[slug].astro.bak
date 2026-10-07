@@ -1,6 +1,4 @@
 ---
-import data from "../../../data/segunda.json";
-
 export function getStaticPaths() {
   const modules = import.meta.glob(
     "../../../content/noticias/*.md",
@@ -56,23 +54,6 @@ const categoryLabel =
   ] ??
   frontmatter.category;
 
-const validTeamSlugs = new Set(
-  (data.teams ?? []).map((team) => team.slug)
-);
-
-const relatedTeamSlug =
-  frontmatter.teamSlug &&
-  validTeamSlugs.has(frontmatter.teamSlug)
-    ? frontmatter.teamSlug
-    : null;
-
-const relatedTeam =
-  relatedTeamSlug
-    ? (data.teams ?? []).find(
-        (team) => team.slug === relatedTeamSlug
-      )
-    : null;
-
 function formatDate(date) {
   return new Intl.DateTimeFormat(
     "es-ES",
@@ -85,44 +66,6 @@ function formatDate(date) {
     new Date(date)
   );
 }
-
-const SITE_URL = "https://segunda-fila.pages.dev";
-
-const canonicalUrl =
-  `${SITE_URL}/segunda/noticias/${article.slug}`;
-
-const articleImage = frontmatter.image
-  ? `${SITE_URL}${frontmatter.image}`
-  : null;
-
-const author =
-  frontmatter.author ?? "Segunda Fila";
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "NewsArticle",
-  headline: frontmatter.title,
-  description: frontmatter.description,
-  datePublished: frontmatter.date,
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": canonicalUrl
-  },
-  author: {
-    "@type": "Organization",
-    name: author
-  },
-  publisher: {
-    "@type": "Organization",
-    name: "Segunda Fila",
-    url: SITE_URL
-  },
-  ...(articleImage
-    ? {
-        image: [articleImage]
-      }
-    : {})
-};
 ---
 
 <html lang="es">
@@ -142,99 +85,10 @@ const jsonLd = {
       name="description"
       content={frontmatter.description}
     />
-
-    <meta
-      name="robots"
-      content="index, follow"
-    />
-
-    <link
-      rel="canonical"
-      href={canonicalUrl}
-    />
-
-    <link
+      <link
       rel="icon"
       type="image/svg+xml"
       href="/favicon.svg"
-    />
-
-    <meta
-      property="og:type"
-      content="article"
-    />
-
-    <meta
-      property="og:site_name"
-      content="Segunda Fila"
-    />
-
-    <meta
-      property="og:locale"
-      content="es_ES"
-    />
-
-    <meta
-      property="og:title"
-      content={frontmatter.title}
-    />
-
-    <meta
-      property="og:description"
-      content={frontmatter.description}
-    />
-
-    <meta
-      property="og:url"
-      content={canonicalUrl}
-    />
-
-    {
-      articleImage && (
-        <meta
-          property="og:image"
-          content={articleImage}
-        />
-      )
-    }
-
-    <meta
-      property="article:published_time"
-      content={frontmatter.date}
-    />
-
-    <meta
-      property="article:section"
-      content={categoryLabel}
-    />
-
-    <meta
-      name="twitter:card"
-      content="summary_large_image"
-    />
-
-    <meta
-      name="twitter:title"
-      content={frontmatter.title}
-    />
-
-    <meta
-      name="twitter:description"
-      content={frontmatter.description}
-    />
-
-    {
-      articleImage && (
-        <meta
-          name="twitter:image"
-          content={articleImage}
-        />
-      )
-    }
-
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(jsonLd)}
     />
   </head>
 
@@ -335,45 +189,6 @@ const jsonLd = {
         <div class="article-body">
           <Content />
         </div>
-
-        <nav
-          class="article-related"
-          aria-label="Contenido relacionado"
-        >
-          <span class="article-related-label">
-            Seguir explorando
-          </span>
-
-          <div class="article-related-links">
-            {
-              relatedTeam && (
-                <a
-                  href={`/segunda/equipos/${relatedTeam.slug}`}
-                  class="article-related-link"
-                >
-                  Ver datos y tendencias de {relatedTeam.name}
-                  <span>→</span>
-                </a>
-              )
-            }
-
-            <a
-              href="/segunda/noticias"
-              class="article-related-link"
-            >
-              Más noticias de Segunda División
-              <span>→</span>
-            </a>
-
-            <a
-              href="/"
-              class="article-related-link"
-            >
-              Ver partidos, clasificación y tendencias
-              <span>→</span>
-            </a>
-          </div>
-        </nav>
 
         {
           frontmatter.tags?.length > 0 && (
@@ -908,89 +723,4 @@ const jsonLd = {
     }
   }
 
-
-  .article-related {
-    margin-top: 42px;
-    padding: 24px;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    background: #f9fafb;
-  }
-
-  .article-related-label {
-    display: block;
-    margin-bottom: 14px;
-    color: #6b7280;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .article-related-links {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .article-related-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 13px 0;
-    border-top: 1px solid #e5e7eb;
-    color: #111827;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 650;
-  }
-
-  .article-related-link:first-child {
-    border-top: none;
-  }
-
-  .article-related-link span {
-    color: #9ca3af;
-    transition: transform 0.15s ease;
-  }
-
-  .article-related-link:hover {
-    color: #000000;
-  }
-
-  .article-related-link:hover span {
-    transform: translateX(3px);
-  }
-
-</style>
-<style>
-  .article-related {
-    padding-left: 34px;
-    padding-right: 34px;
-  }
-
-  @media (max-width: 700px) {
-    .article-related {
-      padding-left: 22px;
-      padding-right: 22px;
-    }
-  }
-</style>
-
-<style>
-  .article-related {
-    width: calc(100% - 56px);
-    margin: 56px auto 44px;
-    padding: 26px 30px;
-    border-radius: 16px;
-  }
-
-  @media (max-width: 700px) {
-    .article-related {
-      width: calc(100% - 24px);
-      margin-top: 42px;
-      margin-bottom: 34px;
-      padding: 22px 20px;
-    }
-  }
 </style>
