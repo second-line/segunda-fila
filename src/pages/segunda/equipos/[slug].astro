@@ -169,6 +169,25 @@ const formLabels = {
   D: "E",
   L: "D"
 };
+
+const SITE_URL = "https://segunda-fila.pages.dev";
+
+const canonicalUrl =
+  `${SITE_URL}/segunda/equipos/${team.slug}`;
+
+const seoTitle =
+  `${team.name}: estadísticas, rachas y resultados | Segunda Fila`;
+
+const seoDescription =
+  `Estadísticas, forma reciente, rachas, resultados y tendencias de ${team.name} en Segunda División.`;
+
+const teamJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  name: team.name,
+  sport: "Football",
+  url: canonicalUrl
+};
 ---
 
 <html lang="es">
@@ -180,16 +199,28 @@ const formLabels = {
       content="width=device-width, initial-scale=1.0"
     />
 
+    <title>{seoTitle}</title>
+
     <meta
       name="description"
-      content={`Rachas, forma y estadísticas recientes de ${team.name} en Segunda División.`}
+      content={seoDescription}
     />
 
-    <title>{team.name} | Segunda Fila</title>
-      <link
-      rel="icon"
-      type="image/svg+xml"
-      href="/favicon.svg"
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Segunda Fila" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(teamJsonLd)}
     />
   </head>
 
