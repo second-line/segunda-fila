@@ -266,6 +266,12 @@ function formatNewsDate(date) {
             ))}
 
           </section>
+
+          <nav
+            class="news-pagination"
+            data-pagination
+            aria-label="Paginación de noticias"
+          ></nav>
         ) : (
           <div class="empty">
             Todavía no hay noticias publicadas.
@@ -276,38 +282,197 @@ function formatNewsDate(date) {
     </main>
   
 <script>
-  const chips = document.querySelectorAll(
-    ".category-chip"
+  const PAGE_SIZE = 6;
+
+  const chips = Array.from(
+    document.querySelectorAll(".category-chip")
   );
 
-  const cards = document.querySelectorAll(
-    "[data-category]"
+  const cards = Array.from(
+    document.querySelectorAll(".article-card[data-category]")
   );
+
+  const pagination =
+    document.querySelector("[data-pagination]");
+
+  let activeFilter = "";
+  let currentPage = 1;
+
+  function getFilteredCards() {
+    return cards.filter((card) => {
+      const category =
+        card.dataset.category ?? "";
+
+      return (
+        !activeFilter ||
+        category === activeFilter
+      );
+    });
+  }
+
+  function renderPagination(totalPages) {
+    if (!pagination) {
+      return;
+    }
+
+    pagination.innerHTML = "";
+
+    if (totalPages <= 1) {
+      pagination.hidden = true;
+      return;
+    }
+
+    pagination.hidden = false;
+
+    const createButton = (
+      label,
+      page,
+      {
+        active = false,
+        disabled = false,
+        ariaLabel = ""
+      } = {}
+    ) => {
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+      button.className = "pagination-button";
+
+      if (active) {
+        button.classList.add("active");
+        button.setAttribute(
+          "aria-current",
+          "page"
+        );
+      }
+
+      button.disabled = disabled;
+      button.textContent = label;
+
+      if (ariaLabel) {
+        button.setAttribute(
+          "aria-label",
+          ariaLabel
+        );
+      }
+
+      button.addEventListener(
+        "click",
+        () => {
+          currentPage = page;
+          renderArticles();
+        }
+      );
+
+      return button;
+    };
+
+    pagination.appendChild(
+      createButton(
+        "←",
+        currentPage - 1,
+        {
+          disabled: currentPage === 1,
+          ariaLabel: "Página anterior"
+        }
+      )
+    );
+
+    for (
+      let page = 1;
+      page <= totalPages;
+      page++
+    ) {
+      pagination.appendChild(
+        createButton(
+          String(page),
+          page,
+          {
+            active:
+              page === currentPage,
+            ariaLabel:
+              `Ir a la página ${page}`
+          }
+        )
+      );
+    }
+
+    pagination.appendChild(
+      createButton(
+        "→",
+        currentPage + 1,
+        {
+          disabled:
+            currentPage === totalPages,
+          ariaLabel: "Página siguiente"
+        }
+      )
+    );
+  }
+
+  function renderArticles() {
+    const filteredCards =
+      getFilteredCards();
+
+    const totalPages =
+      Math.max(
+        1,
+        Math.ceil(
+          filteredCards.length /
+          PAGE_SIZE
+        )
+      );
+
+    if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    cards.forEach((card) => {
+      card.style.display = "none";
+    });
+
+    const start =
+      (currentPage - 1) *
+      PAGE_SIZE;
+
+    const end =
+      start + PAGE_SIZE;
+
+    filteredCards
+      .slice(start, end)
+      .forEach((card) => {
+        card.style.display = "";
+      });
+
+    renderPagination(totalPages);
+  }
 
   chips.forEach((chip) => {
-    chip.addEventListener("click", (event) => {
-      event.preventDefault();
+    chip.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
 
-      const filter =
-        chip.dataset.filter ?? "";
+        activeFilter =
+          chip.dataset.filter ?? "";
 
-      chips.forEach((item) => {
-        item.classList.remove("active");
-      });
+        currentPage = 1;
 
-      chip.classList.add("active");
+        chips.forEach((item) => {
+          item.classList.remove(
+            "active"
+          );
+        });
 
-      cards.forEach((card) => {
-        const category =
-          card.dataset.category ?? "";
+        chip.classList.add("active");
 
-        card.style.display =
-          !filter || category === filter
-            ? ""
-            : "none";
-      });
-    });
+        renderArticles();
+      }
+    );
   });
+
+  renderArticles();
 </script>
 
 
@@ -740,4 +905,290 @@ function formatNewsDate(date) {
     }
   }
 
+
+  .news-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 38px;
+  }
+
+  .news-pagination[hidden] {
+    display: none;
+  }
+
+  .pagination-button {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 11px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #4b5563;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      border-color 0.15s ease,
+      background 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    border-color: #111827;
+    color: #111827;
+  }
+
+  .pagination-button.active {
+    border-color: #111827;
+    background: #111827;
+    color: #ffffff;
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  @media (max-width: 650px) {
+    .news-pagination {
+      margin-top: 28px;
+      gap: 6px;
+    }
+
+    .pagination-button {
+      min-width: 36px;
+      height: 36px;
+      padding: 0 9px;
+    }
+  }
+
+</style>
+<style>
+  .news-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 42px;
+  }
+
+  .pagination-button {
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #374151;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow:
+      0 1px 2px rgba(17, 24, 39, 0.04),
+      0 3px 10px rgba(17, 24, 39, 0.035);
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: #d1d5db;
+    background: #f9fafb;
+    color: #111827;
+    box-shadow:
+      0 2px 4px rgba(17, 24, 39, 0.05),
+      0 6px 14px rgba(17, 24, 39, 0.06);
+  }
+
+  .pagination-button.active {
+    border-color: #111827;
+    background: #111827;
+    color: #ffffff;
+    box-shadow:
+      0 4px 12px rgba(17, 24, 39, 0.16);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.28;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  @media (max-width: 650px) {
+    .news-pagination {
+      gap: 8px;
+      margin-top: 34px;
+    }
+
+    .pagination-button {
+      min-width: 38px;
+      height: 38px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<style>
+  .news-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 42px;
+  }
+
+  .pagination-button {
+    min-width: 42px;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #374151;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow:
+      0 1px 2px rgba(17, 24, 39, 0.04),
+      0 3px 10px rgba(17, 24, 39, 0.035);
+    transition:
+      transform 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .pagination-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: #d1d5db;
+    background: #f9fafb;
+    color: #111827;
+    box-shadow:
+      0 2px 4px rgba(17, 24, 39, 0.05),
+      0 6px 14px rgba(17, 24, 39, 0.06);
+  }
+
+  .pagination-button.active {
+    border-color: #111827;
+    background: #111827;
+    color: #ffffff;
+    box-shadow:
+      0 4px 12px rgba(17, 24, 39, 0.16);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.28;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  @media (max-width: 650px) {
+    .news-pagination {
+      gap: 8px;
+      margin-top: 34px;
+    }
+
+    .pagination-button {
+      min-width: 38px;
+      height: 38px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+<style is:global>
+  .news-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-top: 42px;
+  }
+
+  .news-pagination[hidden] {
+    display: none;
+  }
+
+  .pagination-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 40px;
+    height: 40px;
+    padding: 0 13px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #6b7280;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+      0 1px 2px rgba(17, 24, 39, 0.04),
+      0 3px 10px rgba(17, 24, 39, 0.05);
+
+    transition: all 0.18s ease;
+  }
+
+  .pagination-button:hover:not(:disabled):not(.active) {
+    color: #111827;
+    border-color: #d1d5db;
+    background: #f9fafb;
+    transform: translateY(-1px);
+  }
+
+  .pagination-button.active {
+    min-width: 44px;
+    height: 44px;
+
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+
+    box-shadow:
+      0 5px 14px rgba(17, 24, 39, 0.18);
+  }
+
+  .pagination-button:disabled {
+    opacity: 0.25;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  @media (max-width: 650px) {
+    .news-pagination {
+      margin-top: 32px;
+      gap: 7px;
+    }
+
+    .pagination-button {
+      min-width: 37px;
+      height: 37px;
+      padding: 0 11px;
+    }
+
+    .pagination-button.active {
+      min-width: 41px;
+      height: 41px;
+    }
+  }
 </style>
