@@ -118,14 +118,14 @@
       "dateLabel": "Sábado 10/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-10T14:15:00+00:00",
-      "status": "HT",
+      "status": "2H",
       "home": "Ceuta",
       "away": "Sabadell",
       "homeSlug": "ceuta",
       "awaySlug": "sabadell",
       "matchSlug": "ceuta-vs-sabadell-2026-10-10",
       "homeScore": 1,
-      "awayScore": 1,
+      "awayScore": 2,
       "headToHead": {
         "meetings": []
       }
