@@ -118,14 +118,14 @@
       "dateLabel": "Sábado 10/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-10T14:15:00+00:00",
-      "status": "NS",
+      "status": "HT",
       "home": "Ceuta",
       "away": "Sabadell",
       "homeSlug": "ceuta",
       "awaySlug": "sabadell",
       "matchSlug": "ceuta-vs-sabadell-2026-10-10",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 1,
       "headToHead": {
         "meetings": []
       }
@@ -1006,8 +1006,8 @@
       ]
     }
   ],
-  "classificationMatchday": 8,
-  "standingsProvisional": false,
+  "classificationMatchday": 9,
+  "standingsProvisional": true,
   "standingsBaseUpdatedThrough": "2026-10-05",
   "teamStats": {
     "team_eibar_es": {
