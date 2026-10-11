@@ -182,14 +182,14 @@
       "dateLabel": "Domingo 11/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-11T16:30:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Mallorca",
       "away": "Las Palmas",
       "homeSlug": "mallorca",
       "awaySlug": "las-palmas",
       "matchSlug": "mallorca-vs-las-palmas-2026-10-11",
-      "homeScore": 2,
-      "awayScore": 0,
+      "homeScore": 3,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {
