@@ -310,13 +310,13 @@
       "dateLabel": "Lunes 12/10",
       "time": "21:00",
       "kickoffUtc": "2026-10-12T19:00:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Tenerife",
       "away": "Girona",
       "homeSlug": "tenerife",
       "awaySlug": "girona",
       "matchSlug": "tenerife-vs-girona-2026-10-12",
-      "homeScore": 0,
+      "homeScore": 1,
       "awayScore": 1,
       "headToHead": {
         "meetings": [
