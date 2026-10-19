@@ -1,0 +1,135 @@
+---
+const SITE_URL = "https://segunda-fila.pages.dev";
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <title>Página no encontrada | Segunda Fila</title>
+
+    <meta
+      name="description"
+      content="La página que buscas no existe en Segunda Fila."
+    />
+  </head>
+
+  <body>
+    <main class="error-page">
+      <a href="/" class="brand">
+        <span class="logo">SF</span>
+        <span>Segunda Fila</span>
+      </a>
+
+      <div class="error-content">
+        <span class="error-code">404</span>
+
+        <h1>Fuera de juego</h1>
+
+        <p>
+          La página que buscas no existe o ha cambiado de dirección.
+        </p>
+
+        <a href="/" class="home-link">
+          ← Volver a Segunda Fila
+        </a>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    background: #f7f7f8;
+    color: #111827;
+  }
+
+  .error-page {
+    width: min(920px, calc(100% - 40px));
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 36px 0;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #111827;
+    text-decoration: none;
+    font-weight: 800;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 14px;
+  }
+
+  .error-content {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 600px;
+  }
+
+  .error-code {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #9ca3af;
+  }
+
+  h1 {
+    margin: 10px 0 12px;
+    font-size: clamp(42px, 8vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  p {
+    margin: 0 0 28px;
+    max-width: 480px;
+    color: #6b7280;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .home-link {
+    display: inline-flex;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: #111827;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+  }
+</style>
