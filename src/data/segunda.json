@@ -118,14 +118,14 @@
       "dateLabel": "Lunes 19/10",
       "time": "20:30",
       "kickoffUtc": "2026-10-19T18:30:00+00:00",
-      "status": "NS",
+      "status": "HT",
       "home": "Celta B",
       "away": "Tenerife",
       "homeSlug": "celta-b",
       "awaySlug": "tenerife",
       "matchSlug": "celta-b-vs-tenerife-2026-10-19",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
