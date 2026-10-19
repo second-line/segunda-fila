@@ -4,6 +4,7 @@ import re
 import unicodedata
 
 import requests
+import time
 import truststore
 
 from datetime import datetime, timedelta, timezone
@@ -83,6 +84,9 @@ TEAM_NAMES = {
 
     "Real Valladolid": "Valladolid",
     "Valladolid": "Valladolid",
+
+    "FC Andorra": "Andorra",
+    "Andorra": "Andorra",
 }
 
 
@@ -1120,6 +1124,143 @@ def enrich_match_with_h2h(
 # --------------------------------------------------
 
 sportsdb_day_cache = {}
+sportsdb_next_events_cache = None
+sportsdb_past_events_cache = None
+
+
+def sportsdb_get(
+    endpoint,
+    params,
+    label,
+    retries=2
+):
+
+    for attempt in range(
+        retries + 1
+    ):
+
+        try:
+
+            response = requests.get(
+                (
+                    f"{SPORTSDB_BASE_URL}"
+                    f"/{endpoint}"
+                ),
+                params=params,
+                timeout=30
+            )
+
+            if response.status_code == 429:
+
+                if attempt < retries:
+
+                    wait_seconds = (
+                        5 * (attempt + 1)
+                    )
+
+                    print(
+                        f"Aviso: TheSportsDB 429 en {label}. "
+                        f"Reintentando en {wait_seconds}s..."
+                    )
+
+                    time.sleep(
+                        wait_seconds
+                    )
+
+                    continue
+
+                print(
+                    f"Aviso: TheSportsDB sigue devolviendo "
+                    f"429 en {label}. Se continua sin esos datos."
+                )
+
+                return {
+                    "events": []
+                }
+
+            response.raise_for_status()
+
+            return response.json()
+
+        except requests.RequestException as exc:
+
+            if attempt < retries:
+
+                wait_seconds = (
+                    3 * (attempt + 1)
+                )
+
+                print(
+                    f"Aviso: error consultando {label}: "
+                    f"{exc}. Reintentando en {wait_seconds}s..."
+                )
+
+                time.sleep(
+                    wait_seconds
+                )
+
+                continue
+
+            print(
+                f"Aviso: no se pudo consultar {label}: "
+                f"{exc}. Se continua sin esos datos."
+            )
+
+            return {
+                "events": []
+            }
+
+
+def get_sportsdb_next_events():
+
+    global sportsdb_next_events_cache
+
+    if (
+        sportsdb_next_events_cache
+        is None
+    ):
+
+        payload = sportsdb_get(
+            "eventsnextleague.php",
+            {
+                "id":
+                    SPORTSDB_LEAGUE_ID
+            },
+            "proximos partidos"
+        )
+
+        sportsdb_next_events_cache = (
+            payload.get("events")
+            or []
+        )
+
+    return sportsdb_next_events_cache
+
+
+def get_sportsdb_past_events():
+
+    global sportsdb_past_events_cache
+
+    if (
+        sportsdb_past_events_cache
+        is None
+    ):
+
+        payload = sportsdb_get(
+            "eventspastleague.php",
+            {
+                "id":
+                    SPORTSDB_LEAGUE_ID
+            },
+            "ultimos partidos"
+        )
+
+        sportsdb_past_events_cache = (
+            payload.get("events")
+            or []
+        )
+
+    return sportsdb_past_events_cache
 
 
 def get_events_for_date(day):
@@ -1135,24 +1276,20 @@ def get_events_for_date(day):
 
     # 1. Endpoint principal por fecha
 
-    response = requests.get(
-        (
-            f"{SPORTSDB_BASE_URL}"
-            "/eventsday.php"
-        ),
-        params={
+    payload = sportsdb_get(
+        "eventsday.php",
+        {
             "d":
                 day.isoformat(),
 
             "l":
                 SPORTSDB_LEAGUE_ID
         },
-        timeout=30
+        (
+            "partidos del "
+            f"{day.isoformat()}"
+        )
     )
-
-    response.raise_for_status()
-
-    payload = response.json()
 
     for event in (
         payload.get("events")
@@ -1183,25 +1320,8 @@ def get_events_for_date(day):
 
     try:
 
-        response = requests.get(
-            (
-                f"{SPORTSDB_BASE_URL}"
-                "/eventsnextleague.php"
-            ),
-            params={
-                "id":
-                    SPORTSDB_LEAGUE_ID
-            },
-            timeout=30
-        )
-
-        response.raise_for_status()
-
-        payload = response.json()
-
         for event in (
-            payload.get("events")
-            or []
+            get_sportsdb_next_events()
         ):
 
             if (
@@ -1243,25 +1363,8 @@ def get_events_for_date(day):
 
     try:
 
-        response = requests.get(
-            (
-                f"{SPORTSDB_BASE_URL}"
-                "/eventspastleague.php"
-            ),
-            params={
-                "id":
-                    SPORTSDB_LEAGUE_ID
-            },
-            timeout=30
-        )
-
-        response.raise_for_status()
-
-        payload = response.json()
-
         for event in (
-            payload.get("events")
-            or []
+            get_sportsdb_past_events()
         ):
 
             if (
