@@ -6,6 +6,9 @@ category: "en-el-foco"
 image: "/images/noticias/filiales-segunda.jpg"
 imageAlt: "Partido de un equipo filial en una categoría profesional del fútbol español"
 author: "Segunda Fila"
+teamSlugs:
+  - "celta-b"
+  - "real-sociedad-b"
 tags:
   - Celta Fortuna
   - Real Sociedad B

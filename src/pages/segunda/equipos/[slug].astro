@@ -33,10 +33,16 @@ const relatedNews = Object.entries(newsModules)
       ...(module.frontmatter ?? {})
     };
   })
-  .filter(
-    (article) =>
-      article.teamSlug === team.slug
-  )
+  .filter((article) => {
+    const teamSlugs = Array.isArray(article.teamSlugs)
+      ? article.teamSlugs
+      : [];
+
+    return (
+      article.teamSlug === team.slug ||
+      teamSlugs.includes(team.slug)
+    );
+  })
   .sort(
     (a, b) =>
       new Date(b.date).getTime() -
