@@ -118,14 +118,14 @@
       "dateLabel": "Viernes 23/10",
       "time": "20:30",
       "kickoffUtc": "2026-10-23T18:30:00+00:00",
-      "status": "HT",
+      "status": "2H",
       "home": "Granada",
       "away": "Valladolid",
       "homeSlug": "granada",
       "awaySlug": "valladolid",
       "matchSlug": "granada-vs-valladolid-2026-10-23",
-      "homeScore": 1,
-      "awayScore": 0,
+      "homeScore": 2,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {
