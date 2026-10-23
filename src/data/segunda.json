@@ -113,72 +113,6 @@
   ],
   "todayMatches": [
     {
-      "id": "2505821",
-      "date": "2026-10-23",
-      "dateLabel": "Viernes 23/10",
-      "time": "20:30",
-      "kickoffUtc": "2026-10-23T18:30:00+00:00",
-      "status": "FT",
-      "home": "Granada",
-      "away": "Valladolid",
-      "homeSlug": "granada",
-      "awaySlug": "valladolid",
-      "matchSlug": "granada-vs-valladolid-2026-10-23",
-      "homeScore": 2,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-02-14",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 5,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-11-03",
-            "home": "Valladolid",
-            "away": "Granada",
-            "homeSlug": "valladolid",
-            "awaySlug": "granada",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2021-04-11",
-            "home": "Valladolid",
-            "away": "Granada",
-            "homeSlug": "valladolid",
-            "awaySlug": "granada",
-            "homeScore": 1,
-            "awayScore": 2
-          },
-          {
-            "date": "2020-11-22",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 1,
-            "awayScore": 3
-          },
-          {
-            "date": "2020-08-28",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 0,
-            "awayScore": 3
-          }
-        ]
-      }
-    }
-  ],
-  "journeyMatches": [
-    {
       "id": "2505820",
       "date": "2026-10-24",
       "dateLabel": "Sábado 24/10",
@@ -421,6 +355,72 @@
             "awaySlug": "celta-vigo",
             "homeScore": 1,
             "awayScore": 0
+          }
+        ]
+      }
+    }
+  ],
+  "journeyMatches": [
+    {
+      "id": "2505821",
+      "date": "2026-10-23",
+      "dateLabel": "Viernes 23/10",
+      "time": "20:30",
+      "kickoffUtc": "2026-10-23T18:30:00+00:00",
+      "status": "FT",
+      "home": "Granada",
+      "away": "Valladolid",
+      "homeSlug": "granada",
+      "awaySlug": "valladolid",
+      "matchSlug": "granada-vs-valladolid-2026-10-23",
+      "homeScore": 2,
+      "awayScore": 1,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-02-14",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 5,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-11-03",
+            "home": "Valladolid",
+            "away": "Granada",
+            "homeSlug": "valladolid",
+            "awaySlug": "granada",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2021-04-11",
+            "home": "Valladolid",
+            "away": "Granada",
+            "homeSlug": "valladolid",
+            "awaySlug": "granada",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2020-11-22",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 1,
+            "awayScore": 3
+          },
+          {
+            "date": "2020-08-28",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 0,
+            "awayScore": 3
           }
         ]
       }
