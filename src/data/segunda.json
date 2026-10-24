@@ -365,13 +365,13 @@
       "dateLabel": "Sábado 24/10",
       "time": "21:00",
       "kickoffUtc": "2026-10-24T19:00:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Almería",
       "away": "Oviedo",
       "homeSlug": "almeria",
       "awaySlug": "oviedo",
       "matchSlug": "almeria-vs-oviedo-2026-10-24",
-      "homeScore": 1,
+      "homeScore": 2,
       "awayScore": 0,
       "headToHead": {
         "meetings": [
