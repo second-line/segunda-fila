@@ -118,13 +118,13 @@
       "dateLabel": "Sábado 24/10",
       "time": "14:00",
       "kickoffUtc": "2026-10-24T12:00:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Córdoba",
       "away": "Eibar",
       "homeSlug": "cordoba",
       "awaySlug": "eibar",
       "matchSlug": "cordoba-vs-eibar-2026-10-24",
-      "homeScore": 0,
+      "homeScore": 2,
       "awayScore": 0,
       "headToHead": {
         "meetings": [
