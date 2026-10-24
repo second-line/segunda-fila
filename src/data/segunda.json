@@ -246,14 +246,14 @@
       "dateLabel": "Sábado 24/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-24T16:30:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Las Palmas",
       "away": "Real Sociedad B",
       "homeSlug": "las-palmas",
       "awaySlug": "real-sociedad-b",
       "matchSlug": "las-palmas-vs-real-sociedad-b-2026-10-24",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
@@ -301,14 +301,14 @@
       "dateLabel": "Sábado 24/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-24T16:30:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Girona",
       "away": "Celta B",
       "homeSlug": "girona",
       "awaySlug": "celta-b",
       "matchSlug": "girona-vs-celta-b-2026-10-24",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 4,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
@@ -354,6 +354,70 @@
             "homeSlug": "girona",
             "awaySlug": "celta-vigo",
             "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505823",
+      "date": "2026-10-24",
+      "dateLabel": "Sábado 24/10",
+      "time": "21:00",
+      "kickoffUtc": "2026-10-24T19:00:00+00:00",
+      "status": "NS",
+      "home": "Almería",
+      "away": "Oviedo",
+      "homeSlug": "almeria",
+      "awaySlug": "oviedo",
+      "matchSlug": "almeria-vs-oviedo-2026-10-24",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-06-11",
+            "home": "Oviedo",
+            "away": "Almería",
+            "homeSlug": "oviedo",
+            "awaySlug": "almeria",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-06-07",
+            "home": "Almería",
+            "away": "Oviedo",
+            "homeSlug": "almeria",
+            "awaySlug": "oviedo",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2025-02-01",
+            "home": "Almería",
+            "away": "Oviedo",
+            "homeSlug": "almeria",
+            "awaySlug": "oviedo",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-10-13",
+            "home": "Oviedo",
+            "away": "Almería",
+            "homeSlug": "oviedo",
+            "awaySlug": "almeria",
+            "homeScore": 3,
+            "awayScore": 2
+          },
+          {
+            "date": "2022-01-29",
+            "home": "Oviedo",
+            "away": "Almería",
+            "homeSlug": "oviedo",
+            "awaySlug": "almeria",
+            "homeScore": 2,
             "awayScore": 0
           }
         ]
