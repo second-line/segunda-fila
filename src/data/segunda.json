@@ -246,7 +246,7 @@
       "dateLabel": "Sábado 24/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-24T16:30:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Las Palmas",
       "away": "Real Sociedad B",
       "homeSlug": "las-palmas",
@@ -301,14 +301,14 @@
       "dateLabel": "Sábado 24/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-24T16:30:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Girona",
       "away": "Celta B",
       "homeSlug": "girona",
       "awaySlug": "celta-b",
       "matchSlug": "girona-vs-celta-b-2026-10-24",
-      "homeScore": 4,
-      "awayScore": 0,
+      "homeScore": 5,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {
