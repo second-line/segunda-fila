@@ -182,14 +182,14 @@
       "dateLabel": "Sábado 24/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-24T14:15:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Leganés",
       "away": "Mallorca",
       "homeSlug": "leganes",
       "awaySlug": "mallorca",
       "matchSlug": "leganes-vs-mallorca-2026-10-24",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
