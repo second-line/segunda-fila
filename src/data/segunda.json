@@ -113,6 +113,246 @@
   ],
   "todayMatches": [
     {
+      "id": "2505827",
+      "date": "2026-10-25",
+      "dateLabel": "Domingo 25/10",
+      "time": "14:00",
+      "kickoffUtc": "2026-10-25T13:00:00+00:00",
+      "status": "NS",
+      "home": "Sabadell",
+      "away": "Tenerife",
+      "homeSlug": "sabadell",
+      "awaySlug": "tenerife",
+      "matchSlug": "sabadell-vs-tenerife-2026-10-25",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2021-05-16",
+            "home": "Sabadell",
+            "away": "Tenerife",
+            "homeSlug": "sabadell",
+            "awaySlug": "tenerife",
+            "homeScore": 0,
+            "awayScore": 2
+          },
+          {
+            "date": "2020-12-03",
+            "home": "Tenerife",
+            "away": "Sabadell",
+            "homeSlug": "tenerife",
+            "awaySlug": "sabadell",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2015-05-20",
+            "home": "Sabadell",
+            "away": "Tenerife",
+            "homeSlug": "sabadell",
+            "awaySlug": "tenerife",
+            "homeScore": 1,
+            "awayScore": 3
+          },
+          {
+            "date": "2014-12-20",
+            "home": "Tenerife",
+            "away": "Sabadell",
+            "homeSlug": "tenerife",
+            "awaySlug": "sabadell",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2014-05-25",
+            "home": "Sabadell",
+            "away": "Tenerife",
+            "homeSlug": "sabadell",
+            "awaySlug": "tenerife",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505822",
+      "date": "2026-10-25",
+      "dateLabel": "Domingo 25/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-25T15:15:00+00:00",
+      "status": "NS",
+      "home": "Albacete",
+      "away": "Eldense",
+      "homeSlug": "albacete",
+      "awaySlug": "eldense",
+      "matchSlug": "albacete-vs-eldense-2026-10-25",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-02-23",
+            "home": "Albacete",
+            "away": "Eldense",
+            "homeSlug": "albacete",
+            "awaySlug": "eldense",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-11-16",
+            "home": "Eldense",
+            "away": "Albacete",
+            "homeSlug": "eldense",
+            "awaySlug": "albacete",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-04-21",
+            "home": "Eldense",
+            "away": "Albacete",
+            "homeSlug": "eldense",
+            "awaySlug": "albacete",
+            "homeScore": 0,
+            "awayScore": 1
+          },
+          {
+            "date": "2023-12-19",
+            "home": "Albacete",
+            "away": "Eldense",
+            "homeSlug": "albacete",
+            "awaySlug": "eldense",
+            "homeScore": 1,
+            "awayScore": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505824",
+      "date": "2026-10-25",
+      "dateLabel": "Domingo 25/10",
+      "time": "16:15",
+      "kickoffUtc": "2026-10-25T15:15:00+00:00",
+      "status": "NS",
+      "home": "Cádiz",
+      "away": "Ceuta",
+      "homeSlug": "cadiz",
+      "awaySlug": "ceuta",
+      "matchSlug": "cadiz-vs-ceuta-2026-10-25",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-03-28",
+            "home": "AD Ceuta FC",
+            "away": "Cádiz",
+            "homeSlug": "ad-ceuta-fc",
+            "awaySlug": "cadiz",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-09-28",
+            "home": "Cádiz",
+            "away": "AD Ceuta FC",
+            "homeSlug": "cadiz",
+            "awaySlug": "ad-ceuta-fc",
+            "homeScore": 0,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505825",
+      "date": "2026-10-25",
+      "dateLabel": "Domingo 25/10",
+      "time": "18:30",
+      "kickoffUtc": "2026-10-25T17:30:00+00:00",
+      "status": "NS",
+      "home": "Castellón",
+      "away": "Real Sporting",
+      "homeSlug": "castellon",
+      "awaySlug": "real-sporting",
+      "matchSlug": "castellon-vs-real-sporting-2026-10-25",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    }
+  ],
+  "journeyMatches": [
+    {
+      "id": "2505821",
+      "date": "2026-10-23",
+      "dateLabel": "Viernes 23/10",
+      "time": "20:30",
+      "kickoffUtc": "2026-10-23T18:30:00+00:00",
+      "status": "FT",
+      "home": "Granada",
+      "away": "Valladolid",
+      "homeSlug": "granada",
+      "awaySlug": "valladolid",
+      "matchSlug": "granada-vs-valladolid-2026-10-23",
+      "homeScore": 2,
+      "awayScore": 1,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-02-14",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 5,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-11-03",
+            "home": "Valladolid",
+            "away": "Granada",
+            "homeSlug": "valladolid",
+            "awaySlug": "granada",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2021-04-11",
+            "home": "Valladolid",
+            "away": "Granada",
+            "homeSlug": "valladolid",
+            "awaySlug": "granada",
+            "homeScore": 1,
+            "awayScore": 2
+          },
+          {
+            "date": "2020-11-22",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 1,
+            "awayScore": 3
+          },
+          {
+            "date": "2020-08-28",
+            "home": "Granada",
+            "away": "Valladolid",
+            "homeSlug": "granada",
+            "awaySlug": "valladolid",
+            "homeScore": 0,
+            "awayScore": 3
+          }
+        ]
+      }
+    },
+    {
       "id": "2505820",
       "date": "2026-10-24",
       "dateLabel": "Sábado 24/10",
@@ -421,246 +661,6 @@
             "awayScore": 0
           }
         ]
-      }
-    }
-  ],
-  "journeyMatches": [
-    {
-      "id": "2505821",
-      "date": "2026-10-23",
-      "dateLabel": "Viernes 23/10",
-      "time": "20:30",
-      "kickoffUtc": "2026-10-23T18:30:00+00:00",
-      "status": "FT",
-      "home": "Granada",
-      "away": "Valladolid",
-      "homeSlug": "granada",
-      "awaySlug": "valladolid",
-      "matchSlug": "granada-vs-valladolid-2026-10-23",
-      "homeScore": 2,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-02-14",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 5,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-11-03",
-            "home": "Valladolid",
-            "away": "Granada",
-            "homeSlug": "valladolid",
-            "awaySlug": "granada",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2021-04-11",
-            "home": "Valladolid",
-            "away": "Granada",
-            "homeSlug": "valladolid",
-            "awaySlug": "granada",
-            "homeScore": 1,
-            "awayScore": 2
-          },
-          {
-            "date": "2020-11-22",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 1,
-            "awayScore": 3
-          },
-          {
-            "date": "2020-08-28",
-            "home": "Granada",
-            "away": "Valladolid",
-            "homeSlug": "granada",
-            "awaySlug": "valladolid",
-            "homeScore": 0,
-            "awayScore": 3
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505827",
-      "date": "2026-10-25",
-      "dateLabel": "Domingo 25/10",
-      "time": "14:00",
-      "kickoffUtc": "2026-10-25T13:00:00+00:00",
-      "status": "NS",
-      "home": "Sabadell",
-      "away": "Tenerife",
-      "homeSlug": "sabadell",
-      "awaySlug": "tenerife",
-      "matchSlug": "sabadell-vs-tenerife-2026-10-25",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2021-05-16",
-            "home": "Sabadell",
-            "away": "Tenerife",
-            "homeSlug": "sabadell",
-            "awaySlug": "tenerife",
-            "homeScore": 0,
-            "awayScore": 2
-          },
-          {
-            "date": "2020-12-03",
-            "home": "Tenerife",
-            "away": "Sabadell",
-            "homeSlug": "tenerife",
-            "awaySlug": "sabadell",
-            "homeScore": 1,
-            "awayScore": 2
-          },
-          {
-            "date": "2015-05-20",
-            "home": "Sabadell",
-            "away": "Tenerife",
-            "homeSlug": "sabadell",
-            "awaySlug": "tenerife",
-            "homeScore": 1,
-            "awayScore": 3
-          },
-          {
-            "date": "2014-12-20",
-            "home": "Tenerife",
-            "away": "Sabadell",
-            "homeSlug": "tenerife",
-            "awaySlug": "sabadell",
-            "homeScore": 1,
-            "awayScore": 0
-          },
-          {
-            "date": "2014-05-25",
-            "home": "Sabadell",
-            "away": "Tenerife",
-            "homeSlug": "sabadell",
-            "awaySlug": "tenerife",
-            "homeScore": 1,
-            "awayScore": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505822",
-      "date": "2026-10-25",
-      "dateLabel": "Domingo 25/10",
-      "time": "16:15",
-      "kickoffUtc": "2026-10-25T15:15:00+00:00",
-      "status": "NS",
-      "home": "Albacete",
-      "away": "Eldense",
-      "homeSlug": "albacete",
-      "awaySlug": "eldense",
-      "matchSlug": "albacete-vs-eldense-2026-10-25",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2025-02-23",
-            "home": "Albacete",
-            "away": "Eldense",
-            "homeSlug": "albacete",
-            "awaySlug": "eldense",
-            "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2024-11-16",
-            "home": "Eldense",
-            "away": "Albacete",
-            "homeSlug": "eldense",
-            "awaySlug": "albacete",
-            "homeScore": 2,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-04-21",
-            "home": "Eldense",
-            "away": "Albacete",
-            "homeSlug": "eldense",
-            "awaySlug": "albacete",
-            "homeScore": 0,
-            "awayScore": 1
-          },
-          {
-            "date": "2023-12-19",
-            "home": "Albacete",
-            "away": "Eldense",
-            "homeSlug": "albacete",
-            "awaySlug": "eldense",
-            "homeScore": 1,
-            "awayScore": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505824",
-      "date": "2026-10-25",
-      "dateLabel": "Domingo 25/10",
-      "time": "16:15",
-      "kickoffUtc": "2026-10-25T15:15:00+00:00",
-      "status": "NS",
-      "home": "Cádiz",
-      "away": "Ceuta",
-      "homeSlug": "cadiz",
-      "awaySlug": "ceuta",
-      "matchSlug": "cadiz-vs-ceuta-2026-10-25",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-03-28",
-            "home": "AD Ceuta FC",
-            "away": "Cádiz",
-            "homeSlug": "ad-ceuta-fc",
-            "awaySlug": "cadiz",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-09-28",
-            "home": "Cádiz",
-            "away": "AD Ceuta FC",
-            "homeSlug": "cadiz",
-            "awaySlug": "ad-ceuta-fc",
-            "homeScore": 0,
-            "awayScore": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505825",
-      "date": "2026-10-25",
-      "dateLabel": "Domingo 25/10",
-      "time": "18:30",
-      "kickoffUtc": "2026-10-25T17:30:00+00:00",
-      "status": "NS",
-      "home": "Castellón",
-      "away": "Real Sporting",
-      "homeSlug": "castellon",
-      "awaySlug": "real-sporting",
-      "matchSlug": "castellon-vs-real-sporting-2026-10-25",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": []
       }
     },
     {
