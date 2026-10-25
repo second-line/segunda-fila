@@ -118,14 +118,14 @@
       "dateLabel": "Domingo 25/10",
       "time": "14:00",
       "kickoffUtc": "2026-10-25T13:00:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Sabadell",
       "away": "Tenerife",
       "homeSlug": "sabadell",
       "awaySlug": "tenerife",
       "matchSlug": "sabadell-vs-tenerife-2026-10-25",
-      "homeScore": 0,
-      "awayScore": 0,
+      "homeScore": 1,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {
