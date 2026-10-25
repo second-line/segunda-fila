@@ -182,14 +182,14 @@
       "dateLabel": "Domingo 25/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-25T15:15:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Albacete",
       "away": "Eldense",
       "homeSlug": "albacete",
       "awaySlug": "eldense",
       "matchSlug": "albacete-vs-eldense-2026-10-25",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 1,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
@@ -237,14 +237,14 @@
       "dateLabel": "Domingo 25/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-25T15:15:00+00:00",
-      "status": "1H",
+      "status": "2H",
       "home": "Cádiz",
       "away": "Ceuta",
       "homeSlug": "cadiz",
       "awaySlug": "ceuta",
       "matchSlug": "cadiz-vs-ceuta-2026-10-25",
       "homeScore": 0,
-      "awayScore": 0,
+      "awayScore": 1,
       "headToHead": {
         "meetings": [
           {
