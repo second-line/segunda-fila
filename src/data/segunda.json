@@ -274,13 +274,13 @@
       "dateLabel": "Domingo 25/10",
       "time": "18:30",
       "kickoffUtc": "2026-10-25T17:30:00+00:00",
-      "status": "HT",
+      "status": "2H",
       "home": "Castellón",
       "away": "Real Sporting",
       "homeSlug": "castellon",
       "awaySlug": "real-sporting",
       "matchSlug": "castellon-vs-real-sporting-2026-10-25",
-      "homeScore": 2,
+      "homeScore": 4,
       "awayScore": 0,
       "headToHead": {
         "meetings": []
