@@ -118,14 +118,14 @@
       "dateLabel": "Lunes 26/10",
       "time": "20:30",
       "kickoffUtc": "2026-10-26T19:30:00+00:00",
-      "status": "1H",
+      "status": "HT",
       "home": "Andorra",
       "away": "Burgos",
       "homeSlug": "andorra",
       "awaySlug": "burgos",
       "matchSlug": "andorra-vs-burgos-2026-10-26",
-      "homeScore": 0,
-      "awayScore": 0,
+      "homeScore": 2,
+      "awayScore": 3,
       "headToHead": {
         "meetings": [
           {
