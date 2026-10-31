@@ -111,8 +111,7 @@
       "slug": "albacete"
     }
   ],
-  "todayMatches": [],
-  "journeyMatches": [
+  "todayMatches": [
     {
       "id": "2505836",
       "date": "2026-10-31",
@@ -341,7 +340,9 @@
           }
         ]
       }
-    },
+    }
+  ],
+  "journeyMatches": [
     {
       "id": "2505837",
       "date": "2026-11-01",
