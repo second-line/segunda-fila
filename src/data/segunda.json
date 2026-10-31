@@ -155,14 +155,14 @@
       "dateLabel": "Sábado 31/10",
       "time": "16:15",
       "kickoffUtc": "2026-10-31T15:15:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Eibar",
       "away": "Almería",
       "homeSlug": "eibar",
       "awaySlug": "almeria",
       "matchSlug": "eibar-vs-almeria-2026-10-31",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
