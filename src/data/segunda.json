@@ -118,14 +118,14 @@
       "dateLabel": "Sábado 31/10",
       "time": "14:00",
       "kickoffUtc": "2026-10-31T13:00:00+00:00",
-      "status": "NS",
+      "status": "1H",
       "home": "Real Sociedad B",
       "away": "Girona",
       "homeSlug": "real-sociedad-b",
       "awaySlug": "girona",
       "matchSlug": "real-sociedad-b-vs-girona-2026-10-31",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
@@ -1163,8 +1163,8 @@
       ]
     }
   ],
-  "classificationMatchday": 11,
-  "standingsProvisional": false,
+  "classificationMatchday": 12,
+  "standingsProvisional": true,
   "standingsBaseUpdatedThrough": "2026-10-26",
   "teamStats": {
     "team_castellon_es": {
