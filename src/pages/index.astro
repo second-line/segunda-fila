@@ -107,7 +107,7 @@ const getMatchUrl = (match) => {
 
     <meta
       name="description"
-      content="Segunda Fila: actualidad, estadísticas, tendencias, resultados y análisis de Segunda División."
+      content="Segunda División 2026/27: clasificación, partidos, resultados, estadísticas, rachas, tendencias y actualidad de todos los equipos."
     />
 
     <link
@@ -115,7 +115,25 @@ const getMatchUrl = (match) => {
   href="https://segunda-fila.pages.dev/"
 />
 
-    <title> Segunda Fila | Segunda División, estadísticas y actualidad </title>
+    <meta name="robots" content="index, follow" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Segunda Fila" />
+    <meta property="og:locale" content="es_ES" />
+    <meta
+      property="og:title"
+      content="Segunda División 2026/27: clasificación, partidos y estadísticas"
+    />
+    <meta
+      property="og:description"
+      content="Clasificación, partidos, resultados, estadísticas, rachas, tendencias y actualidad de Segunda División."
+    />
+    <meta
+      property="og:url"
+      content="https://segunda-fila.pages.dev/"
+    />
+
+    <title>Segunda División 2026/27: clasificación, partidos y estadísticas | Segunda Fila</title>
       <link
       rel="icon"
       type="image/svg+xml"
@@ -130,7 +148,7 @@ const getMatchUrl = (match) => {
           <div class="logo">SF</div>
 
           <div>
-            <h1>Segunda Fila</h1>
+            <p class="brand-name">Segunda Fila</p>
             <p>Fútbol más allá de Primera</p>
           </div>
         </div>
@@ -138,6 +156,14 @@ const getMatchUrl = (match) => {
     </header>
 
     <main class="container page">
+      <section class="home-intro">
+        <h1>Segunda División 2026/27: clasificación, partidos y estadísticas</h1>
+
+        <p>
+          Consulta resultados, próximos partidos, clasificación, rachas,
+          tendencias y estadísticas actualizadas de todos los equipos.
+        </p>
+      </section>
       <nav class="league-tabs">
         <button class="league-tab active">
           Segunda
@@ -540,15 +566,22 @@ const getMatchUrl = (match) => {
           <div class="panel-header">
             <div>
               <h2>
-  Clasificación · J{data.classificationMatchday}
-</h2>
+                Clasificación · J{data.classificationMatchday}
+              </h2>
 
-<span>
-  {data.standingsProvisional
-    ? "Segunda División · jornada en curso"
-    : "Segunda División"}
-</span>
+              <span>
+                {data.standingsProvisional
+                  ? "Segunda División · jornada en curso"
+                  : "Segunda División"}
+              </span>
             </div>
+
+            <a
+              href="/segunda/clasificacion"
+              class="standings-full-link"
+            >
+              Ver completa →
+            </a>
           </div>
 
           <div class="standing-header">
@@ -1872,6 +1905,48 @@ const getMatchUrl = (match) => {
     .site-footer-tagline {
       text-align: left;
     }
+  }
+
+
+  .standings-full-link {
+    flex-shrink: 0;
+    color: #111827;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .standings-full-link:hover {
+    text-decoration: underline;
+  }
+
+
+  .brand-name {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .home-intro {
+    margin: 8px 0 28px;
+  }
+
+  .home-intro h1 {
+    margin: 0 0 10px;
+    max-width: 850px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .home-intro p {
+    margin: 0;
+    max-width: 760px;
+    color: #6b7280;
+    font-size: 15px;
+    line-height: 1.6;
   }
 
 </style>

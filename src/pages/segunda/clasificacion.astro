@@ -1,0 +1,432 @@
+---
+import data from "../../data/segunda.json";
+
+const standings = data.standings ?? [];
+const matchday = data.classificationMatchday ?? null;
+
+const SITE_URL = "https://segunda-fila.pages.dev";
+const canonicalUrl = `${SITE_URL}/segunda/clasificacion`;
+
+const seoTitle =
+  "Clasificación Segunda División 2026/27 | Segunda Fila";
+
+const seoDescription =
+  "Clasificación actualizada de Segunda División 2026/27: puntos, partidos jugados, ascenso directo, playoff y descenso.";
+
+const leader = standings[0] ?? null;
+const directPromotion = standings.slice(0, 2);
+const playoff = standings.slice(2, 6);
+const relegation = standings.slice(-4);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: seoTitle,
+  description: seoDescription,
+  url: canonicalUrl
+};
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>{seoTitle}</title>
+
+    <meta
+      name="description"
+      content={seoDescription}
+    />
+
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Segunda Fila" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="container">
+        <a href="/" class="brand">
+          <div class="logo">SF</div>
+
+          <div>
+            <strong>Segunda Fila</strong>
+            <span>Fútbol más allá de Primera</span>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <main class="container page">
+      <a href="/" class="back-link">
+        ← Volver
+      </a>
+
+      <section class="page-header">
+        <span class="eyebrow">
+          Segunda División
+        </span>
+
+        <h1>
+          Clasificación Segunda División 2026/27
+        </h1>
+
+        <p>
+          Tabla actualizada de Segunda División con puntos,
+          partidos jugados, ascenso directo, playoff y descenso.
+        </p>
+
+        {
+          matchday && (
+            <span class="matchday">
+              Jornada {matchday}
+            </span>
+          )
+        }
+      </section>
+
+      {
+        leader && (
+          <section class="summary">
+            <div class="summary-item">
+              <span class="summary-label">Líder</span>
+              <strong>{leader.team}</strong>
+              <p>{leader.points} puntos</p>
+            </div>
+
+            {
+              directPromotion.length === 2 && (
+                <div class="summary-item">
+                  <span class="summary-label">Ascenso directo</span>
+                  <strong>
+                    {directPromotion[0].team} y {directPromotion[1].team}
+                  </strong>
+                  <p>1.º y 2.º puesto</p>
+                </div>
+              )
+            }
+
+            {
+              playoff.length > 0 && (
+                <div class="summary-item">
+                  <span class="summary-label">Playoff</span>
+                  <strong>
+                    {playoff.map((team) => team.team).join(", ")}
+                  </strong>
+                  <p>Puestos del 3.º al 6.º</p>
+                </div>
+              )
+            }
+          </section>
+        )
+      }
+
+      <section class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Equipo</th>
+                <th>PJ</th>
+                <th>DG</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {standings.map((row) => {
+                const zone =
+                  row.pos <= 2
+                    ? "promotion"
+                    : row.pos <= 6
+                      ? "playoff"
+                      : row.pos >= standings.length - 3
+                        ? "relegation"
+                        : "";
+
+                return (
+                  <tr class={zone}>
+                    <td>{row.pos}</td>
+
+                    <td>
+                      <a href={`/segunda/equipos/${row.slug}`}>
+                        {row.team}
+                      </a>
+                    </td>
+
+                    <td>{row.played}</td>
+                    <td>{row.goalDifference}</td>
+                    <td><strong>{row.points}</strong></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {
+        relegation.length > 0 && (
+          <section class="note">
+            <h2>Zona de descenso</h2>
+
+            <p>
+              Actualmente ocupan las últimas posiciones:
+              {" "}
+              {relegation.map((team) => team.team).join(", ")}.
+            </p>
+          </section>
+        )
+      }
+    </main>
+  </body>
+</html>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family:
+      Inter,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+    background: #f7f7f8;
+    color: #111827;
+  }
+
+  .container {
+    width: min(1000px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+
+  .topbar {
+    background: #111827;
+    color: white;
+    padding: 18px 0;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .brand strong,
+  .brand span {
+    display: block;
+  }
+
+  .brand span {
+    margin-top: 2px;
+    color: #9ca3af;
+    font-size: 13px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: white;
+    color: #111827;
+    font-weight: 900;
+  }
+
+  .page {
+    padding: 32px 0 64px;
+  }
+
+  .back-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .page-header {
+    margin: 30px 0;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+  }
+
+  h1 {
+    margin: 8px 0 12px;
+    font-size: clamp(32px, 5vw, 48px);
+    letter-spacing: -0.03em;
+  }
+
+  .page-header p {
+    max-width: 700px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  .matchday {
+    display: inline-flex;
+    margin-top: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .summary,
+  .note,
+  .panel {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .summary-item {
+    min-width: 0;
+    padding: 20px 24px;
+  }
+
+  .summary-item + .summary-item {
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .summary-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .summary-item strong {
+    display: block;
+    line-height: 1.4;
+  }
+
+  .summary-item p {
+    margin: 5px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .panel {
+    overflow: hidden;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 15px 18px;
+    border-bottom: 1px solid #f0f1f3;
+    text-align: left;
+  }
+
+  th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+  }
+
+  td a {
+    color: #111827;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  tr.promotion td:first-child {
+    border-left: 4px solid #22c55e;
+  }
+
+  tr.playoff td:first-child {
+    border-left: 4px solid #86efac;
+  }
+
+  tr.relegation td:first-child {
+    border-left: 4px solid #ef4444;
+  }
+
+  .note {
+    margin-top: 20px;
+    padding: 20px 24px;
+  }
+
+  .note h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+
+  .note p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  @media(max-width:650px) {
+    .summary {
+      grid-template-columns: 1fr;
+    }
+
+    .summary-item + .summary-item {
+      border-left: 0;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    th,
+    td {
+      padding: 13px 10px;
+      font-size: 14px;
+    }
+  }
+</style>
