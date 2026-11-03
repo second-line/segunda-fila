@@ -187,7 +187,7 @@ const getMatchUrl = (match) => {
 
         {teams.map((team) => (
           <a
-            href={`/segunda/equipos/${team.slug}`}
+            href={`/segunda/equipos/${team.slug}/`}
             class="team-chip"
           >
             {team.name}
@@ -450,7 +450,7 @@ const getMatchUrl = (match) => {
                   </div>
           
                   <a
-                    href="/segunda/noticias"
+                    href="/segunda/noticias/"
                     class="news-all-link"
                   >
                     Ver todas →
@@ -461,7 +461,7 @@ const getMatchUrl = (match) => {
           
                   {latestNews[0] && (
                     <a
-                      href={`/segunda/noticias/${latestNews[0].slug}`}
+                      href={`/segunda/noticias/${latestNews[0].slug}/`}
                       class="news-featured"
                     >
                       {
@@ -514,7 +514,7 @@ const getMatchUrl = (match) => {
                     {latestNews.slice(1, 3).map(
                       (article) => (
                         <a
-                          href={`/segunda/noticias/${article.slug}`}
+                          href={`/segunda/noticias/${article.slug}/`}
                           class="news-secondary-card"
                         >
                           {
@@ -577,7 +577,7 @@ const getMatchUrl = (match) => {
             </div>
 
             <a
-              href="/segunda/clasificacion"
+              href="/segunda/clasificacion/"
               class="standings-full-link"
             >
               Ver completa →
@@ -608,7 +608,7 @@ const getMatchUrl = (match) => {
               </span>
 
               <a
-                href={`/segunda/equipos/${row.slug}`}
+                href={`/segunda/equipos/${row.slug}/`}
                 class="standing-team standing-team-link"
               >
                 <div class="small-logo">

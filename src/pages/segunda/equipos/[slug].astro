@@ -179,7 +179,7 @@ const formLabels = {
 const SITE_URL = "https://segunda-fila.pages.dev";
 
 const canonicalUrl =
-  `${SITE_URL}/segunda/equipos/${team.slug}`;
+  `${SITE_URL}/segunda/equipos/${team.slug}/`;
 
 const seoTitle =
   `${team.name}: estadísticas, rachas y resultados | Segunda Fila`;
@@ -727,7 +727,7 @@ const teamJsonLd = {
               </div>
 
               <a
-                href="/segunda/noticias"
+                href="/segunda/noticias/"
                 class="team-news-all"
               >
                 Ver actualidad →
@@ -737,7 +737,7 @@ const teamJsonLd = {
             <div class="team-news-list">
               {relatedNews.map((article) => (
                 <a
-                  href={`/segunda/noticias/${article.slug}`}
+                  href={`/segunda/noticias/${article.slug}/`}
                   class="team-news-item"
                 >
                   {
