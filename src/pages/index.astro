@@ -92,7 +92,7 @@ const getMatchUrl = (match) => {
     return null;
   }
 
-  return `/segunda/partidos/${match.matchSlug}`;
+  return `/segunda/partidos/${match.matchSlug}/`;
 };
 ---
 
@@ -212,7 +212,7 @@ const getMatchUrl = (match) => {
       <div class="matches-list">
         {todayMatches.map((match) => {
           const matchUrl = match.matchSlug
-            ? `/segunda/partidos/${match.matchSlug}`
+            ? `/segunda/partidos/${match.matchSlug}/`
             : null;
 
           const initialUrl = getMatchUrl(match);
@@ -312,7 +312,7 @@ const getMatchUrl = (match) => {
                         <div class="matches-list">
                           {matches.map((match) => {
                             const matchUrl = match.matchSlug
-                              ? `/segunda/partidos/${match.matchSlug}`
+                              ? `/segunda/partidos/${match.matchSlug}/`
                               : null;
 
                             const initialUrl = getMatchUrl(match);

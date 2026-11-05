@@ -182,10 +182,10 @@ const canonicalUrl =
   `${SITE_URL}/segunda/equipos/${team.slug}/`;
 
 const seoTitle =
-  `${team.name}: estadísticas, rachas y resultados | Segunda Fila`;
+  `${team.name}: clasificación, resultados y estadísticas | Segunda Fila`;
 
 const seoDescription =
-  `Estadísticas, forma reciente, rachas, resultados y tendencias de ${team.name} en Segunda División.`;
+  `Consulta la clasificación, resultados, forma reciente, rachas y estadísticas de ${team.name} en Segunda División 2026/27.`;
 
 const teamJsonLd = {
   "@context": "https://schema.org",
@@ -237,7 +237,7 @@ const teamJsonLd = {
           <div class="logo">SF</div>
 
           <div>
-            <h1>Segunda Fila</h1>
+            <p class="brand-title">Segunda Fila</p>
             <p>Fútbol más allá de Primera</p>
           </div>
         </a>
@@ -246,8 +246,14 @@ const teamJsonLd = {
 
     <main class="container page">
       <a href="/" class="back-link">
-        ← Segunda División
+        ← Volver
       </a>
+
+      <div class="team-context-links">
+        <a href="/segunda/clasificacion/">
+          Ver clasificación completa →
+        </a>
+      </div>
 
       <section class="team-hero">
   <div class="team-hero-main">
@@ -260,10 +266,10 @@ const teamJsonLd = {
         Segunda División
       </span>
 
-      <h2>{team.name}</h2>
+      <h1>{team.name} en Segunda División 2026/27</h1>
 
       <p>
-        Tendencias y estadísticas recientes
+        Clasificación, resultados, tendencias y estadísticas recientes
       </p>
     </div>
   </div>
@@ -1759,6 +1765,29 @@ const teamJsonLd = {
     .team-news-content p {
       display: none;
     }
+  }
+
+
+  .brand-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .team-context-links {
+    margin: 12px 0 18px;
+  }
+
+  .team-context-links a {
+    color: #111827;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .team-context-links a:hover {
+    text-decoration: underline;
   }
 
 </style>

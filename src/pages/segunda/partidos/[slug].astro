@@ -244,6 +244,17 @@ const formatHistoricalDate = (
 
   return `${day}/${month}/${year}`;
 };
+const SITE_URL = "https://segunda-fila.pages.dev";
+
+const canonicalUrl =
+  `${SITE_URL}/segunda/partidos/${match.matchSlug}/`;
+
+const seoTitle =
+  `${match.home} vs ${match.away}: previa, estadísticas y resultado | Segunda Fila`;
+
+const seoDescription =
+  `Consulta la previa, forma reciente, tendencias, estadísticas y resultado de ${match.home} vs ${match.away} en Segunda División 2026/27.`;
+
 ---
 
 <html lang="es">
@@ -257,12 +268,24 @@ const formatHistoricalDate = (
 
     <meta
       name="description"
-      content={`Previa, forma, tendencias y enfrentamientos directos de ${match.home} - ${match.away}.`}
+      content={seoDescription}
     />
 
-    <title>
-      {match.home} - {match.away} | Segunda Fila
-    </title>
+    <meta name="robots" content="index, follow" />
+
+    <link
+      rel="canonical"
+      href={canonicalUrl}
+    />
+
+    <title>{seoTitle}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Segunda Fila" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:url" content={canonicalUrl} />
       <link
       rel="icon"
       type="image/svg+xml"
@@ -277,7 +300,7 @@ const formatHistoricalDate = (
           <div class="logo">SF</div>
 
           <div>
-            <h1>Segunda Fila</h1>
+            <p class="brand-title">Segunda Fila</p>
             <p>Fútbol más allá de Primera</p>
           </div>
         </a>
@@ -286,10 +309,14 @@ const formatHistoricalDate = (
 
     <main class="container page">
       <a href="/" class="back-link">
-        ← Segunda División
+        ← Volver
       </a>
 
       <section class="match-hero panel">
+        <h1 class="match-title">
+          {match.home} vs {match.away}
+        </h1>
+
         <div class="hero-top">
           <span>
             Segunda División
@@ -328,7 +355,7 @@ const formatHistoricalDate = (
 
         <div class="scoreboard">
           <a
-            href={`/segunda/equipos/${match.homeSlug}`}
+            href={`/segunda/equipos/${match.homeSlug}/`}
             class="club"
           >
             <div class="club-logo">
@@ -371,7 +398,7 @@ const formatHistoricalDate = (
           </div>
 
           <a
-            href={`/segunda/equipos/${match.awaySlug}`}
+            href={`/segunda/equipos/${match.awaySlug}/`}
             class="club"
           >
             <div class="club-logo">
@@ -1319,6 +1346,21 @@ const formatHistoricalDate = (
     .site-footer-tagline {
       text-align: left;
     }
+  }
+
+
+  .brand-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .match-title {
+    margin: 0 0 18px;
+    font-size: clamp(26px, 4vw, 38px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
   }
 
 </style>

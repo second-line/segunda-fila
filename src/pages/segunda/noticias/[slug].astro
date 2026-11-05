@@ -89,7 +89,7 @@ function formatDate(date) {
 const SITE_URL = "https://segunda-fila.pages.dev";
 
 const canonicalUrl =
-  `${SITE_URL}/segunda/noticias/${article.slug}`;
+  `${SITE_URL}/segunda/noticias/${article.slug}/`;
 
 const articleImage = frontmatter.image
   ? `${SITE_URL}${frontmatter.image}`
@@ -293,7 +293,7 @@ const jsonLd = {
 
                   <a
                     href={
-                      `/segunda/equipos/${frontmatter.teamSlug}`
+                      `/segunda/equipos/${frontmatter.teamSlug}/`
                     }
                   >
                     {frontmatter.team}
@@ -348,7 +348,7 @@ const jsonLd = {
             {
               relatedTeam && (
                 <a
-                  href={`/segunda/equipos/${relatedTeam.slug}`}
+                  href={`/segunda/equipos/${relatedTeam.slug}/`}
                   class="article-related-link"
                 >
                   Ver datos y tendencias de {relatedTeam.name}
