@@ -6,6 +6,9 @@ category: "que-fue-de"
 image: "/images/noticias/que-fue-de-jonathan-pereira.jpg"
 imageAlt: "Jonathan Pereira durante su etapa como futbolista profesional"
 author: "Segunda Fila"
+teamSlugs:
+  - "valladolid"
+  - "oviedo"
 tags:
   - Jonathan Pereira
   - Qué fue de
