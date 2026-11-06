@@ -170,6 +170,24 @@
   ],
   "journeyMatches": [
     {
+      "id": "2505848",
+      "date": "2026-11-07",
+      "dateLabel": "Sábado 07/11",
+      "time": "14:00",
+      "kickoffUtc": "2026-11-07T13:00:00+00:00",
+      "status": "NS",
+      "home": "Burgos",
+      "away": "Celta B",
+      "homeSlug": "burgos",
+      "awaySlug": "celta-b",
+      "matchSlug": "burgos-vs-celta-b-2026-11-07",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
       "id": "2505840",
       "date": "2026-11-07",
       "dateLabel": "Sábado 07/11",
