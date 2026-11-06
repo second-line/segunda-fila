@@ -111,15 +111,14 @@
       "slug": "ceuta"
     }
   ],
-  "todayMatches": [],
-  "journeyMatches": [
+  "todayMatches": [
     {
       "id": "2505846",
       "date": "2026-11-06",
       "dateLabel": "Viernes 06/11",
       "time": "20:30",
       "kickoffUtc": "2026-11-06T19:30:00+00:00",
-      "status": "NS",
+      "status": "PST",
       "home": "Castellón",
       "away": "Eibar",
       "homeSlug": "castellon",
@@ -167,7 +166,9 @@
           }
         ]
       }
-    },
+    }
+  ],
+  "journeyMatches": [
     {
       "id": "2505840",
       "date": "2026-11-07",
@@ -996,8 +997,8 @@
       ]
     }
   ],
-  "classificationMatchday": 12,
-  "standingsProvisional": false,
+  "classificationMatchday": 13,
+  "standingsProvisional": true,
   "standingsBaseUpdatedThrough": "2026-11-02",
   "teamStats": {
     "team_castellon_es": {
