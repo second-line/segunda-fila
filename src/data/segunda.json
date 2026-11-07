@@ -113,63 +113,6 @@
   ],
   "todayMatches": [
     {
-      "id": "2505846",
-      "date": "2026-11-06",
-      "dateLabel": "Viernes 06/11",
-      "time": "20:30",
-      "kickoffUtc": "2026-11-06T19:30:00+00:00",
-      "status": "PST",
-      "home": "Castellón",
-      "away": "Eibar",
-      "homeSlug": "castellon",
-      "awaySlug": "eibar",
-      "matchSlug": "castellon-vs-eibar-2026-11-06",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-31",
-            "home": "Castellón",
-            "away": "Eibar",
-            "homeSlug": "castellon",
-            "awaySlug": "eibar",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-10-12",
-            "home": "Eibar",
-            "away": "Castellón",
-            "homeSlug": "eibar",
-            "awaySlug": "castellon",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-02-15",
-            "home": "Castellón",
-            "away": "Eibar",
-            "homeSlug": "castellon",
-            "awaySlug": "eibar",
-            "homeScore": 2,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-08-17",
-            "home": "Eibar",
-            "away": "Castellón",
-            "homeSlug": "eibar",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 0
-          }
-        ]
-      }
-    }
-  ],
-  "journeyMatches": [
-    {
       "id": "2505848",
       "date": "2026-11-07",
       "dateLabel": "Sábado 07/11",
@@ -185,6 +128,70 @@
       "awayScore": null,
       "headToHead": {
         "meetings": []
+      }
+    },
+    {
+      "id": "2505844",
+      "date": "2026-11-07",
+      "dateLabel": "Sábado 07/11",
+      "time": "16:15",
+      "kickoffUtc": "2026-11-07T15:15:00+00:00",
+      "status": "1H",
+      "home": "Cádiz",
+      "away": "Oviedo",
+      "homeSlug": "cadiz",
+      "awaySlug": "oviedo",
+      "matchSlug": "cadiz-vs-oviedo-2026-11-07",
+      "homeScore": 0,
+      "awayScore": 2,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2025-06-01",
+            "home": "Oviedo",
+            "away": "Cádiz",
+            "homeSlug": "oviedo",
+            "awaySlug": "cadiz",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2024-10-26",
+            "home": "Cádiz",
+            "away": "Oviedo",
+            "homeSlug": "cadiz",
+            "awaySlug": "oviedo",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2020-07-04",
+            "home": "Cádiz",
+            "away": "Oviedo",
+            "homeSlug": "cadiz",
+            "awaySlug": "oviedo",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2019-12-15",
+            "home": "Oviedo",
+            "away": "Cádiz",
+            "homeSlug": "oviedo",
+            "awaySlug": "cadiz",
+            "homeScore": 0,
+            "awayScore": 2
+          },
+          {
+            "date": "2019-02-03",
+            "home": "Oviedo",
+            "away": "Cádiz",
+            "homeSlug": "oviedo",
+            "awaySlug": "cadiz",
+            "homeScore": 2,
+            "awayScore": 1
+          }
+        ]
       }
     },
     {
@@ -374,6 +381,63 @@
             "homeSlug": "tenerife",
             "awaySlug": "granada",
             "homeScore": 2,
+            "awayScore": 0
+          }
+        ]
+      }
+    }
+  ],
+  "journeyMatches": [
+    {
+      "id": "2505846",
+      "date": "2026-11-06",
+      "dateLabel": "Viernes 06/11",
+      "time": "20:30",
+      "kickoffUtc": "2026-11-06T19:30:00+00:00",
+      "status": "PST",
+      "home": "Castellón",
+      "away": "Eibar",
+      "homeSlug": "castellon",
+      "awaySlug": "eibar",
+      "matchSlug": "castellon-vs-eibar-2026-11-06",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-31",
+            "home": "Castellón",
+            "away": "Eibar",
+            "homeSlug": "castellon",
+            "awaySlug": "eibar",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-10-12",
+            "home": "Eibar",
+            "away": "Castellón",
+            "homeSlug": "eibar",
+            "awaySlug": "castellon",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-02-15",
+            "home": "Castellón",
+            "away": "Eibar",
+            "homeSlug": "castellon",
+            "awaySlug": "eibar",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-08-17",
+            "home": "Eibar",
+            "away": "Castellón",
+            "homeSlug": "eibar",
+            "awaySlug": "castellon",
+            "homeScore": 1,
             "awayScore": 0
           }
         ]
