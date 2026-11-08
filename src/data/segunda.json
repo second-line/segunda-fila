@@ -136,14 +136,14 @@
       "dateLabel": "Domingo 08/11",
       "time": "16:15",
       "kickoffUtc": "2026-11-08T15:15:00+00:00",
-      "status": "NS",
+      "status": "2H",
       "home": "Girona",
       "away": "Almería",
       "homeSlug": "girona",
       "awaySlug": "almeria",
       "matchSlug": "girona-vs-almeria-2026-11-08",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
@@ -200,7 +200,7 @@
       "dateLabel": "Domingo 08/11",
       "time": "18:30",
       "kickoffUtc": "2026-11-08T17:30:00+00:00",
-      "status": "NS",
+      "status": "PST",
       "home": "Las Palmas",
       "away": "Eldense",
       "homeSlug": "las-palmas",
