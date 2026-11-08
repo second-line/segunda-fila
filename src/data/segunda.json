@@ -113,6 +113,181 @@
   ],
   "todayMatches": [
     {
+      "id": "2505847",
+      "date": "2026-11-08",
+      "dateLabel": "Domingo 08/11",
+      "time": "14:00",
+      "kickoffUtc": "2026-11-08T13:00:00+00:00",
+      "status": "PST",
+      "home": "Andorra",
+      "away": "Mallorca",
+      "homeSlug": "andorra",
+      "awaySlug": "mallorca",
+      "matchSlug": "andorra-vs-mallorca-2026-11-08",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505841",
+      "date": "2026-11-08",
+      "dateLabel": "Domingo 08/11",
+      "time": "16:15",
+      "kickoffUtc": "2026-11-08T15:15:00+00:00",
+      "status": "NS",
+      "home": "Girona",
+      "away": "Almería",
+      "homeSlug": "girona",
+      "awaySlug": "almeria",
+      "matchSlug": "girona-vs-almeria-2026-11-08",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2024-01-14",
+            "home": "Almería",
+            "away": "Girona",
+            "homeSlug": "almeria",
+            "awaySlug": "girona",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2023-10-22",
+            "home": "Girona",
+            "away": "Almería",
+            "homeSlug": "girona",
+            "awaySlug": "almeria",
+            "homeScore": 5,
+            "awayScore": 2
+          },
+          {
+            "date": "2023-02-17",
+            "home": "Girona",
+            "away": "Almería",
+            "homeSlug": "girona",
+            "awaySlug": "almeria",
+            "homeScore": 6,
+            "awayScore": 2
+          },
+          {
+            "date": "2022-10-20",
+            "home": "Almería",
+            "away": "Girona",
+            "homeSlug": "almeria",
+            "awaySlug": "girona",
+            "homeScore": 3,
+            "awayScore": 2
+          },
+          {
+            "date": "2022-03-27",
+            "home": "Almería",
+            "away": "Girona",
+            "homeSlug": "almeria",
+            "awaySlug": "girona",
+            "homeScore": 0,
+            "awayScore": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505839",
+      "date": "2026-11-08",
+      "dateLabel": "Domingo 08/11",
+      "time": "18:30",
+      "kickoffUtc": "2026-11-08T17:30:00+00:00",
+      "status": "NS",
+      "home": "Las Palmas",
+      "away": "Eldense",
+      "homeSlug": "las-palmas",
+      "awaySlug": "eldense",
+      "matchSlug": "las-palmas-vs-eldense-2026-11-08",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505845",
+      "date": "2026-11-08",
+      "dateLabel": "Domingo 08/11",
+      "time": "18:30",
+      "kickoffUtc": "2026-11-08T17:30:00+00:00",
+      "status": "NS",
+      "home": "Real Sporting",
+      "away": "Valladolid",
+      "homeSlug": "real-sporting",
+      "awaySlug": "valladolid",
+      "matchSlug": "real-sporting-vs-valladolid-2026-11-08",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": []
+      }
+    }
+  ],
+  "journeyMatches": [
+    {
+      "id": "2505846",
+      "date": "2026-11-06",
+      "dateLabel": "Viernes 06/11",
+      "time": "20:30",
+      "kickoffUtc": "2026-11-06T19:30:00+00:00",
+      "status": "PST",
+      "home": "Castellón",
+      "away": "Eibar",
+      "homeSlug": "castellon",
+      "awaySlug": "eibar",
+      "matchSlug": "castellon-vs-eibar-2026-11-06",
+      "homeScore": null,
+      "awayScore": null,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-05-31",
+            "home": "Castellón",
+            "away": "Eibar",
+            "homeSlug": "castellon",
+            "awaySlug": "eibar",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-10-12",
+            "home": "Eibar",
+            "away": "Castellón",
+            "homeSlug": "eibar",
+            "awaySlug": "castellon",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-02-15",
+            "home": "Castellón",
+            "away": "Eibar",
+            "homeSlug": "castellon",
+            "awaySlug": "eibar",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-08-17",
+            "home": "Eibar",
+            "away": "Castellón",
+            "homeSlug": "eibar",
+            "awaySlug": "castellon",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
       "id": "2505848",
       "date": "2026-11-07",
       "dateLabel": "Sábado 07/11",
@@ -384,181 +559,6 @@
             "awayScore": 0
           }
         ]
-      }
-    }
-  ],
-  "journeyMatches": [
-    {
-      "id": "2505846",
-      "date": "2026-11-06",
-      "dateLabel": "Viernes 06/11",
-      "time": "20:30",
-      "kickoffUtc": "2026-11-06T19:30:00+00:00",
-      "status": "PST",
-      "home": "Castellón",
-      "away": "Eibar",
-      "homeSlug": "castellon",
-      "awaySlug": "eibar",
-      "matchSlug": "castellon-vs-eibar-2026-11-06",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-05-31",
-            "home": "Castellón",
-            "away": "Eibar",
-            "homeSlug": "castellon",
-            "awaySlug": "eibar",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-10-12",
-            "home": "Eibar",
-            "away": "Castellón",
-            "homeSlug": "eibar",
-            "awaySlug": "castellon",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-02-15",
-            "home": "Castellón",
-            "away": "Eibar",
-            "homeSlug": "castellon",
-            "awaySlug": "eibar",
-            "homeScore": 2,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-08-17",
-            "home": "Eibar",
-            "away": "Castellón",
-            "homeSlug": "eibar",
-            "awaySlug": "castellon",
-            "homeScore": 1,
-            "awayScore": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505847",
-      "date": "2026-11-08",
-      "dateLabel": "Domingo 08/11",
-      "time": "14:00",
-      "kickoffUtc": "2026-11-08T13:00:00+00:00",
-      "status": "PST",
-      "home": "Andorra",
-      "away": "Mallorca",
-      "homeSlug": "andorra",
-      "awaySlug": "mallorca",
-      "matchSlug": "andorra-vs-mallorca-2026-11-08",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": []
-      }
-    },
-    {
-      "id": "2505841",
-      "date": "2026-11-08",
-      "dateLabel": "Domingo 08/11",
-      "time": "16:15",
-      "kickoffUtc": "2026-11-08T15:15:00+00:00",
-      "status": "NS",
-      "home": "Girona",
-      "away": "Almería",
-      "homeSlug": "girona",
-      "awaySlug": "almeria",
-      "matchSlug": "girona-vs-almeria-2026-11-08",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2024-01-14",
-            "home": "Almería",
-            "away": "Girona",
-            "homeSlug": "almeria",
-            "awaySlug": "girona",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2023-10-22",
-            "home": "Girona",
-            "away": "Almería",
-            "homeSlug": "girona",
-            "awaySlug": "almeria",
-            "homeScore": 5,
-            "awayScore": 2
-          },
-          {
-            "date": "2023-02-17",
-            "home": "Girona",
-            "away": "Almería",
-            "homeSlug": "girona",
-            "awaySlug": "almeria",
-            "homeScore": 6,
-            "awayScore": 2
-          },
-          {
-            "date": "2022-10-20",
-            "home": "Almería",
-            "away": "Girona",
-            "homeSlug": "almeria",
-            "awaySlug": "girona",
-            "homeScore": 3,
-            "awayScore": 2
-          },
-          {
-            "date": "2022-03-27",
-            "home": "Almería",
-            "away": "Girona",
-            "homeSlug": "almeria",
-            "awaySlug": "girona",
-            "homeScore": 0,
-            "awayScore": 1
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505839",
-      "date": "2026-11-08",
-      "dateLabel": "Domingo 08/11",
-      "time": "18:30",
-      "kickoffUtc": "2026-11-08T17:30:00+00:00",
-      "status": "NS",
-      "home": "Las Palmas",
-      "away": "Eldense",
-      "homeSlug": "las-palmas",
-      "awaySlug": "eldense",
-      "matchSlug": "las-palmas-vs-eldense-2026-11-08",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": []
-      }
-    },
-    {
-      "id": "2505845",
-      "date": "2026-11-08",
-      "dateLabel": "Domingo 08/11",
-      "time": "18:30",
-      "kickoffUtc": "2026-11-08T17:30:00+00:00",
-      "status": "NS",
-      "home": "Real Sporting",
-      "away": "Valladolid",
-      "homeSlug": "real-sporting",
-      "awaySlug": "valladolid",
-      "matchSlug": "real-sporting-vs-valladolid-2026-11-08",
-      "homeScore": null,
-      "awayScore": null,
-      "headToHead": {
-        "meetings": []
       }
     },
     {
