@@ -111,8 +111,7 @@
       "slug": "ceuta"
     }
   ],
-  "todayMatches": [],
-  "journeyMatches": [
+  "todayMatches": [
     {
       "id": "2505850",
       "date": "2026-11-13",
@@ -176,7 +175,9 @@
           }
         ]
       }
-    },
+    }
+  ],
+  "journeyMatches": [
     {
       "id": "2505855",
       "date": "2026-11-14",
