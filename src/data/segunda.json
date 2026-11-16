@@ -113,211 +113,38 @@
   ],
   "todayMatches": [
     {
-      "id": "2505854",
-      "date": "2026-11-15",
-      "dateLabel": "Domingo 15/11",
-      "time": "14:00",
-      "kickoffUtc": "2026-11-15T13:00:00+00:00",
-      "status": "FT",
-      "home": "Tenerife",
-      "away": "Ceuta",
-      "homeSlug": "tenerife",
-      "awaySlug": "ceuta",
-      "matchSlug": "tenerife-vs-ceuta-2026-11-15",
-      "homeScore": 2,
-      "awayScore": 0,
-      "headToHead": {
-        "meetings": []
-      }
-    },
-    {
-      "id": "2505852",
-      "date": "2026-11-15",
-      "dateLabel": "Domingo 15/11",
-      "time": "16:15",
-      "kickoffUtc": "2026-11-15T15:15:00+00:00",
-      "status": "FT",
-      "home": "Granada",
-      "away": "Las Palmas",
-      "homeSlug": "granada",
-      "awaySlug": "las-palmas",
-      "matchSlug": "granada-vs-las-palmas-2026-11-15",
-      "homeScore": 1,
-      "awayScore": 0,
+      "id": "2505856",
+      "date": "2026-11-16",
+      "dateLabel": "Lunes 16/11",
+      "time": "20:30",
+      "kickoffUtc": "2026-11-16T19:30:00+00:00",
+      "status": "NS",
+      "home": "Albacete",
+      "away": "Celta B",
+      "homeSlug": "albacete",
+      "awaySlug": "celta-b",
+      "matchSlug": "albacete-vs-celta-b-2026-11-16",
+      "homeScore": null,
+      "awayScore": null,
       "headToHead": {
         "meetings": [
           {
-            "date": "2026-04-02",
-            "home": "Las Palmas",
-            "away": "Granada",
-            "homeSlug": "las-palmas",
-            "awaySlug": "granada",
-            "homeScore": 2,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-10-10",
-            "home": "Granada",
-            "away": "Las Palmas",
-            "homeSlug": "granada",
-            "awaySlug": "las-palmas",
+            "date": "2011-04-17",
+            "home": "Albacete",
+            "away": "Celta Vigo",
+            "homeSlug": "albacete",
+            "awaySlug": "celta-vigo",
             "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-07-25",
-            "home": "Las Palmas",
-            "away": "Granada",
-            "homeSlug": "las-palmas",
-            "awaySlug": "granada",
-            "homeScore": 1,
             "awayScore": 1
           },
           {
-            "date": "2024-02-03",
-            "home": "Granada",
-            "away": "Las Palmas",
-            "homeSlug": "granada",
-            "awaySlug": "las-palmas",
-            "homeScore": 1,
-            "awayScore": 1
-          },
-          {
-            "date": "2023-09-24",
-            "home": "Las Palmas",
-            "away": "Granada",
-            "homeSlug": "las-palmas",
-            "awaySlug": "granada",
-            "homeScore": 1,
-            "awayScore": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505851",
-      "date": "2026-11-15",
-      "dateLabel": "Domingo 15/11",
-      "time": "18:30",
-      "kickoffUtc": "2026-11-15T17:30:00+00:00",
-      "status": "FT",
-      "home": "Eibar",
-      "away": "Cádiz",
-      "homeSlug": "eibar",
-      "awaySlug": "cadiz",
-      "matchSlug": "eibar-vs-cadiz-2026-11-15",
-      "homeScore": 1,
-      "awayScore": 1,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-03-01",
-            "home": "Eibar",
-            "away": "Cádiz",
-            "homeSlug": "eibar",
-            "awaySlug": "cadiz",
+            "date": "2010-11-21",
+            "home": "Celta Vigo",
+            "away": "Albacete",
+            "homeSlug": "celta-vigo",
+            "awaySlug": "albacete",
             "homeScore": 3,
             "awayScore": 1
-          },
-          {
-            "date": "2025-09-13",
-            "home": "Cádiz",
-            "away": "Eibar",
-            "homeSlug": "cadiz",
-            "awaySlug": "eibar",
-            "homeScore": 1,
-            "awayScore": 0
-          },
-          {
-            "date": "2025-03-31",
-            "home": "Cádiz",
-            "away": "Eibar",
-            "homeSlug": "cadiz",
-            "awaySlug": "eibar",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2024-10-23",
-            "home": "Eibar",
-            "away": "Cádiz",
-            "homeSlug": "eibar",
-            "awaySlug": "cadiz",
-            "homeScore": 1,
-            "awayScore": 0
-          },
-          {
-            "date": "2021-03-06",
-            "home": "Cádiz",
-            "away": "Eibar",
-            "homeSlug": "cadiz",
-            "awaySlug": "eibar",
-            "homeScore": 1,
-            "awayScore": 0
-          }
-        ]
-      }
-    },
-    {
-      "id": "2505860",
-      "date": "2026-11-15",
-      "dateLabel": "Domingo 15/11",
-      "time": "18:30",
-      "kickoffUtc": "2026-11-15T17:30:00+00:00",
-      "status": "FT",
-      "home": "Eldense",
-      "away": "Sabadell",
-      "homeSlug": "eldense",
-      "awaySlug": "sabadell",
-      "matchSlug": "eldense-vs-sabadell-2026-11-15",
-      "homeScore": 2,
-      "awayScore": 0,
-      "headToHead": {
-        "meetings": [
-          {
-            "date": "2026-02-07",
-            "home": "Eldense",
-            "away": "Sabadell",
-            "homeSlug": "eldense",
-            "awaySlug": "sabadell",
-            "homeScore": 2,
-            "awayScore": 1
-          },
-          {
-            "date": "2025-08-30",
-            "home": "Sabadell",
-            "away": "Eldense",
-            "homeSlug": "sabadell",
-            "awaySlug": "eldense",
-            "homeScore": 0,
-            "awayScore": 0
-          },
-          {
-            "date": "2023-02-19",
-            "home": "Eldense",
-            "away": "Sabadell",
-            "homeSlug": "eldense",
-            "awaySlug": "sabadell",
-            "homeScore": 1,
-            "awayScore": 0
-          },
-          {
-            "date": "2022-10-09",
-            "home": "Sabadell",
-            "away": "Eldense",
-            "homeSlug": "sabadell",
-            "awaySlug": "eldense",
-            "homeScore": 1,
-            "awayScore": 3
-          },
-          {
-            "date": "2017-04-09",
-            "home": "Eldense",
-            "away": "Sabadell",
-            "homeSlug": "eldense",
-            "awaySlug": "sabadell",
-            "homeScore": 0,
-            "awayScore": 5
           }
         ]
       }
@@ -545,38 +372,211 @@
       }
     },
     {
-      "id": "2505856",
-      "date": "2026-11-16",
-      "dateLabel": "Lunes 16/11",
-      "time": "20:30",
-      "kickoffUtc": "2026-11-16T19:30:00+00:00",
-      "status": "NS",
-      "home": "Albacete",
-      "away": "Celta B",
-      "homeSlug": "albacete",
-      "awaySlug": "celta-b",
-      "matchSlug": "albacete-vs-celta-b-2026-11-16",
-      "homeScore": null,
-      "awayScore": null,
+      "id": "2505854",
+      "date": "2026-11-15",
+      "dateLabel": "Domingo 15/11",
+      "time": "14:00",
+      "kickoffUtc": "2026-11-15T13:00:00+00:00",
+      "status": "FT",
+      "home": "Tenerife",
+      "away": "Ceuta",
+      "homeSlug": "tenerife",
+      "awaySlug": "ceuta",
+      "matchSlug": "tenerife-vs-ceuta-2026-11-15",
+      "homeScore": 2,
+      "awayScore": 0,
+      "headToHead": {
+        "meetings": []
+      }
+    },
+    {
+      "id": "2505852",
+      "date": "2026-11-15",
+      "dateLabel": "Domingo 15/11",
+      "time": "16:15",
+      "kickoffUtc": "2026-11-15T15:15:00+00:00",
+      "status": "FT",
+      "home": "Granada",
+      "away": "Las Palmas",
+      "homeSlug": "granada",
+      "awaySlug": "las-palmas",
+      "matchSlug": "granada-vs-las-palmas-2026-11-15",
+      "homeScore": 1,
+      "awayScore": 0,
       "headToHead": {
         "meetings": [
           {
-            "date": "2011-04-17",
-            "home": "Albacete",
-            "away": "Celta Vigo",
-            "homeSlug": "albacete",
-            "awaySlug": "celta-vigo",
+            "date": "2026-04-02",
+            "home": "Las Palmas",
+            "away": "Granada",
+            "homeSlug": "las-palmas",
+            "awaySlug": "granada",
+            "homeScore": 2,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-10-10",
+            "home": "Granada",
+            "away": "Las Palmas",
+            "homeSlug": "granada",
+            "awaySlug": "las-palmas",
             "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-07-25",
+            "home": "Las Palmas",
+            "away": "Granada",
+            "homeSlug": "las-palmas",
+            "awaySlug": "granada",
+            "homeScore": 1,
             "awayScore": 1
           },
           {
-            "date": "2010-11-21",
-            "home": "Celta Vigo",
-            "away": "Albacete",
-            "homeSlug": "celta-vigo",
-            "awaySlug": "albacete",
+            "date": "2024-02-03",
+            "home": "Granada",
+            "away": "Las Palmas",
+            "homeSlug": "granada",
+            "awaySlug": "las-palmas",
+            "homeScore": 1,
+            "awayScore": 1
+          },
+          {
+            "date": "2023-09-24",
+            "home": "Las Palmas",
+            "away": "Granada",
+            "homeSlug": "las-palmas",
+            "awaySlug": "granada",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505851",
+      "date": "2026-11-15",
+      "dateLabel": "Domingo 15/11",
+      "time": "18:30",
+      "kickoffUtc": "2026-11-15T17:30:00+00:00",
+      "status": "FT",
+      "home": "Eibar",
+      "away": "Cádiz",
+      "homeSlug": "eibar",
+      "awaySlug": "cadiz",
+      "matchSlug": "eibar-vs-cadiz-2026-11-15",
+      "homeScore": 1,
+      "awayScore": 1,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-03-01",
+            "home": "Eibar",
+            "away": "Cádiz",
+            "homeSlug": "eibar",
+            "awaySlug": "cadiz",
             "homeScore": 3,
             "awayScore": 1
+          },
+          {
+            "date": "2025-09-13",
+            "home": "Cádiz",
+            "away": "Eibar",
+            "homeSlug": "cadiz",
+            "awaySlug": "eibar",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2025-03-31",
+            "home": "Cádiz",
+            "away": "Eibar",
+            "homeSlug": "cadiz",
+            "awaySlug": "eibar",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2024-10-23",
+            "home": "Eibar",
+            "away": "Cádiz",
+            "homeSlug": "eibar",
+            "awaySlug": "cadiz",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2021-03-06",
+            "home": "Cádiz",
+            "away": "Eibar",
+            "homeSlug": "cadiz",
+            "awaySlug": "eibar",
+            "homeScore": 1,
+            "awayScore": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "2505860",
+      "date": "2026-11-15",
+      "dateLabel": "Domingo 15/11",
+      "time": "18:30",
+      "kickoffUtc": "2026-11-15T17:30:00+00:00",
+      "status": "FT",
+      "home": "Eldense",
+      "away": "Sabadell",
+      "homeSlug": "eldense",
+      "awaySlug": "sabadell",
+      "matchSlug": "eldense-vs-sabadell-2026-11-15",
+      "homeScore": 2,
+      "awayScore": 0,
+      "headToHead": {
+        "meetings": [
+          {
+            "date": "2026-02-07",
+            "home": "Eldense",
+            "away": "Sabadell",
+            "homeSlug": "eldense",
+            "awaySlug": "sabadell",
+            "homeScore": 2,
+            "awayScore": 1
+          },
+          {
+            "date": "2025-08-30",
+            "home": "Sabadell",
+            "away": "Eldense",
+            "homeSlug": "sabadell",
+            "awaySlug": "eldense",
+            "homeScore": 0,
+            "awayScore": 0
+          },
+          {
+            "date": "2023-02-19",
+            "home": "Eldense",
+            "away": "Sabadell",
+            "homeSlug": "eldense",
+            "awaySlug": "sabadell",
+            "homeScore": 1,
+            "awayScore": 0
+          },
+          {
+            "date": "2022-10-09",
+            "home": "Sabadell",
+            "away": "Eldense",
+            "homeSlug": "sabadell",
+            "awaySlug": "eldense",
+            "homeScore": 1,
+            "awayScore": 3
+          },
+          {
+            "date": "2017-04-09",
+            "home": "Eldense",
+            "away": "Sabadell",
+            "homeSlug": "eldense",
+            "awaySlug": "sabadell",
+            "homeScore": 0,
+            "awayScore": 5
           }
         ]
       }
